@@ -36,16 +36,20 @@
 					@Html.DisplayFor(modelItem => item.apellido)
 				</td>
 				<td>
-                    <a href="/Propietario/Edicion/@item.id_propietario"><i class="fa-solid fa-pen-to-square"></a>|
-					<a href="/Propietario/Detalles"><i class="fa-solid fa-eye"></a>|
-					<a href="/Propietario/Eliminar/@item.id_propietario"><i class="fa-solid fa-trash"></a>
+                    <a href="/Propietario/Edicion/@item.id_propietario"><i class="fa-solid fa-pen-to-square"></i></a>|
+					<a href="/Propietario/Detalles"><i class="fa-solid fa-eye"></i></a>|
+					<a href="/Propietario/Eliminar/@item.id_propietario"><i class="fa-solid fa-trash"></i></a>
 				</td>
 			</tr>
 		}
 		
 	</tbody>
 	<tfoot>
-		<a href="/Propietario/Edicion/"> <i class="fa-solid fa-plus"></i></a>
+		<tr>
+			<td>
+				<a href="/Propietario/Edicion/"> <i class="fa-solid fa-plus"></i></a>
+			</td>
+		</tr>
 	</tfoot>
 </table>
 
