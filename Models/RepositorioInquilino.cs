@@ -18,9 +18,9 @@ public class RepositorioInquilino
                         id_inquilino = reader.GetInt32(nameof(Inquilino.id_inquilino)),
                         nombre = reader.GetString(nameof(Inquilino.nombre)),
                         apellido = reader.GetString(nameof(Inquilino.apellido)),
-                        dni = reader.GetInt32(nameof(Inquilino.dni)),
+                        dni = reader.GetString(nameof(Inquilino.dni)),
                         email = reader.GetString(nameof(Inquilino.email)),
-                        telefono = reader.GetInt32(nameof(Inquilino.telefono)),
+                        telefono = reader.GetString(nameof(Inquilino.telefono)),
                             
                    });
                }
@@ -43,9 +43,9 @@ public class RepositorioInquilino
                         id_inquilino = reader.GetInt32(nameof(Inquilino.id_inquilino)),
                         nombre = reader.GetString(nameof(Inquilino.nombre)),
                         apellido = reader.GetString(nameof(Inquilino.apellido)),
-                        dni = reader.GetInt32(nameof(Inquilino.dni)),
+                        dni = reader.GetString(nameof(Inquilino.dni)),
                         email = reader.GetString(nameof(Inquilino.email)),
-                        telefono = reader.GetInt32(nameof(Inquilino.telefono)),
+                        telefono = reader.GetString(nameof(Inquilino.telefono)),
                             
                    };
                }
