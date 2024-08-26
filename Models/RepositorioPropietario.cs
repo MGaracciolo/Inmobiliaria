@@ -2,9 +2,8 @@ using MySql.Data.MySqlClient;
 
 namespace net.Models;
 
-public class RepositorioPropietario
+public class RepositorioPropietario : RepositorioBase
 {
-    public string ConnectionString="Server=localhost;User=root;Password=;Database=inmobiliaria;SslMode=none";
     public List<Propietario> ObtenerTodos(){
         List<Propietario> propietarios = new List<Propietario>();
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
