@@ -44,5 +44,16 @@ public class PropietarioController : Controller
         repo.Baja(id);
         return RedirectToAction("Index");
     }
+
+     public IActionResult Detalle(int id)
+    {
+        if(id == 0)  
+            return View();
+        else
+        {
+            var inquilino = repo.ObtenerUno(id);
+            return View(inquilino);
+        }
+    }
    
 }

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<net.Models.Contrato>
+@{
+    ViewData["Title"] = "Contrato";
+}
+
+<div class="text-center">
+    <h3 class="display-4">Contratos registrados:</h3>
+	
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				ID
+			</th>
+			<th>
+				Inquilino
+			</th>
+			<th>
+				Inmueble
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.id_contrato)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.id_inquilino)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.id_inmueble)
+				</td>
+				<td>
+                    <a href="/Contrato/Edicion/@item.id_contrato"><i class="fa-solid fa-pen-to-square"></i></a>|
+					<a href="/Contrato/Detalle/@item.id_contrato"><i class="fa-solid fa-eye"></i></a>|
+					<a href="/Contrato/Eliminar/@item.id_contrato"><i class="fa-solid fa-trash"></i></a>
+				</td>
+			</tr>
+		}
+		
+	</tbody>
+	<tfoot>
+		<tr>
+			<td>
+				<a href="/Contrato/Edicion/"> <i class="fa-solid fa-plus"></i></a>
+			</td>
+		</tr>
+	</tfoot>
+</table>
+
+
+@section Scripts{
+	<script>
+		
+	</script>
+}

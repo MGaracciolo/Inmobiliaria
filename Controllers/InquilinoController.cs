@@ -30,6 +30,16 @@ public class InquilinoController : Controller
             return View(inquilino);
         }
     }
+    public IActionResult Detalle(int id)
+    {
+        if(id == 0)  
+            return View();
+        else
+        {
+            var inquilino = repo.ObtenerUno(id);
+            return View(inquilino);
+        }
+    }
     [HttpPost]
     public IActionResult Guardar(int id, Inquilino inquilino){
         id=inquilino.id_inquilino;

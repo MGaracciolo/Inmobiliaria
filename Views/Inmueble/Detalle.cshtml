@@ -1,0 +1,64 @@
+@model net.Models.Inmueble
+@{
+    ViewData["Title"] = "Detalle";
+	int id = Model==null ? 0 : Model.id_inmueble;
+}
+
+
+<div class="text-center">
+    <h3 class="display-4">Inmueble:</h3>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="readonly" name="id_inmueble" value="@id" />
+            <div class="form-group">
+                <label asp-for="id_direccion" class="control-label"></label>
+                <input asp-for="id_direccion" class="form-control" />
+                <span asp-validation-for="id_direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="latitud" class="control-label"></label>
+                <input asp-for="latitud" class="form-control" />
+                <span asp-validation-for="latitud" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="longitud" class="control-label"></label>
+                <input asp-for="longitud" class="form-control" />
+                <span asp-validation-for="longitud" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="id_propietario" class="control-label"></label>
+                <input asp-for="id_propietario" class="form-control" />
+                <span asp-validation-for="id_propietario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="uso" class="control-label"></label>
+                <input asp-for="uso" class="form-control" />
+                <span asp-validation-for="uso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="tipo" class="control-label"></label>
+                <input asp-for="tipo" class="form-control" />
+                <span asp-validation-for="tipo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ambientes" class="control-label"></label>
+                <input asp-for="ambientes" class="form-control" />
+                <span asp-validation-for="ambientes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="estado" class="control-label"></label>
+                <input asp-for="estado" class="form-control" />
+                <span asp-validation-for="estado" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>

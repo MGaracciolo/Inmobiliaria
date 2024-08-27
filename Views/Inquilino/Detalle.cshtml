@@ -1,18 +1,22 @@
-﻿@model net.Models.Inquilino
+@model net.Models.Inquilino
 @{
-    ViewData["Title"] = "Editar Inquilino";
+    ViewData["Title"] = "Detalle";
 	int id = Model==null ? 0 : Model.id_inquilino;
 }
 
+
 <div class="text-center">
-    <h3 class="display-4">Editar inquilino:</h3>
+    <h3 class="display-4">Inquilino:</h3>
 </div>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Guardar">
+        <form>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="readonly" name="id_inquilino" value="@id" />
+            <div class="form-group">
+                <label asp-for="id_inquilino" class="control-label"></label>
+                <input asp-for="id_inquilino" class="form-control" />
+            </div>
             <div class="form-group">
                 <label asp-for="nombre" class="control-label"></label>
                 <input asp-for="nombre" class="form-control" />
@@ -37,9 +41,6 @@
                 <label asp-for="email" class="control-label"></label>
                 <input asp-for="email" class="form-control" />
                 <span asp-validation-for="email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
