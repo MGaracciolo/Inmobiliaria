@@ -7,9 +7,5 @@ public class Direccion
     public int altura { get; set; }
     public string? piso { get; set; }
     public string? departamento { get; set; }
-    // latitud y longitud lo dejamos en direccion o 
-    //en inmueble?
-    public string? latitud { get; set; }
-    public string? longitud { get; set; }
      public string? observaciones { get; set; }
 }
