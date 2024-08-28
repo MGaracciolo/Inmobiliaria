@@ -19,5 +19,10 @@ public class Inmueble{
 
     public double precio { get; set; }
 
-    public bool estado { get; set; }
+    public bool estado { get; set; }  = true;
+
+    public Propietario? propietario { get; set; }
+
+    public Direccion? direccion { get; set; }
+
 }

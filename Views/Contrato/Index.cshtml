@@ -30,10 +30,10 @@
 					@Html.DisplayFor(modelItem => item.id_contrato)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.id_inquilino)
+					@(item.inquilino != null ? item.inquilino.ToString() : "Inquilino no disponible")
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.id_inmueble)
+					@(item.inmueble.direccion != null ? item.inmueble.direccion.ToString() : "Direccion no disponible")
 				</td>
 				<td>
                     <a href="/Contrato/Edicion/@item.id_contrato"><i class="fa-solid fa-pen-to-square"></i></a>|

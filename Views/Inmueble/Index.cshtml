@@ -33,10 +33,10 @@
 					@Html.DisplayFor(modelItem => item.id_inmueble)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.id_direccion)
+					@(item.direccion != null ? item.direccion.ToString() : "Dirección no disponible")
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.id_propietario)
+					@(item.propietario != null ? item.propietario.ToString() : "Propietario no disponible")
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.uso)

@@ -12,45 +12,53 @@
     <div class="col-md-4">
         <form asp-action="Guardar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="readonly" name="id_inmueble" value="@id" />
+            <input type="hidden" name="id_inmueble" value="@id" />
             <div class="form-group">
-                <label asp-for="id_direccion" class="control-label"></label>
+                <label asp-for="id_direccion" class="control-label">Direccion</label>
                 <input asp-for="id_direccion" class="form-control" />
                 <span asp-validation-for="id_direccion" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="latitud" class="control-label"></label>
+                <label asp-for="latitud" class="control-label">Latitud</label>
                 <input asp-for="latitud" class="form-control" />
                 <span asp-validation-for="latitud" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="longitud" class="control-label"></label>
+                <label asp-for="longitud" class="control-label">Longitud</label>
                 <input asp-for="longitud" class="form-control" />
                 <span asp-validation-for="longitud" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="id_propietario" class="control-label"></label>
+                <label asp-for="id_propietario" class="control-label">Propietario</label>
                 <input asp-for="id_propietario" class="form-control" />
                 <span asp-validation-for="id_propietario" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="uso" class="control-label"></label>
+                <label asp-for="uso" class="control-label">Uso</label>
                 <input asp-for="uso" class="form-control" />
                 <span asp-validation-for="uso" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="tipo" class="control-label"></label>
+                <label asp-for="tipo" class="control-label">Tipo</label>
                 <input asp-for="tipo" class="form-control" />
                 <span asp-validation-for="tipo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ambientes" class="control-label"></label>
+                <label asp-for="ambientes" class="control-label">Ambientes</label>
                 <input asp-for="ambientes" class="form-control" />
                 <span asp-validation-for="ambientes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="estado" class="control-label"></label>
-                <input asp-for="estado" class="form-control" />
+                <label asp-for="precio" class="control-label">Precio</label>
+                <input asp-for="precio" class="form-control" />
+                <span asp-validation-for="precio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="estado" class="control-label">Estado</label>
+                <select asp-for="estado" class="form-control">
+                    <option value=1>Activo</option>
+                    <option value=0>Inactivo</option>
+                </select>
                 <span asp-validation-for="estado" class="text-danger"></span>
             </div>
             <div class="form-group">

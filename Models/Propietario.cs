@@ -14,4 +14,10 @@ public class Propietario
 
     public string? telefono { get; set; }
 
+    public override string ToString()
+		{
+			var res = $"{nombre} {apellido} {dni}";
+			return res;
+		}
+
 }

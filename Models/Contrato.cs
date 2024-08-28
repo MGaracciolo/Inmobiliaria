@@ -14,5 +14,9 @@ public class Contrato{
 
     public double precio { get; set; }
 
-    public bool estado { get; set; }
+    public bool estado { get; set; }  = true;
+
+    public Inquilino? inquilino { get; set; }
+
+    public Inmueble? inmueble { get; set; }
 }

@@ -14,4 +14,9 @@ public class Inquilino
 
     public string? telefono { get; set; }
 
+    public override string ToString()
+		{
+			var res = $"{nombre} {apellido} {dni}";
+			return res;
+		}
 }

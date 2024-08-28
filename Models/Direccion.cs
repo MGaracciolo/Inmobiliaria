@@ -8,4 +8,10 @@ public class Direccion
     public string? piso { get; set; }
     public string? departamento { get; set; }
      public string? observaciones { get; set; }
+
+     public override string ToString()
+		{
+			var res = $"{calle} {altura}";
+			return res;
+		}
 }

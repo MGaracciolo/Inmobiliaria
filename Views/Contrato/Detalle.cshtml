@@ -14,37 +14,38 @@
         <form>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="id_contrato" class="control-label"></label>
+                <label asp-for="id_contrato" class="control-label">ID</label>
                 <input asp-for="id_contrato" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="id_inquilino" class="control-label"></label>
+                <label asp-for="id_inquilino" class="control-label">Inquilino</label>
                 <input asp-for="id_inquilino" class="form-control" />
                 <span asp-validation-for="id_inquilino" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="id_inmueble" class="control-label"></label>
+                <label asp-for="id_inmueble" class="control-label">Inmueble</label>
                 <input asp-for="id_inmueble" class="form-control" />
                 <span asp-validation-for="id_inmueble" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="desde" class="control-label"></label>
+                <label asp-for="desde" class="control-label">Desde</label>
                 <input asp-for="desde" class="form-control" />
                 <span asp-validation-for="desde" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="hasta" class="control-label"></label>
+                <label asp-for="hasta" class="control-label">Hasta</label>
                 <input asp-for="hasta" class="form-control" />
                 <span asp-validation-for="hasta" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="precio" class="control-label"></label>
+                <label asp-for="precio" class="control-label">Precio</label>
                 <input asp-for="precio" class="form-control" />
                 <span asp-validation-for="precio" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="estado" class="control-label"></label>
-                <input asp-for="estado" class="form-control" />
+           <div class="form-group">
+                <label asp-for="estado" class="control-label">Estado</label>
+                <input type="text" class="form-control" 
+                    value="@(!Model.estado ? "Inactivo" : "Activo")" readonly />
                 <span asp-validation-for="estado" class="text-danger"></span>
             </div>
         </form>
