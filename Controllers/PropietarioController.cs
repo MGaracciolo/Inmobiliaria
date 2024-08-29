@@ -32,6 +32,11 @@ public class PropietarioController : Controller
     }
     [HttpPost]
     public IActionResult Guardar(int id, Propietario propietario){
+
+        if (!ModelState.IsValid) {
+            return View("Edicion", propietario);
+        }
+
         id=propietario.id_propietario;
         if(id == 0)
             repo.Alta(propietario);
