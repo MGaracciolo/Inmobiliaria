@@ -55,6 +55,13 @@ public class RepositorioInquilino: RepositorioBase
     }
 
     public int Alta(Inquilino inquilino){
+
+        //Melian
+        if (EmailYaRegistrado(inquilino.email))
+        {
+            throw new Exception("El Email ya esta registrado.");
+        }
+
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"INSERT INTO inquilino
@@ -72,6 +79,21 @@ public class RepositorioInquilino: RepositorioBase
                connection.Close();
            }
            return res;
+        }
+    }
+
+    private bool EmailYaRegistrado(string? email)//Melian
+    {
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        {
+            var query = "SELECT COUNT(*) FROM inquilino WHERE email = @Email";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@Email", email);
+                connection.Open();
+                var count = Convert.ToInt32(command.ExecuteScalar());
+                return count > 0;
+            }
         }
     }
 

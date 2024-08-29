@@ -42,6 +42,14 @@ public class InquilinoController : Controller
     }
     [HttpPost]
     public IActionResult Guardar(int id, Inquilino inquilino){
+
+        //Melian
+        if (!ModelState.IsValid)
+        {
+            //Si el modelo no es valido, se regresa a la vista de edicion
+            return View("Edicion", inquilino);
+        }
+
         id=inquilino.id_inquilino;
         if(id == 0)
             repo.Alta(inquilino);
