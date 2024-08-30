@@ -1,61 +1,62 @@
 ﻿@model IEnumerable<net.Models.Contrato>
 @{
     ViewData["Title"] = "Contrato";
+	
 }
 
 <div class="text-center">
     <h3 class="display-4">Contratos registrados:</h3>
 	
 </div>
-<table class="table">
-	<thead>
-		<tr>
-			<th>
-				ID
-			</th>
-			<th>
-				Inquilino
-			</th>
-			<th>
-				Inmueble
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.id_contrato)
-				</td>
-				<td>
-					@(item.inquilino != null ? item.inquilino.ToString() : "Inquilino no disponible")
-				</td>
-				<td>
-					@(item.inmueble.direccion != null ? item.inmueble.direccion.ToString() : "Direccion no disponible")
-				</td>
-				<td>
+
+<table class="table" id="contratosTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Inquilino</th>
+            <th>Inmueble</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.id_contrato)</td>
+                <td>@(item.inquilino != null ? item.inquilino.ToString() : "Inquilino no disponible")</td>
+                <td>@(item.inmueble?.direccion != null ? item.inmueble.direccion.ToString() : "Direccion no disponible")</td>
+                <td>
                     <a href="/Contrato/Edicion/@item.id_contrato"><i class="fa-solid fa-pen-to-square"></i></a>|
-					<a href="/Contrato/Detalle/@item.id_contrato"><i class="fa-solid fa-eye"></i></a>|
-					<a href="/Contrato/Eliminar/@item.id_contrato"><i class="fa-solid fa-trash"></i></a>
-				</td>
-			</tr>
-		}
-		
-	</tbody>
-	<tfoot>
-		<tr>
-			<td>
-				<a href="/Contrato/Edicion/"> <i class="fa-solid fa-plus"></i></a>
-			</td>
-		</tr>
-	</tfoot>
+                    <a href="/Contrato/Detalle/@item.id_contrato"><i class="fa-solid fa-eye"></i></a>|
+                    <a href="/Contrato/Eliminar/@item.id_contrato"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4">
+                <a href="/Contrato/Edicion/"> <i class="fa-solid fa-plus"></i></a>
+            </td>
+        </tr>
+    </tfoot>
 </table>
 
 
 @section Scripts{
-	<script>
-		
-	</script>
+    <!-- jQuery para las dependencias de la datatables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- script de DataTables.net y abajo estan los estilos -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+
+    <script>
+        $(document).ready(function() {
+            $('#contratosTable').DataTable({//Inicializa sobre el id que le ponga a la tabla
+                "language": {//Esto es para el idioma espaniol
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+                }
+            });
+        });
+    </script>
 }
