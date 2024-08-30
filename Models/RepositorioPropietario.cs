@@ -75,6 +75,20 @@ public class RepositorioPropietario : RepositorioBase
         }
     }
 
+    public bool EmailYaRegistrado(string email){
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        {
+            using (MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM propietario WHERE email = @email", connection))
+            {
+                command.Parameters.AddWithValue("@email", email);
+                connection.Open();
+                int count = Convert.ToInt32(command.ExecuteScalar());
+                connection.Close();
+                return count > 0;
+            }
+        }
+    }
+
     public int Modificar(Propietario propietario){
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){

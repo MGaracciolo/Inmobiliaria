@@ -6,52 +6,56 @@
 <div class="text-center">
     <h3 class="display-4">Inquilinos registrados:</h3>
 </div>
-<table class="table">
-	<thead>
-		<tr>
-			<th>
-				ID
-			</th>
-			<th>
-				Nombre
-			</th>
-			<th>
-				Apellido
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.id_inquilino)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.nombre)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.apellido)
-				</td>
-				<td>
-                    <a href="/Inquilino/Edicion/@item.id_inquilino"><i class="fa-solid fa-pen-to-square"></i></a>|
-					<a href="/Inquilino/Detalle/@item.id_inquilino"><i class="fa-solid fa-eye"></i></a>|
-					<a href="/Inquilino/Eliminar/@item.id_inquilino"><i class="fa-solid fa-trash"></i></a>
-				</td>
-			</tr>
-		}
-	</tbody>
-	<tfoot>
-		<tr>
-			<td><a href="/Inquilino/Edicion/"><i class="fa-solid fa-plus"></i></a></td></tr>
-		
-	</tfoot>
+
+<table id="inquilinosTable" class="table display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.id_inquilino)</td>
+                <td>@Html.DisplayFor(modelItem => item.nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.apellido)</td>
+                <td class="text-end">
+                    <a href="/Inquilino/Edicion/@item.id_inquilino"><i class="fa-solid fa-pen-to-square"></i></a> |
+                    <a href="/Inquilino/Detalle/@item.id_inquilino"><i class="fa-solid fa-eye"></i></a> |
+                    <a href="/Inquilino/Eliminar/@item.id_inquilino"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"><a href="/Inquilino/Edicion/"><i class="fa-solid fa-plus"></i></a></td>
+        </tr>
+    </tfoot>
 </table>
 
-
 @section Scripts{
-	<script>
-		
-	</script>
+	<!-- jQuery para las dependencias de la datatables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- script de DataTables.net y abajo estan los estilos -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+
+
+    <script>
+        $(document).ready(function () {
+            $('#inquilinosTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+                },
+				"columnDefs": [
+                    { "orderable": false, "targets": 3 }
+                ]
+            });
+        });
+    </script>
 }
