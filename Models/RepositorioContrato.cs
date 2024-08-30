@@ -170,8 +170,7 @@ public class RepositorioContrato: RepositorioBase
     public int Modificar(Contrato contrato){
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
-           var query = $@"UPDATE contrato
-           SET 
+           var query = $@"UPDATE contrato SET 
            {nameof(Contrato.id_inquilino)} = @id_inquilino,
            {nameof(Contrato.id_inmueble)} = @id_inmueble,
            {nameof(Contrato.desde)} = @desde,
@@ -191,7 +190,6 @@ public class RepositorioContrato: RepositorioBase
                connection.Close();
            }
         }
-          
         return res;
     }
 

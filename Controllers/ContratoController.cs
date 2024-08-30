@@ -8,6 +8,8 @@ public class ContratoController : Controller
 {
     private readonly ILogger<ContratoController> _logger;
     private RepositorioContrato repo = new RepositorioContrato();
+    private readonly RepositorioInquilino repoInquilino = new RepositorioInquilino();
+    private RepositorioInmueble repoInmueble = new RepositorioInmueble();
 
     public ContratoController(ILogger<ContratoController> logger)
     {
@@ -22,6 +24,8 @@ public class ContratoController : Controller
     /*endpoint*/
     public IActionResult Edicion(int id)
     {
+        ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
+        ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
         if(id == 0)  
             return View();
         else
@@ -37,6 +41,10 @@ public class ContratoController : Controller
         else
         {
             var contrato = repo.ObtenerUno(id);
+            var inquilino = repoInquilino.ObtenerUno(contrato.id_inquilino);
+            var inmueble = repoInmueble.ObtenerUno(contrato.id_inmueble);
+            contrato.inquilino = inquilino;
+            contrato.inmueble = inmueble;
             return View(contrato);
         }
     }
