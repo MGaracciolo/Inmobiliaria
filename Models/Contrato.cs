@@ -5,7 +5,7 @@ public class Contrato{
     public int id_contrato { get; set; }
 
     public int id_inquilino { get; set; }
-    //deberia tener el id del propietario?
+    
     public int id_inmueble { get; set; }
 
     public DateTime desde { get; set; }

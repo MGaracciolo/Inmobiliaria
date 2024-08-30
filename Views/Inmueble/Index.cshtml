@@ -22,6 +22,9 @@
 			<th>
 				Uso
 			</th>
+			<th>
+				Tipo
+			</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -39,7 +42,10 @@
 					@(item.propietario != null ? item.propietario.ToString() : "Propietario no disponible")
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.uso)
+					@(item.usoInmueble != null ? item.usoInmueble.ToString() : "Uso no disponible")
+				</td>
+				<td>
+					@(item.tipoInmueble != null ? item.tipoInmueble.ToString() : "Tipo no disponible")
 				</td>
 				<td>
                     <a href="/Inmueble/Edicion/@item.id_inmueble"><i class="fa-solid fa-pen-to-square"></i></a>|

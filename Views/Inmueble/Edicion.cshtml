@@ -2,20 +2,33 @@
 @{
     ViewData["Title"] = "Editar Inmueble";
 	int id = Model==null ? 0 : Model.id_inmueble;
+	var Propietarios = (IList<Propietario>)ViewBag.Propietarios;
+    var Usos = (IList<UsoInmueble>)ViewBag.Usos;
+    var Tipos = (IList<TipoInmueble>)ViewBag.Tipos;
+    var Direcciones = (IList<Direccion>)ViewBag.Direcciones;
+    @* var Direcciones = ViewBag.Direcciones as IList<Direccion> ?? new List<Direccion>();
+    var Propietarios = ViewBag.Propietarios as IList<Propietario> ?? new List<Propietario>();
+    var Usos = ViewBag.Usos as IList<UsoInmueble> ?? new List<UsoInmueble>();
+    var Tipos = ViewBag.Tipos as IList<TipoInmueble> ?? new List<TipoInmueble>(); *@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Editar inmueble:</h1>
+    <h1 class="display-4">@((Model?.id_inmueble == 0) ? "Crear nuevo inmueble" : "Editar inmueble"):</h1>
 </div>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Guardar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="id_inmueble" value="@id" />
+            <input type="hidden" name="id_inmueble" value="@id"/>
             <div class="form-group">
-                <label asp-for="id_direccion" class="control-label">Direccion</label>
-                <input asp-for="id_direccion" class="form-control" />
+                <label class="control-label">Direccion</label>
+                <select class="form-control" name="id_direccion">
+                    @foreach (var item in Direcciones)
+                    {
+                        @:<option @(item.id_direccion==Model?.id_direccion ? "selected" : "") value="@item.id_direccion">@(item.ToString())</option>
+                    }
+                </select>
                 <span asp-validation-for="id_direccion" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,19 +42,34 @@
                 <span asp-validation-for="longitud" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="id_propietario" class="control-label">Propietario</label>
-                <input asp-for="id_propietario" class="form-control" />
+                <label class="control-label">Propietario</label>
+                <select class="form-control" name="id_propietario">
+                    @foreach (var item in Propietarios)
+                    {
+                        @:<option @(item.id_propietario==Model?.id_propietario ? "selected" : "") value="@item.id_propietario">@(item.ToString())</option>
+                    }
+                </select>
                 <span asp-validation-for="id_propietario" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="uso" class="control-label">Uso</label>
-                <input asp-for="uso" class="form-control" />
-                <span asp-validation-for="uso" class="text-danger"></span>
+                <label class="control-label">Uso</label>
+                <select class="form-control" name="id_uso_inmueble">
+                    @foreach (var item in Usos)
+                    {
+                        @:<option @(item.id_uso_inmueble==Model?.id_uso_inmueble ? "selected" : "") value="@item.id_uso_inmueble">@(item.valor)</option>
+                    }
+                </select>
+                <span asp-validation-for="id_uso_inmueble" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="tipo" class="control-label">Tipo</label>
-                <input asp-for="tipo" class="form-control" />
-                <span asp-validation-for="tipo" class="text-danger"></span>
+                <label class="control-label">Tipo</label>
+                <select class="form-control" name="id_tipo_inmueble">
+                    @foreach (var item in Tipos)
+                    {
+                        @:<option @(item.id_tipo_inmueble==Model?.id_tipo_inmueble ? "selected" : "") value="@item.id_tipo_inmueble">@(item.valor)</option>
+                    }
+                </select>
+                <span asp-validation-for="id_tipo_inmueble" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ambientes" class="control-label">Ambientes</label>

@@ -11,9 +11,9 @@ public class Inmueble{
 
     public int id_propietario { get; set; }
 
-    public string? uso { get; set; }
+    public int id_uso_inmueble { get; set; }
 
-    public string? tipo { get; set; }
+    public int id_tipo_inmueble { get; set; }
 
     public int ambientes { get; set; }
 
@@ -24,5 +24,9 @@ public class Inmueble{
     public Propietario? propietario { get; set; }
 
     public Direccion? direccion { get; set; }
+
+    public TipoInmueble? tipoInmueble { get; set; }
+
+    public UsoInmueble? usoInmueble { get; set; }
 
 }

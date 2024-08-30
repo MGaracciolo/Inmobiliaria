@@ -8,6 +8,10 @@ public class InmuebleController : Controller
 {
     private readonly ILogger<InmuebleController> _logger;
     private RepositorioInmueble repo = new RepositorioInmueble();
+    private readonly RepositorioPropietario repoPropietario = new RepositorioPropietario();
+    private readonly RepositorioTipo repoTipo = new RepositorioTipo();
+    private readonly RepositorioUso repoUso = new RepositorioUso();
+    private readonly RepositorioDireccion repoDireccion = new RepositorioDireccion();
 
     public InmuebleController(ILogger<InmuebleController> logger)
     {
@@ -22,8 +26,15 @@ public class InmuebleController : Controller
     /*endpoint*/
     public IActionResult Edicion(int id)
     {
-        if(id == 0)  
+        ViewBag.Propietarios = repoPropietario.ObtenerTodos();
+        ViewBag.Direcciones = repoDireccion.ObtenerTodos();
+        ViewBag.Usos = repoUso.ObtenerTodos();
+        ViewBag.Tipos = repoTipo.ObtenerTodos();
+        if(id == 0) 
+        {
+            
             return View();
+        }
         else
         {
             var inmueble = repo.ObtenerUno(id);
@@ -37,6 +48,14 @@ public class InmuebleController : Controller
         else
         {
             var inmueble = repo.ObtenerUno(id);
+            var propietario = repoPropietario.ObtenerUno(inmueble.id_propietario);
+            var uso = repoUso.ObtenerUno(inmueble.id_uso_inmueble);
+            var direccion = repoDireccion.ObtenerUno(inmueble.id_direccion);
+            var tipo = repoTipo.ObtenerUno(inmueble.id_tipo_inmueble);
+            inmueble.propietario = propietario;
+            inmueble.usoInmueble = uso;
+            inmueble.direccion = direccion;
+            inmueble.tipoInmueble = tipo;
             return View(inmueble);
         }
     }

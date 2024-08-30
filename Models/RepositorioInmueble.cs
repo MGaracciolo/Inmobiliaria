@@ -13,8 +13,8 @@ public class RepositorioInmueble: RepositorioBase
            i.{nameof(Inmueble.latitud)},
            i.{nameof(Inmueble.longitud)},
            i.{nameof(Inmueble.id_propietario)},
-           i.{nameof(Inmueble.uso)},
-           i.{nameof(Inmueble.tipo)},
+           i.{nameof(Inmueble.id_uso_inmueble)},
+           i.{nameof(Inmueble.id_tipo_inmueble)},
            i.{nameof(Inmueble.ambientes)},
            i.{nameof(Inmueble.precio)},
            i.{nameof(Inmueble.estado)},
@@ -23,10 +23,16 @@ public class RepositorioInmueble: RepositorioBase
            p.{nameof(Propietario.apellido)},
            d.{nameof(Direccion.id_direccion)},
            d.{nameof(Direccion.calle)},
-           d.{nameof(Direccion.altura)}
+           d.{nameof(Direccion.altura)},
+           t.{nameof(TipoInmueble.id_tipo_inmueble)},
+           t.valor as tipo_inmueble,
+           u.{nameof(UsoInmueble.id_uso_inmueble)},
+           u.valor as uso_inmueble
             FROM inmueble i
             INNER JOIN propietario p ON i.id_propietario = p.id_propietario
-            INNER JOIN direccion d ON i.id_direccion = d.id_direccion";
+            INNER JOIN direccion d ON i.id_direccion = d.id_direccion
+            INNER JOIN tipo_inmueble t ON i.id_tipo_inmueble = t.id_tipo_inmueble
+            INNER JOIN uso_inmueble u ON i.id_uso_inmueble = u.id_uso_inmueble";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                connection.Open();
                var reader = command.ExecuteReader();
@@ -37,8 +43,8 @@ public class RepositorioInmueble: RepositorioBase
                         latitud = reader.GetString(nameof(Inmueble.latitud)),
                         longitud = reader.GetString(nameof(Inmueble.longitud)),
                         id_propietario = reader.GetInt32(nameof(Inmueble.id_propietario)),
-                        uso = reader.GetString(nameof(Inmueble.uso)),
-                        tipo = reader.GetString(nameof(Inmueble.tipo)),
+                        id_uso_inmueble = reader.GetInt32(nameof(Inmueble.id_uso_inmueble)),
+                        id_tipo_inmueble = reader.GetInt32(nameof(Inmueble.id_tipo_inmueble)),
                         ambientes = reader.GetInt32(nameof(Inmueble.ambientes)),
                         precio = reader.GetDouble(nameof(Inmueble.precio)),
                         estado = reader.GetBoolean(nameof(Inmueble.estado)),
@@ -53,6 +59,16 @@ public class RepositorioInmueble: RepositorioBase
                                 id_direccion = reader.GetInt32(nameof(Inmueble.id_direccion)),
                                 calle = reader.GetString(nameof(Direccion.calle)),
                                 altura = reader.GetInt32(nameof(Direccion.altura))
+                            },
+                        usoInmueble = new UsoInmueble
+                            {
+                                id_uso_inmueble = reader.GetInt32(nameof(Inmueble.id_uso_inmueble)),
+                                valor = reader.GetString("uso_inmueble")
+                            },
+                        tipoInmueble = new TipoInmueble
+                            {
+                                id_tipo_inmueble = reader.GetInt32(nameof(Inmueble.id_tipo_inmueble)),
+                                valor = reader.GetString("tipo_inmueble")
                             }
                    });
                }
@@ -63,13 +79,14 @@ public class RepositorioInmueble: RepositorioBase
     public Inmueble? ObtenerUno(int id){
         Inmueble? inmueble = null;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
-           var query = $@"SELECT i.{nameof(Inmueble.id_inmueble)},
+           var query = $@"SELECT 
+           i.{nameof(Inmueble.id_inmueble)},
            i.{nameof(Inmueble.id_direccion)},
            i.{nameof(Inmueble.latitud)},
            i.{nameof(Inmueble.longitud)},
            i.{nameof(Inmueble.id_propietario)},
-           i.{nameof(Inmueble.uso)},
-           i.{nameof(Inmueble.tipo)},
+           i.{nameof(Inmueble.id_uso_inmueble)},
+           i.{nameof(Inmueble.id_tipo_inmueble)},
            i.{nameof(Inmueble.ambientes)},
            i.{nameof(Inmueble.precio)},
            i.{nameof(Inmueble.estado)},
@@ -78,10 +95,16 @@ public class RepositorioInmueble: RepositorioBase
            p.{nameof(Propietario.apellido)},
            d.{nameof(Direccion.id_direccion)},
            d.{nameof(Direccion.calle)},
-           d.{nameof(Direccion.altura)}
+           d.{nameof(Direccion.altura)},
+           t.{nameof(TipoInmueble.id_tipo_inmueble)},
+           t.valor AS tipo_inmueble,
+           u.{nameof(UsoInmueble.id_uso_inmueble)},
+           u.valor AS uso_inmueble
             FROM inmueble i
             INNER JOIN propietario p ON i.id_propietario = p.id_propietario
             INNER JOIN direccion d ON i.id_direccion = d.id_direccion
+            INNER JOIN tipo_inmueble t ON t.id_tipo_inmueble = i.id_tipo_inmueble
+            INNER JOIN uso_inmueble u ON u.id_uso_inmueble = i.id_uso_inmueble
            WHERE {nameof(Inmueble.id_inmueble)} = @id";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                 command.Parameters.AddWithValue("@id", id);
@@ -94,8 +117,8 @@ public class RepositorioInmueble: RepositorioBase
                         latitud = reader.GetString(nameof(Inmueble.latitud)),
                         longitud = reader.GetString(nameof(Inmueble.longitud)),
                         id_propietario = reader.GetInt32(nameof(Inmueble.id_propietario)),
-                        uso = reader.GetString(nameof(Inmueble.uso)),
-                        tipo = reader.GetString(nameof(Inmueble.tipo)),
+                        id_uso_inmueble = reader.GetInt32(nameof(Inmueble.id_uso_inmueble)),
+                        id_tipo_inmueble = reader.GetInt32(nameof(Inmueble.id_tipo_inmueble)),
                         ambientes = reader.GetInt32(nameof(Inmueble.ambientes)),
                         precio = reader.GetDouble(nameof(Inmueble.precio)),
                         estado = reader.GetBoolean(nameof(Inmueble.estado)),
@@ -110,6 +133,16 @@ public class RepositorioInmueble: RepositorioBase
                                 id_direccion = reader.GetInt32(nameof(Inmueble.id_direccion)),
                                 calle = reader.GetString(nameof(Direccion.calle)),
                                 altura = reader.GetInt32(nameof(Direccion.altura))
+                            },
+                         usoInmueble = new UsoInmueble
+                            {
+                                id_uso_inmueble = reader.GetInt32(nameof(Inmueble.id_uso_inmueble)),
+                                valor = reader.GetString("uso_inmueble")
+                            },
+                        tipoInmueble = new TipoInmueble
+                            {
+                                id_tipo_inmueble = reader.GetInt32(nameof(Inmueble.id_tipo_inmueble)),
+                                valor = reader.GetString("tipo_inmueble")
                             }
                    };
                }
@@ -123,16 +156,24 @@ public class RepositorioInmueble: RepositorioBase
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"INSERT INTO inmueble
-           ({nameof(Inmueble.id_direccion)},{nameof(Inmueble.latitud)},{nameof(Inmueble.longitud)},{nameof(Inmueble.id_propietario)},{nameof(Inmueble.uso)},{nameof(Inmueble.tipo)},{nameof(Inmueble.ambientes)},{nameof(Inmueble.precio)},{nameof(Inmueble.estado)})
-           VALUES(@id_direccion,@latitud,@longitud,@id_propietario,@uso,@tipo,@ambientes,@precio,@estado);
+           ({nameof(Inmueble.id_direccion)},
+           {nameof(Inmueble.latitud)},
+           {nameof(Inmueble.longitud)},
+           {nameof(Inmueble.id_propietario)},
+           {nameof(Inmueble.id_uso_inmueble)},
+           {nameof(Inmueble.id_tipo_inmueble)},
+           {nameof(Inmueble.ambientes)},
+           {nameof(Inmueble.precio)},
+           {nameof(Inmueble.estado)})
+           VALUES(@id_direccion,@latitud,@longitud,@id_propietario,@id_uso_inmueble,@id_tipo_inmueble,@ambientes,@precio,@estado);
            SELECT LAST_INSERT_ID();";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                command.Parameters.AddWithValue("@id_direccion", inmueble.id_direccion);
                command.Parameters.AddWithValue("@latitud", inmueble.latitud);
                command.Parameters.AddWithValue("@longitud", inmueble.longitud);
                command.Parameters.AddWithValue("@id_propietario", inmueble.id_propietario);
-               command.Parameters.AddWithValue("@uso", inmueble.uso);
-               command.Parameters.AddWithValue("@tipo", inmueble.tipo);
+               command.Parameters.AddWithValue("@id_uso_inmueble", inmueble.id_uso_inmueble);
+               command.Parameters.AddWithValue("@id_tipo_inmueble", inmueble.id_tipo_inmueble);
                command.Parameters.AddWithValue("@ambientes", inmueble.ambientes);
                command.Parameters.AddWithValue("@precio", inmueble.precio);
                command.Parameters.AddWithValue("@estado", inmueble.estado);
@@ -152,8 +193,8 @@ public class RepositorioInmueble: RepositorioBase
            {nameof(Inmueble.latitud)} = @latitud,
            {nameof(Inmueble.longitud)} = @longitud,
            {nameof(Inmueble.id_propietario)} = @id_propietario,
-           {nameof(Inmueble.uso)} = @uso,
-           {nameof(Inmueble.tipo)} = @tipo,
+           {nameof(Inmueble.id_uso_inmueble)} = @id_uso_inmueble,
+           {nameof(Inmueble.id_tipo_inmueble)} = @id_tipo_inmueble,
            {nameof(Inmueble.ambientes)} = @ambientes,
            {nameof(Inmueble.precio)} = @precio,
            {nameof(Inmueble.estado)} = @estado
@@ -164,8 +205,8 @@ public class RepositorioInmueble: RepositorioBase
                command.Parameters.AddWithValue("@latitud", inmueble.latitud);
                command.Parameters.AddWithValue("@longitud", inmueble.longitud);
                command.Parameters.AddWithValue("@id_propietario", inmueble.id_propietario);
-               command.Parameters.AddWithValue("@uso", inmueble.uso);
-               command.Parameters.AddWithValue("@uso", inmueble.uso);
+               command.Parameters.AddWithValue("@id_uso_inmueble", inmueble.id_uso_inmueble);
+               command.Parameters.AddWithValue("@id_tipo_inmueble", inmueble.id_tipo_inmueble);
                command.Parameters.AddWithValue("@ambientes", inmueble.ambientes);
                command.Parameters.AddWithValue("@precio", inmueble.precio);
                command.Parameters.AddWithValue("@estado", inmueble.estado);
