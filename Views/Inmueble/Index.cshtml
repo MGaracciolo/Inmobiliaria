@@ -33,24 +33,24 @@
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.id_inmueble)
+					@Html.DisplayFor(modelItem => item.Id)
 				</td>
 				<td>
-					@(item.direccion != null ? item.direccion.ToString() : "Dirección no disponible")
+					@(item.Direccion != null ? item.Direccion.ToString() : "Dirección no disponible")
 				</td>
 				<td>
-					@(item.propietario != null ? item.propietario.ToString() : "Propietario no disponible")
+					@(item.Propietario != null ? item.Propietario.ToString() : "Propietario no disponible")
 				</td>
 				<td>
-					@(item.usoInmueble != null ? item.usoInmueble.ToString() : "Uso no disponible")
+					@(item.UsoInmueble != null ? item.UsoInmueble.ToString() : "Uso no disponible")
 				</td>
 				<td>
-					@(item.tipoInmueble != null ? item.tipoInmueble.ToString() : "Tipo no disponible")
+					@(item.TipoInmueble != null ? item.TipoInmueble.ToString() : "Tipo no disponible")
 				</td>
 				<td>
-                    <a href="/Inmueble/Edicion/@item.id_inmueble"><i class="fa-solid fa-pen-to-square"></i></a>|
-					<a href="/Inmueble/Detalle/@item.id_inmueble"><i class="fa-solid fa-eye"></i></a>|
-					<a href="/Inmueble/Eliminar/@item.id_inmueble"><i class="fa-solid fa-trash"></i></a>
+                    <a href="/Inmueble/Edicion/@item.Id"><i class="fa-solid fa-pen-to-square"></i></a>|
+					<a href="/Inmueble/Detalle/@item.Id"><i class="fa-solid fa-eye"></i></a>|
+					<a href="/Inmueble/Eliminar/@item.Id"><i class="fa-solid fa-trash"></i></a>
 				</td>
 			</tr>
 		}

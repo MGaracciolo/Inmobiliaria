@@ -10,7 +10,7 @@
 <table id="inquilinosTable" class="table display">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>DNI</th>
             <th>Nombre</th>
             <th>Apellido</th>
             <th></th>
@@ -20,13 +20,13 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.id_inquilino)</td>
-                <td>@Html.DisplayFor(modelItem => item.nombre)</td>
-                <td>@Html.DisplayFor(modelItem => item.apellido)</td>
+                <td>@Html.DisplayFor(modelItem => item.Dni)</td>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
                 <td class="text-end">
-                    <a href="/Inquilino/Edicion/@item.id_inquilino"><i class="fa-solid fa-pen-to-square"></i></a> |
-                    <a href="/Inquilino/Detalle/@item.id_inquilino"><i class="fa-solid fa-eye"></i></a> |
-                    <a href="/Inquilino/Eliminar/@item.id_inquilino"><i class="fa-solid fa-trash"></i></a>
+                    <a href="/Inquilino/Edicion/@item.Id"><i class="fa-solid fa-pen-to-square"></i></a> |
+                    <a href="/Inquilino/Detalle/@item.Id"><i class="fa-solid fa-eye"></i></a> |
+                    <a href="/Inquilino/Eliminar/@item.Id"><i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>
         }

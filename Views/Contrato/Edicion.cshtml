@@ -1,7 +1,7 @@
 ﻿@model net.Models.Contrato
 @{
     ViewData["Title"] = "Editar Contrato";
-	int id = Model==null ? 0 : Model.id_contrato;
+	int id = Model==null ? 0 : Model.Id;
     var Propietarios = (IList<Propietario>)ViewBag.Propietarios;
     var Inmuebles = (IList<Inmueble>)ViewBag.Inmuebles;
     var Inquilinos = (IList<Inquilino>)ViewBag.Inquilinos;
@@ -16,49 +16,49 @@
     <div class="col-md-4">
         <form asp-action="Guardar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="readonly" name="id_propietario" value="@id" />
+            <input  type="hidden" name="Id" value="@id" readonly/>
             <div class="form-group">
                 <label class="control-label">Inquilino</label>
-                <select class="form-control" name="id_inquilino">
+                <select class="form-control" name="IdInquilino">
                     @foreach (var item in Inquilinos)
                     {
-                        @:<option @(item.id_inquilino==Model?.id_inquilino ? "selected" : "") value="@item.id_inquilino">@(item.ToString())</option>
+                        @:<option @(item.Id==Model?.IdInquilino ? "selected" : "") value="@item.Id">@(item.ToString())</option>
                     }
                 </select>
-                <span asp-validation-for="id_inquilino" class="text-danger"></span>
+                <span asp-validation-for="IdInquilino" class="text-danger"></span>
             </div>
              <div class="form-group">
                 <label class="control-label">Inmueble</label>
-                <select class="form-control" name="id_inmueble">
+                <select class="form-control" name="IdInmueble">
                     @foreach (var item in Inmuebles)
                     {
-                        @:<option @(item.id_inmueble==Model?.id_inmueble ? "selected" : "") value="@item.id_inmueble">@(item.direccion?.ToString())</option>
+                        @:<option @(item.Id==Model?.Id ? "selected" : "") value="@item.Id">@(item.Direccion?.ToString())</option>
                     }
                 </select>
-                <span asp-validation-for="id_inmueble" class="text-danger"></span>
+                <span asp-validation-for="IdInmueble" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="desde" class="control-label">Desde</label>
-                <input asp-for="desde" class="form-control" />
-                <span asp-validation-for="desde" class="text-danger"></span>
+                <label asp-for="Desde" class="control-label">Desde</label>
+                <input asp-for="Desde" class="form-control" />
+                <span asp-validation-for="Desde" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="hasta" class="control-label">Hasta</label>
-                <input asp-for="hasta" class="form-control" />
-                <span asp-validation-for="hasta" class="text-danger"></span>
+                <label asp-for="Hasta" class="control-label">Hasta</label>
+                <input asp-for="Hasta" class="form-control" />
+                <span asp-validation-for="Hasta" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="precio" class="control-label">Precio</label>
-                <input asp-for="precio" class="form-control" />
-                <span asp-validation-for="precio" class="text-danger"></span>
+                <label asp-for="Precio" class="control-label">Precio</label>
+                <input asp-for="Precio" class="form-control" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="estado" class="control-label">Estado</label>
-                <select asp-for="estado" class="form-control">
+                <label asp-for="Estado" class="control-label">Estado</label>
+                <select asp-for="Estado" class="form-control">
                     <option value=1>Activo</option>
                     <option value=0>Inactivo</option>
                 </select>
-                <span asp-validation-for="estado" class="text-danger"></span>
+                <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" />

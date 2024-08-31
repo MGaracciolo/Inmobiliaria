@@ -7,19 +7,25 @@ public class RepositorioInquilino: RepositorioBase
     public List<Inquilino> ObtenerTodos(){
         List<Inquilino> inquilinos = new List<Inquilino>();
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
-           var query = $@"SELECT {nameof(Inquilino.id_inquilino)},{nameof(Inquilino.nombre)},{nameof(Inquilino.apellido)},{nameof(Inquilino.dni)},{nameof(Inquilino.email)},{nameof(Inquilino.telefono)} 
+           var query = $@"SELECT 
+            id_inquilino AS Id,
+            nombre AS Nombre,
+            apellido AS Apellido,
+            dni AS Dni,
+            email AS Email,
+            telefono AS Telefono 
            FROM inquilino";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                connection.Open();
                var reader = command.ExecuteReader();
                while(reader.Read()){
                   inquilinos.Add(new Inquilino{
-                        id_inquilino = reader.GetInt32(nameof(Inquilino.id_inquilino)),
-                        nombre = reader.GetString(nameof(Inquilino.nombre)),
-                        apellido = reader.GetString(nameof(Inquilino.apellido)),
-                        dni = reader.GetString(nameof(Inquilino.dni)),
-                        email = reader.GetString(nameof(Inquilino.email)),
-                        telefono = reader.GetString(nameof(Inquilino.telefono)),
+                        Id = reader.GetInt32(nameof(Inquilino.Id)),
+                        Nombre = reader.GetString(nameof(Inquilino.Nombre)),
+                        Apellido = reader.GetString(nameof(Inquilino.Apellido)),
+                        Dni = reader.GetString(nameof(Inquilino.Dni)),
+                        Email = reader.GetString(nameof(Inquilino.Email)),
+                        Telefono = reader.GetString(nameof(Inquilino.Telefono)),
                             
                    });
                }
@@ -30,21 +36,26 @@ public class RepositorioInquilino: RepositorioBase
     public Inquilino? ObtenerUno(int id){
         Inquilino? inquilino = null;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
-           var query = $@"SELECT {nameof(Inquilino.id_inquilino)},{nameof(Inquilino.nombre)},{nameof(Inquilino.apellido)},{nameof(Inquilino.dni)},{nameof(Inquilino.email)},{nameof(Inquilino.telefono)} 
+           var query = $@"SELECT id_inquilino AS Id,
+            nombre AS Nombre,
+            apellido AS Apellido,
+            dni AS Dni,
+            email AS Email,
+            telefono AS Telefono 
            FROM inquilino
-           WHERE {nameof(Inquilino.id_inquilino)} = @id";
+           WHERE id_inquilino = @id";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                 command.Parameters.AddWithValue("@id", id);
                connection.Open();
                var reader = command.ExecuteReader();
                if(reader.Read()){
                    inquilino = new Inquilino{
-                        id_inquilino = reader.GetInt32(nameof(Inquilino.id_inquilino)),
-                        nombre = reader.GetString(nameof(Inquilino.nombre)),
-                        apellido = reader.GetString(nameof(Inquilino.apellido)),
-                        dni = reader.GetString(nameof(Inquilino.dni)),
-                        email = reader.GetString(nameof(Inquilino.email)),
-                        telefono = reader.GetString(nameof(Inquilino.telefono)),
+                        Id = reader.GetInt32(nameof(Inquilino.Id)),
+                        Nombre = reader.GetString(nameof(Inquilino.Nombre)),
+                        Apellido = reader.GetString(nameof(Inquilino.Apellido)),
+                        Dni = reader.GetString(nameof(Inquilino.Dni)),
+                        Email = reader.GetString(nameof(Inquilino.Email)),
+                        Telefono = reader.GetString(nameof(Inquilino.Telefono)),
                             
                    };
                }
@@ -57,7 +68,7 @@ public class RepositorioInquilino: RepositorioBase
     public int Alta(Inquilino inquilino){
 
         //Melian
-        if (EmailYaRegistrado(inquilino.email))
+        if (EmailYaRegistrado(inquilino.Email))
         {
             throw new Exception("El Email ya esta registrado.");
         }
@@ -65,15 +76,19 @@ public class RepositorioInquilino: RepositorioBase
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"INSERT INTO inquilino
-           ({nameof(Inquilino.nombre)},{nameof(Inquilino.apellido)},{nameof(Inquilino.dni)},{nameof(Inquilino.email)},{nameof(Inquilino.telefono)})
+           (nombre,
+            apellido,
+            dni,
+            email,
+            telefono)
            VALUES(@nombre,@apellido,@dni,@email,@telefono);
            SELECT LAST_INSERT_ID();";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-               command.Parameters.AddWithValue("@nombre", inquilino.nombre);
-               command.Parameters.AddWithValue("@apellido", inquilino.apellido);
-               command.Parameters.AddWithValue("@dni", inquilino.dni);
-               command.Parameters.AddWithValue("@email", inquilino.email);
-               command.Parameters.AddWithValue("@telefono", inquilino.telefono);
+               command.Parameters.AddWithValue("@nombre", inquilino.Nombre);
+               command.Parameters.AddWithValue("@apellido", inquilino.Apellido);
+               command.Parameters.AddWithValue("@dni", inquilino.Dni);
+               command.Parameters.AddWithValue("@email", inquilino.Email);
+               command.Parameters.AddWithValue("@telefono", inquilino.Telefono);
                connection.Open();   
                res = Convert.ToInt32(command.ExecuteScalar());
                connection.Close();
@@ -101,19 +116,19 @@ public class RepositorioInquilino: RepositorioBase
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"UPDATE inquilino
-           SET {nameof(Inquilino.nombre)} = @nombre,
-           {nameof(Inquilino.apellido)} = @apellido,
-           {nameof(Inquilino.dni)} = @dni,
-           {nameof(Inquilino.email)} = @email,
-           {nameof(Inquilino.telefono)} = @telefono
-           WHERE {nameof(Inquilino.id_inquilino)} = @id_inquilino";
+           SET nombre= @nombre,
+           apellido= @apellido,
+           dni = @dni,
+           email= @email,
+           telefono = @telefono
+           WHERE id_inquilino = @id_inquilino";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-               command.Parameters.AddWithValue("@id_inquilino", inquilino.id_inquilino);
-               command.Parameters.AddWithValue("@nombre", inquilino.nombre);
-               command.Parameters.AddWithValue("@apellido", inquilino.apellido);
-               command.Parameters.AddWithValue("@dni", inquilino.dni);
-               command.Parameters.AddWithValue("@email", inquilino.email);
-               command.Parameters.AddWithValue("@telefono", inquilino.telefono);
+               command.Parameters.AddWithValue("@id_inquilino", inquilino.Id);
+               command.Parameters.AddWithValue("@nombre", inquilino.Nombre);
+               command.Parameters.AddWithValue("@apellido", inquilino.Apellido);
+               command.Parameters.AddWithValue("@dni", inquilino.Dni);
+               command.Parameters.AddWithValue("@email", inquilino.Email);
+               command.Parameters.AddWithValue("@telefono", inquilino.Telefono);
                connection.Open();
                res = command.ExecuteNonQuery();
                connection.Close();
@@ -126,7 +141,7 @@ public class RepositorioInquilino: RepositorioBase
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"DELETE FROM inquilino
-           WHERE {nameof(Inquilino.id_inquilino)} = @id";
+           WHERE id_inquilino = @id";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                command.Parameters.AddWithValue("@id", id);
                connection.Open();

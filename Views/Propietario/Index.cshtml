@@ -7,55 +7,55 @@
     <h3 class="display-4">Propietarios registrados:</h3>
 	
 </div>
-<table class="table">
-	<thead>
-		<tr>
-			<th>
-				ID
-			</th>
-			<th>
-				Nombre
-			</th>
-			<th>
-				Apellido
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.id_propietario)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.nombre)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.apellido)
-				</td>
-				<td>
-                    <a href="/Propietario/Edicion/@item.id_propietario"><i class="fa-solid fa-pen-to-square"></i></a>|
-					<a href="/Propietario/Detalle/@item.id_propietario"><i class="fa-solid fa-eye"></i></a>|
-					<a href="/Propietario/Eliminar/@item.id_propietario"><i class="fa-solid fa-trash"></i></a>
-				</td>
-			</tr>
-		}
-		
-	</tbody>
-	<tfoot>
-		<tr>
-			<td>
-				<a href="/Propietario/Edicion/"> <i class="fa-solid fa-plus"></i></a>
-			</td>
-		</tr>
-	</tfoot>
+<table id="propietariosTable" class="table display">
+    <thead>
+        <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Dni)</td>
+                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
+                <td class="text-end">
+                    <a href="/Propietario/Edicion/@item.Id"><i class="fa-solid fa-pen-to-square"></i></a> |
+                    <a href="/Propietario/Detalle/@item.Id"><i class="fa-solid fa-eye"></i></a> |
+                    <a href="/Propietario/Eliminar/@item.Id"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"><a href="/Propietario/Edicion/"><i class="fa-solid fa-plus"></i></a></td>
+        </tr>
+    </tfoot>
 </table>
 
-
 @section Scripts{
-	<script>
-		
-	</script>
+	<!-- jQuery para las dependencias de la datatables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- script de DataTables.net y abajo estan los estilos -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+
+
+    <script>
+        $(document).ready(function () {
+            $('#propietariosTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+                },
+				"columnDefs": [
+                    { "orderable": false, "targets": 3 }
+                ]
+            });
+        });
+    </script>
 }

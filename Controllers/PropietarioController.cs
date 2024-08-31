@@ -37,7 +37,7 @@ public class PropietarioController : Controller
             return View("Edicion", propietario);
         }
 
-        id=propietario.id_propietario;
+        id=propietario.Id;
         if(id == 0)
             repo.Alta(propietario);
         else
@@ -56,8 +56,8 @@ public class PropietarioController : Controller
             return View();
         else
         {
-            var inquilino = repo.ObtenerUno(id);
-            return View(inquilino);
+            var propietario = repo.ObtenerUno(id);
+            return View(propietario);
         }
     }
    

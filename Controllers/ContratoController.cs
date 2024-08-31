@@ -41,16 +41,16 @@ public class ContratoController : Controller
         else
         {
             var contrato = repo.ObtenerUno(id);
-            var inquilino = repoInquilino.ObtenerUno(contrato.id_inquilino);
-            var inmueble = repoInmueble.ObtenerUno(contrato.id_inmueble);
-            contrato.inquilino = inquilino;
-            contrato.inmueble = inmueble;
+            var inquilino = repoInquilino.ObtenerUno(contrato.IdInquilino);
+            var inmueble = repoInmueble.ObtenerUno(contrato.IdInmueble);
+            contrato.Inquilino = inquilino;
+            contrato.Inmueble = inmueble;
             return View(contrato);
         }
     }
     [HttpPost]
     public IActionResult Guardar(int id, Contrato contrato){
-        id=contrato.id_contrato;
+        id=contrato.Id;
         if(id == 0)
             repo.Alta(contrato);
         else

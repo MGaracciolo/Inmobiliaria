@@ -2,16 +2,16 @@ namespace net.Models;
 
 public class Direccion
 {
-    public int id_direccion { get; set; }
-    public string? calle { get; set; }
-    public int altura { get; set; }
-    public int piso { get; set; }
-    public string? departamento { get; set; }
-     public string? observaciones { get; set; }
+    public int Id { get; set; }
+    public string? Calle { get; set; }
+    public int Altura { get; set; }
+    public int Piso { get; set; }
+    public string? Departamento { get; set; }
+     public string? Observaciones { get; set; }
 
      public override string ToString()
 		{
-			var res = $"{calle} {altura}";
+			var res = $"{Calle} {Altura}";
 			return res;
 		}
 }

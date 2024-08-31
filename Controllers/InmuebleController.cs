@@ -48,20 +48,21 @@ public class InmuebleController : Controller
         else
         {
             var inmueble = repo.ObtenerUno(id);
-            var propietario = repoPropietario.ObtenerUno(inmueble.id_propietario);
-            var uso = repoUso.ObtenerUno(inmueble.id_uso_inmueble);
-            var direccion = repoDireccion.ObtenerUno(inmueble.id_direccion);
-            var tipo = repoTipo.ObtenerUno(inmueble.id_tipo_inmueble);
-            inmueble.propietario = propietario;
-            inmueble.usoInmueble = uso;
-            inmueble.direccion = direccion;
-            inmueble.tipoInmueble = tipo;
+            var propietario = repoPropietario.ObtenerUno(inmueble.IdPropietario);
+            var uso = repoUso.ObtenerUno(inmueble.IdUso);
+            var direccion = repoDireccion.ObtenerUno(inmueble.IdDireccion);
+            var tipo = repoTipo.ObtenerUno(inmueble.IdTipo);
+            inmueble.Propietario = propietario;
+            inmueble.UsoInmueble = uso;
+            inmueble.Direccion = direccion;
+            inmueble.TipoInmueble = tipo;
             return View(inmueble);
         }
     }
+
     [HttpPost]
     public IActionResult Guardar(int id, Inmueble inmueble){
-        id=inmueble.id_inmueble;
+        id=inmueble.Id;
         if(id == 0)
             repo.Alta(inmueble);
         else

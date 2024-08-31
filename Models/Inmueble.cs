@@ -1,32 +1,32 @@
 namespace net.Models;
 
 public class Inmueble{
-    public int id_inmueble { get; set; }
+    public int Id { get; set; }
 
-    public int id_direccion { get; set; }
+    public int IdDireccion { get; set; }
 
-    public string? latitud { get; set; }
+    public string? Latitud { get; set; }
 
-    public string? longitud { get; set; }
+    public string? Longitud { get; set; }
 
-    public int id_propietario { get; set; }
+    public int IdPropietario { get; set; }
 
-    public int id_uso_inmueble { get; set; }
+    public int IdUso { get; set; }
 
-    public int id_tipo_inmueble { get; set; }
+    public int IdTipo { get; set; }
 
-    public int ambientes { get; set; }
+    public int Ambientes { get; set; }
 
-    public double precio { get; set; }
+    public decimal Precio { get; set; }
 
-    public bool estado { get; set; }  = true;
+    public bool Estado { get; set; }  = true;
 
-    public Propietario? propietario { get; set; }
+    public Propietario? Propietario { get; set; }
 
-    public Direccion? direccion { get; set; }
+    public Direccion? Direccion { get; set; }
 
-    public TipoInmueble? tipoInmueble { get; set; }
+    public TipoInmueble? TipoInmueble { get; set; }
 
-    public UsoInmueble? usoInmueble { get; set; }
+    public UsoInmueble? UsoInmueble { get; set; }
 
 }

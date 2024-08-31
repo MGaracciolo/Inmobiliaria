@@ -1,7 +1,7 @@
 @model net.Models.Inmueble
 @{
     ViewData["Title"] = "Detalle";
-	int id = Model==null ? 0 : Model.id_inmueble;
+	int id = Model==null ? 0 : Model.Id;
     
 }
 
@@ -14,52 +14,52 @@
     <div class="col-md-4">
         <form >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="id_inmueble" value="@id" />
+            <input type="hidden" name="Id" value="@id" />
             <div class="form-group">
-                <label asp-for="direccion" class="control-label">Direccion</label>
-                <input asp-for="direccion" class="form-control" value="@Model?.direccion?.ToString()" readonly/>
-                <span asp-validation-for="direccion" class="text-danger"></span>
+                <label asp-for="Direccion" class="control-label">Direccion</label>
+                <input asp-for="Direccion" class="form-control" value="@Model?.Direccion?.ToString()" readonly/>
+                <span asp-validation-for="Direccion" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="latitud" class="control-label">Latitud</label>
-                <input asp-for="latitud" class="form-control" readonly/>
-                <span asp-validation-for="latitud" class="text-danger"></span>
+                <label asp-for="Latitud" class="control-label">Latitud</label>
+                <input asp-for="Latitud" class="form-control" readonly/>
+                <span asp-validation-for="Latitud" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="longitud" class="control-label">Longitud</label>
-                <input asp-for="longitud" class="form-control" readonly/>
-                <span asp-validation-for="longitud" class="text-danger"></span>
+                <label asp-for="Longitud" class="control-label">Longitud</label>
+                <input asp-for="Longitud" class="form-control" readonly/>
+                <span asp-validation-for="Longitud" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="propietario" class="control-label">Propietario</label>
-                <input asp-for="propietario" class="form-control" value="@Model?.propietario?.ToString()" readonly/>
-                <span asp-validation-for="propietario" class="text-danger"></span>
+                <label asp-for="Propietario" class="control-label">Propietario</label>
+                <input asp-for="Propietario" class="form-control" value="@Model?.Propietario?.ToString()" readonly/>
+                <span asp-validation-for="Propietario" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="usoInmueble" class="control-label">Uso</label>
-                <input asp-for="usoInmueble" class="form-control" value="@Model?.usoInmueble?.valor" readonly/>
-                <span asp-validation-for="usoInmueble" class="text-danger"></span>
+                <label asp-for="UsoInmueble" class="control-label">Uso</label>
+                <input asp-for="UsoInmueble" class="form-control" value="@Model?.UsoInmueble?.Valor" readonly/>
+                <span asp-validation-for="UsoInmueble" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="tipoInmueble" class="control-label">Tipo</label>
-                <input asp-for="tipoInmueble" class="form-control" value="@Model?.tipoInmueble?.valor" readonly/>
-                <span asp-validation-for="tipoInmueble" class="text-danger"></span>
+                <label asp-for="TipoInmueble" class="control-label">Tipo</label>
+                <input asp-for="TipoInmueble" class="form-control" value="@Model?.TipoInmueble?.Valor" readonly/>
+                <span asp-validation-for="TipoInmueble" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ambientes" class="control-label">Ambientes</label>
-                <input asp-for="ambientes" class="form-control" readonly/>
-                <span asp-validation-for="ambientes" class="text-danger"></span>
+                <label asp-for="Ambientes" class="control-label">Ambientes</label>
+                <input asp-for="Ambientes" class="form-control" readonly/>
+                <span asp-validation-for="Ambientes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="precio" class="control-label">Precio</label>
-                <input asp-for="precio" class="form-control" readonly/>
-                <span asp-validation-for="precio" class="text-danger"></span>
+                <label asp-for="Precio" class="control-label">Precio</label>
+                <input asp-for="Precio" class="form-control" readonly/>
+                <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="estado" class="control-label">Estado</label>
+                <label asp-for="Estado" class="control-label">Estado</label>
                 <input type="text" class="form-control" 
-                    value="@(Model?.estado == true ? "Activo" : "Inactivo")" readonly />
-                <span asp-validation-for="estado" class="text-danger"></span>
+                    value="@(Model?.Estado == true ? "Activo" : "Inactivo")" readonly />
+                <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
         </form>
     </div>

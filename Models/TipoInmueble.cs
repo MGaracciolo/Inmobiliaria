@@ -2,13 +2,13 @@ namespace net.Models;
 
 public class TipoInmueble
 {
-    public int id_tipo_inmueble { get; set; }
+    public int Id { get; set; }
 
-    public string? valor { get; set; }
+    public string? Valor { get; set; }
 
     public override string ToString()
 		{
-			var res = $"{valor}";
+			var res = $"{Valor}";
 			return res;
 		}
 }
