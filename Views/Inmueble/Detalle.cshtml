@@ -1,7 +1,7 @@
 @model net.Models.Inmueble
 @{
     ViewData["Title"] = "Detalle";
-	int id = Model==null ? 0 : Model.Id;
+	int id = Model==null ? 0 : Model.InmuebleId;
     
 }
 
@@ -14,7 +14,7 @@
     <div class="col-md-4">
         <form >
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="Id" value="@id" />
+            <input type="hidden" name="InmuebleId" value="@id" />
             <div class="form-group">
                 <label asp-for="Direccion" class="control-label">Direccion</label>
                 <input asp-for="Direccion" class="form-control" value="@Model?.Direccion?.ToString()" readonly/>
@@ -37,7 +37,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="UsoInmueble" class="control-label">Uso</label>
-                <input asp-for="UsoInmueble" class="form-control" value="@Model?.UsoInmueble?.Valor" readonly/>
+                <input asp-for="UsoInmueble" class="form-control" value="@Model?.UsoInmueble?.UsoValor" readonly/>
                 <span asp-validation-for="UsoInmueble" class="text-danger"></span>
             </div>
             <div class="form-group">

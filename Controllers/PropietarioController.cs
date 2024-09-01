@@ -8,6 +8,7 @@ public class PropietarioController : Controller
 {
     private readonly ILogger<PropietarioController> _logger;
     private RepositorioPropietario repo = new RepositorioPropietario();
+    private RepositorioDireccion repositorioDireccion = new RepositorioDireccion();
 
     public PropietarioController(ILogger<PropietarioController> logger)
     {
@@ -31,17 +32,21 @@ public class PropietarioController : Controller
         }
     }
     [HttpPost]
-    public IActionResult Guardar(int id, Propietario propietario){
+    public IActionResult Guardar(int id, Propietario propietario,Direccion direccion){
 
         if (!ModelState.IsValid) {
             return View("Edicion", propietario);
         }
-
-        id=propietario.Id;
-        if(id == 0)
+        id=propietario.PropietarioId;
+        if(id == 0){
+            // repositorioDireccion.Alta(direccion);
             repo.Alta(propietario);
+        }
         else
+        {
+            // repositorioDireccion.Modificar(direccion);
             repo.Modificar(propietario);
+        }
         return RedirectToAction("Index");
     }
 
@@ -57,6 +62,7 @@ public class PropietarioController : Controller
         else
         {
             var propietario = repo.ObtenerUno(id);
+            // var direccion = repositorioDireccion.ObtenerUno(propietario.IdDireccion);
             return View(propietario);
         }
     }

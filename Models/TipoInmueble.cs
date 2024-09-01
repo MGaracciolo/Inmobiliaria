@@ -2,7 +2,7 @@ namespace net.Models;
 
 public class TipoInmueble
 {
-    public int Id { get; set; }
+    public int TipoId { get; set; }
 
     public string? Valor { get; set; }
 

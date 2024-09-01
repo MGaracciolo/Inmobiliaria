@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 public class Propietario
 {
-    public int Id { get; set; }
+    public int PropietarioId { get; set; }
 
     [Required(ErrorMessage = "El nombre es obligatorio.")]
     [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "El nombre solo puede contener letras y espacios.")]

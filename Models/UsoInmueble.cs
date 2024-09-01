@@ -2,13 +2,13 @@ namespace net.Models;
 
 public class UsoInmueble
 {
-    public int Id { get; set; }
+    public int UsoId { get; set; }
 
-    public string? Valor { get; set; }
+    public string? UsoValor { get; set; }
 
     public override string ToString()
 		{
-			var res = $"{Valor}";
+			var res = $"{UsoValor}";
 			return res;
 		}
 }

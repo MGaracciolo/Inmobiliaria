@@ -22,13 +22,13 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.ContratoId)</td>
                 <td>@(item.Inquilino != null ? item.Inquilino.ToString() : "Inquilino no disponible")</td>
                 <td>@(item.Inmueble?.Direccion != null ? item.Inmueble.Direccion.ToString() : "Direccion no disponible")</td>
                 <td>
-                    <a href="/Contrato/Edicion/@item.Id"><i class="fa-solid fa-pen-to-square"></i></a>|
-                    <a href="/Contrato/Detalle/@item.Id"><i class="fa-solid fa-eye"></i></a>|
-                    <a href="/Contrato/Eliminar/@item.Id"><i class="fa-solid fa-trash"></i></a>
+                    <a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a>|
+                    <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>|
+                    <a href="/Contrato/Eliminar/@item.ContratoId"><i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>
         }

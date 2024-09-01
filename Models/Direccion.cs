@@ -2,7 +2,7 @@ namespace net.Models;
 
 public class Direccion
 {
-    public int Id { get; set; }
+    public int DireccionId { get; set; }
     public string? Calle { get; set; }
     public int Altura { get; set; }
     public int Piso { get; set; }

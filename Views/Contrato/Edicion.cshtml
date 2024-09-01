@@ -1,7 +1,7 @@
 ﻿@model net.Models.Contrato
 @{
     ViewData["Title"] = "Editar Contrato";
-	int id = Model==null ? 0 : Model.Id;
+	int id = Model==null ? 0 : Model.ContratoId;
     var Propietarios = (IList<Propietario>)ViewBag.Propietarios;
     var Inmuebles = (IList<Inmueble>)ViewBag.Inmuebles;
     var Inquilinos = (IList<Inquilino>)ViewBag.Inquilinos;
@@ -16,13 +16,13 @@
     <div class="col-md-4">
         <form asp-action="Guardar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input  type="hidden" name="Id" value="@id" readonly/>
+            <input  type="hidden" name="ContratoId" value="@id" readonly/>
             <div class="form-group">
                 <label class="control-label">Inquilino</label>
                 <select class="form-control" name="IdInquilino">
                     @foreach (var item in Inquilinos)
                     {
-                        @:<option @(item.Id==Model?.IdInquilino ? "selected" : "") value="@item.Id">@(item.ToString())</option>
+                        @:<option @(item.InquilinoId==Model?.IdInquilino ? "selected" : "") value="@item.InquilinoId">@(item.ToString())</option>
                     }
                 </select>
                 <span asp-validation-for="IdInquilino" class="text-danger"></span>
@@ -32,7 +32,7 @@
                 <select class="form-control" name="IdInmueble">
                     @foreach (var item in Inmuebles)
                     {
-                        @:<option @(item.Id==Model?.Id ? "selected" : "") value="@item.Id">@(item.Direccion?.ToString())</option>
+                        @:<option @(item.InmuebleId==Model?.IdInmueble ? "selected" : "") value="@item.InmuebleId">@(item.Direccion?.ToString())</option>
                     }
                 </select>
                 <span asp-validation-for="IdInmueble" class="text-danger"></span>

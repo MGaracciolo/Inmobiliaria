@@ -50,7 +50,7 @@ public class InquilinoController : Controller
             return View("Edicion", inquilino);
         }
 
-        id=inquilino.Id;
+        id=inquilino.InquilinoId;
         if(id == 0)
             repo.Alta(inquilino);
         else

@@ -9,7 +9,7 @@ public class RepositorioDireccion : RepositorioBase
         List<Direccion> direcciones = new List<Direccion>();
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"SELECT 
-           id_direccion AS Id,
+           id_direccion AS DireccionId,
            calle AS Calle,
            altura AS Altura
            FROM direccion";
@@ -18,7 +18,7 @@ public class RepositorioDireccion : RepositorioBase
                var reader = command.ExecuteReader();
                while(reader.Read()){
                    direcciones.Add(new Direccion{
-                       Id = reader.GetInt32(nameof(Direccion.Id)),
+                       DireccionId = reader.GetInt32(nameof(Direccion.DireccionId)),
                        Calle = reader.GetString(nameof(Direccion.Calle)),
                        Altura = reader.GetInt32(nameof(Direccion.Altura))
                    });
@@ -31,7 +31,7 @@ public class RepositorioDireccion : RepositorioBase
         Direccion? direccion = null;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"SELECT
-           id_direccion AS Id,
+           id_direccion AS DireccionId,
            calle AS Calle,
            altura AS Altura,
            piso AS Piso,
@@ -45,7 +45,7 @@ public class RepositorioDireccion : RepositorioBase
                var reader = command.ExecuteReader();
                if(reader.Read()){
                   direccion = new Direccion{
-                     Id = reader.GetInt32(nameof(Direccion.Id)),
+                     DireccionId = reader.GetInt32(nameof(Direccion.DireccionId)),
                        Calle = reader.GetString(nameof(Direccion.Calle)),
                        Altura = reader.GetInt32(nameof(Direccion.Altura)),
                        Piso = reader.GetInt32(nameof(Direccion.Piso)),
@@ -95,7 +95,7 @@ public class RepositorioDireccion : RepositorioBase
            observaciones= @observaciones
            WHERE id_direccion= @id_direccion";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-               command.Parameters.AddWithValue("@id_direccion", direccion.Id);
+               command.Parameters.AddWithValue("@id_direccion", direccion.DireccionId);
                command.Parameters.AddWithValue("@calle", direccion.Calle);
                command.Parameters.AddWithValue("@altura", direccion.Altura);
                command.Parameters.AddWithValue("@piso", direccion.Piso);

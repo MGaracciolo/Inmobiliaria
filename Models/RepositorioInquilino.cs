@@ -8,7 +8,7 @@ public class RepositorioInquilino: RepositorioBase
         List<Inquilino> inquilinos = new List<Inquilino>();
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"SELECT 
-            id_inquilino AS Id,
+            id_inquilino AS InquilinoId,
             nombre AS Nombre,
             apellido AS Apellido,
             dni AS Dni,
@@ -20,7 +20,7 @@ public class RepositorioInquilino: RepositorioBase
                var reader = command.ExecuteReader();
                while(reader.Read()){
                   inquilinos.Add(new Inquilino{
-                        Id = reader.GetInt32(nameof(Inquilino.Id)),
+                        InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
                         Nombre = reader.GetString(nameof(Inquilino.Nombre)),
                         Apellido = reader.GetString(nameof(Inquilino.Apellido)),
                         Dni = reader.GetString(nameof(Inquilino.Dni)),
@@ -36,7 +36,7 @@ public class RepositorioInquilino: RepositorioBase
     public Inquilino? ObtenerUno(int id){
         Inquilino? inquilino = null;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
-           var query = $@"SELECT id_inquilino AS Id,
+           var query = $@"SELECT id_inquilino AS InquilinoId,
             nombre AS Nombre,
             apellido AS Apellido,
             dni AS Dni,
@@ -50,7 +50,7 @@ public class RepositorioInquilino: RepositorioBase
                var reader = command.ExecuteReader();
                if(reader.Read()){
                    inquilino = new Inquilino{
-                        Id = reader.GetInt32(nameof(Inquilino.Id)),
+                        InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
                         Nombre = reader.GetString(nameof(Inquilino.Nombre)),
                         Apellido = reader.GetString(nameof(Inquilino.Apellido)),
                         Dni = reader.GetString(nameof(Inquilino.Dni)),
@@ -123,7 +123,7 @@ public class RepositorioInquilino: RepositorioBase
            telefono = @telefono
            WHERE id_inquilino = @id_inquilino";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-               command.Parameters.AddWithValue("@id_inquilino", inquilino.Id);
+               command.Parameters.AddWithValue("@id_inquilino", inquilino.InquilinoId);
                command.Parameters.AddWithValue("@nombre", inquilino.Nombre);
                command.Parameters.AddWithValue("@apellido", inquilino.Apellido);
                command.Parameters.AddWithValue("@dni", inquilino.Dni);

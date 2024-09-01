@@ -50,7 +50,7 @@ public class ContratoController : Controller
     }
     [HttpPost]
     public IActionResult Guardar(int id, Contrato contrato){
-        id=contrato.Id;
+        id=contrato.ContratoId;
         if(id == 0)
             repo.Alta(contrato);
         else
@@ -58,9 +58,9 @@ public class ContratoController : Controller
         return RedirectToAction("Index");
     }
 
-    // public IActionResult Eliminar(int id){
-    //     repo.Baja(id);
-    //     return RedirectToAction("Index");
-    // }
+    public IActionResult Eliminar(int id){
+        repo.Baja(id);
+        return RedirectToAction("Index");
+    }
    
 }

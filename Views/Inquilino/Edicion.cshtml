@@ -1,7 +1,7 @@
 ﻿@model net.Models.Inquilino
 @{
     ViewData["Title"] = "Editar Inquilino";
-	int id = Model==null ? 0 : Model.Id;
+	int id = Model==null ? 0 : Model.InquilinoId;
 }
 
 <div class="text-center">
@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Guardar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" readonly name="Id" value="@id" />
+            <input type="hidden" readonly name="InquilinoId" value="@id" />
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />

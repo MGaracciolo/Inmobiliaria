@@ -1,7 +1,7 @@
 ﻿@model net.Models.Inmueble
 @{
     ViewData["Title"] = "Editar Inmueble";
-	int id = Model==null ? 0 : Model.Id;
+	int id = Model==null ? 0 : Model.InmuebleId;
 	var Propietarios = (IList<Propietario>)ViewBag.Propietarios;
     var Usos = (IList<UsoInmueble>)ViewBag.Usos;
     var Tipos = (IList<TipoInmueble>)ViewBag.Tipos;
@@ -20,16 +20,31 @@
     <div class="col-md-4">
         <form asp-action="Guardar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="Id" value="@id"/>
+            <input type="hidden" name="InmuebleId" value="@id"/>
             <div class="form-group">
-                <label class="control-label">Direccion</label>
-                <select class="form-control" name="IdDireccion">
-                    @foreach (var item in Direcciones)
-                    {
-                        @:<option @(item.Id==Model?.Id ? "selected" : "") value="@item.Id">@(item.ToString())</option>
-                    }
-                </select>
-                <span asp-validation-for="IdDireccion" class="text-danger"></span>
+                <label asp-for="Direccion.Calle" class="control-label"></label>
+                <input asp-for="Direccion.Calle" class="form-control" />
+                <span asp-validation-for="Direccion.Calle" class="text-danger"></span>
+            </div>
+               <div class="form-group">
+                <label asp-for="Direccion.Altura" class="control-label"></label>
+                <input asp-for="Direccion.Altura" class="form-control" />
+                <span asp-validation-for="Direccion.Altura" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Piso" class="control-label"></label>
+                <input asp-for="Direccion.Piso" class="form-control" />
+                <span asp-validation-for="Direccion.Piso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Departamento" class="control-label"></label>
+                <input asp-for="Direccion.Departamento" class="form-control" />
+                <span asp-validation-for="Direccion.Departamento" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="Direccion.Observaciones" class="control-label"></label>
+                <input asp-for="Direccion.Observaciones" class="form-control" />
+                <span asp-validation-for="Direccion.Observaciones" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Latitud" class="control-label">Latitud</label>
@@ -46,7 +61,7 @@
                 <select class="form-control" name="IdPropietario">
                     @foreach (var item in Propietarios)
                     {
-                        @:<option @(item.Id==Model?.Id ? "selected" : "") value="@item.Id">@(item.ToString())</option>
+                        @:<option @(item.PropietarioId==Model?.IdPropietario ? "selected" : "") value="@item.PropietarioId">@(item.ToString())</option>
                     }
                 </select>
                 <span asp-validation-for="IdPropietario" class="text-danger"></span>
@@ -56,7 +71,7 @@
                 <select class="form-control" name="UsoInmueble">
                     @foreach (var item in Usos)
                     {
-                        @:<option @(item.Id==Model?.Id ? "selected" : "") value="@item.Id">@(item.Valor)</option>
+                        @:<option @(item.UsoId==Model?.IdUso ? "selected" : "") value="@item.UsoId">@(item.UsoValor)</option>
                     }
                 </select>
                 <span asp-validation-for="UsoInmueble" class="text-danger"></span>
@@ -66,7 +81,7 @@
                 <select class="form-control" name="TipoInmueble">
                     @foreach (var item in Tipos)
                     {
-                        @:<option @(item.Id==Model?.Id ? "selected" : "") value="@item.Id">@(item.Valor)</option>
+                        @:<option @(item.TipoId==Model?.IdTipo ? "selected" : "") value="@item.TipoId">@(item.Valor)</option>
                     }
                 </select>
                 <span asp-validation-for="TipoInmueble" class="text-danger"></span>

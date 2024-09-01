@@ -1,7 +1,7 @@
 namespace net.Models;
 
 public class Inmueble{
-    public int Id { get; set; }
+    public int InmuebleId { get; set; }
 
     public int IdDireccion { get; set; }
 

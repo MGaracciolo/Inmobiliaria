@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 public class Inquilino
 {
-    public int Id { get; set; }
+    public int InquilinoId { get; set; }
 
     [Required(ErrorMessage = "El nombre es obligatorio.")]//Melian
     [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "El nombre solo puede contener letras y espacios.")]

@@ -9,7 +9,7 @@ public class RepositorioTipo : RepositorioBase
         List<TipoInmueble> tipos = new List<TipoInmueble>();
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"SELECT 
-           id_tipo_inmueble AS Id,
+           id_tipo_inmueble AS TipoId,
            valor AS Valor
            FROM tipo_inmueble";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
@@ -17,7 +17,7 @@ public class RepositorioTipo : RepositorioBase
                var reader = command.ExecuteReader();
                while(reader.Read()){
                    tipos.Add(new TipoInmueble{
-                        Id = reader.GetInt32(nameof(TipoInmueble.Id)),
+                        TipoId = reader.GetInt32(nameof(TipoInmueble.TipoId)),
                         Valor = reader.GetString(nameof(TipoInmueble.Valor))
                             
                    });
@@ -30,7 +30,7 @@ public class RepositorioTipo : RepositorioBase
         TipoInmueble? tipo = null;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"SELECT 
-           id_tipo_inmueble AS Id,
+           id_tipo_inmueble AS TipoId,
            valor AS Valor
            FROM tipo_inmueble
            WHERE id_tipo_inmueble = @id";
@@ -40,7 +40,7 @@ public class RepositorioTipo : RepositorioBase
                var reader = command.ExecuteReader();
                if(reader.Read()){
                    tipo = new TipoInmueble{
-                        Id = reader.GetInt32(nameof(TipoInmueble.Id)),
+                        TipoId = reader.GetInt32(nameof(TipoInmueble.TipoId)),
                         Valor = reader.GetString(nameof(TipoInmueble.Valor))
                             
                    };
@@ -75,7 +75,7 @@ public class RepositorioTipo : RepositorioBase
            SET valor = @valor
            WHERE id_tipo_inmueble = @id_tipo_inmueble";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-               command.Parameters.AddWithValue("@id_tipo_inmueble", tipo.Id);
+               command.Parameters.AddWithValue("@id_tipo_inmueble", tipo.TipoId);
                command.Parameters.AddWithValue("@valor", tipo.Valor);
                connection.Open();
                res = command.ExecuteNonQuery();

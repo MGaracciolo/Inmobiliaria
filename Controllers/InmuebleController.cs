@@ -62,7 +62,7 @@ public class InmuebleController : Controller
 
     [HttpPost]
     public IActionResult Guardar(int id, Inmueble inmueble){
-        id=inmueble.Id;
+        id=inmueble.InmuebleId;
         if(id == 0)
             repo.Alta(inmueble);
         else
@@ -70,9 +70,9 @@ public class InmuebleController : Controller
         return RedirectToAction("Index");
     }
 
-    // public IActionResult Eliminar(int id){
-    //     repo.Baja(id);
-    //     return RedirectToAction("Index");
-    // }
+    public IActionResult Eliminar(Inmueble Inmueble){
+        repo.Baja(Inmueble);
+        return RedirectToAction("Index");
+    }
    
 }
