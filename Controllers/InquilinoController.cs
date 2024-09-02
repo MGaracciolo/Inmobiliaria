@@ -26,6 +26,7 @@ public class InquilinoController : Controller
             return View();
         else
         {
+
             var inquilino = repo.ObtenerUno(id);
             return View(inquilino);
         }
@@ -41,7 +42,8 @@ public class InquilinoController : Controller
         }
     }
     [HttpPost]
-    public IActionResult Guardar(int id, Inquilino inquilino){
+    public IActionResult Guardar(int id, Inquilino inquilino)
+    {
 
         //Melian
         if (!ModelState.IsValid)
@@ -50,16 +52,24 @@ public class InquilinoController : Controller
             return View("Edicion", inquilino);
         }
 
-        id=inquilino.InquilinoId;
-        if(id == 0)
+        id = inquilino.InquilinoId;
+        if (id == 0)
+        {
             repo.Alta(inquilino);
+            TempData["Mensaje"] = "Inquilino guardado";
+        }
+
         else
+        {
             repo.Modificar(inquilino);
+            TempData["Mensaje"] = "Cambios guardados";
+        }
         return RedirectToAction("Index");
     }
 
     public IActionResult Eliminar(int id){
         repo.Baja(id);
+        TempData["Mensaje"] = "El inquilino se elimino";
         return RedirectToAction("Index");
     }
    

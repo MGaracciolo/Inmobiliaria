@@ -57,5 +57,16 @@
                 ]
             });
         });
+        @if (TempData["Mensaje"] != null)
+            {
+                <text>
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: '@TempData["Mensaje"]',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+                </text>
+            }
     </script>
 }

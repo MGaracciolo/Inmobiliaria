@@ -46,11 +46,11 @@ public class RepositorioDireccion : RepositorioBase
                if(reader.Read()){
                   direccion = new Direccion{
                      DireccionId = reader.GetInt32(nameof(Direccion.DireccionId)),
-                       Calle = reader.GetString(nameof(Direccion.Calle)),
-                       Altura = reader.GetInt32(nameof(Direccion.Altura)),
-                       Piso = reader.GetInt32(nameof(Direccion.Piso)),
-                       Departamento = reader.GetString(nameof(Direccion.Departamento)),
-                       Observaciones = reader.GetString(nameof(Direccion.Observaciones))
+                    Calle = reader.GetString(nameof(Direccion.Calle)),
+                    Altura = reader.GetInt32(nameof(Direccion.Altura)),
+                    Piso = reader.IsDBNull(reader.GetOrdinal(nameof(Direccion.Piso))) ? (int?)null : reader.GetInt32(nameof(Direccion.Piso)),
+                    Departamento = reader.IsDBNull(reader.GetOrdinal(nameof(Direccion.Departamento))) ? null : reader.GetString(nameof(Direccion.Departamento)),
+                    Observaciones = reader.IsDBNull(reader.GetOrdinal(nameof(Direccion.Observaciones))) ? null : reader.GetString(nameof(Direccion.Observaciones))
                   };
                }
                connection.Close();

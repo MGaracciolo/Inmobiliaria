@@ -26,10 +26,13 @@ public class ContratoController : Controller
     {
         ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
         ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
-        if(id == 0)  
+        if(id == 0) {
+            
             return View();
+        }
         else
         {
+            
             var contrato = repo.ObtenerUno(id);
             return View(contrato);
         }
@@ -51,15 +54,21 @@ public class ContratoController : Controller
     [HttpPost]
     public IActionResult Guardar(int id, Contrato contrato){
         id=contrato.ContratoId;
-        if(id == 0)
+        if(id == 0){
             repo.Alta(contrato);
+            TempData["Mensaje"] = "Contrato generado";
+        }
         else
+        {
             repo.Modificar(contrato);
+            TempData["Mensaje"] = "Cambios guardados";
+        }
         return RedirectToAction("Index");
     }
 
     public IActionResult Eliminar(int id){
         repo.Baja(id);
+        TempData["Mensaje"] = "El contrato quedo inactivo";
         return RedirectToAction("Index");
     }
    

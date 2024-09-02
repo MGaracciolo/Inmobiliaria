@@ -27,6 +27,7 @@ public class PropietarioController : Controller
             return View();
         else
         {
+            TempData["Mensaje"] = "El propietario se editó con exito";
             var propietario = repo.ObtenerUno(id);
             return View(propietario);
         }
@@ -40,11 +41,13 @@ public class PropietarioController : Controller
         id=propietario.PropietarioId;
         if(id == 0){
             // repositorioDireccion.Alta(direccion);
+            TempData["Mensaje"] = "Propietario guardado";
             repo.Alta(propietario);
         }
         else
         {
             // repositorioDireccion.Modificar(direccion);
+            TempData["Mensaje"] = "Cambios guardados";
             repo.Modificar(propietario);
         }
         return RedirectToAction("Index");
@@ -52,6 +55,7 @@ public class PropietarioController : Controller
 
     public IActionResult Eliminar(int id){
         repo.Baja(id);
+        TempData["Mensaje"] = "El propietario se elimino";
         return RedirectToAction("Index");
     }
 

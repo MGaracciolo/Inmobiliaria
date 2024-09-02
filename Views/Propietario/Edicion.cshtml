@@ -74,3 +74,18 @@
 <div>
     <a asp-action="Index">Volver al listado</a>
 </div>
+
+<script>
+    @if (TempData["Mensaje"] != null)
+    {
+        <text>
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            text: '@TempData["Mensaje"]',
+            showConfirmButton: false,
+            timer: 1500
+            });
+        </text>
+    }
+</script>

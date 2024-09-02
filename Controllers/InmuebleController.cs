@@ -63,15 +63,21 @@ public class InmuebleController : Controller
     [HttpPost]
     public IActionResult Guardar(int id, Inmueble inmueble){
         id=inmueble.InmuebleId;
-        if(id == 0)
+        if(id == 0){
+
             repo.Alta(inmueble);
-        else
+            TempData["Mensaje"] = "Inmueble guardado";
+        }
+        else{
             repo.Modificar(inmueble);
+            TempData["Mensaje"] = "Cambios guardados";
+        }
         return RedirectToAction("Index");
     }
 
     public IActionResult Eliminar(Inmueble Inmueble){
         repo.Baja(Inmueble);
+        TempData["Mensaje"] = "El inmueble quedo inactivo";
         return RedirectToAction("Index");
     }
    
