@@ -17,9 +17,9 @@ public class RepositorioContrato: RepositorioBase
            c.precio AS Precio,
            c.estado AS Estado,
            i.id_inquilino AS InquilinoId,
-            i.nombre AS Nombre,
-            i.apellido AS Apellido,
-            i.dni AS Dni,
+            i.nombre AS NombreI,
+            i.apellido AS ApellidoI,
+            i.dni AS DniI,
            inm.id_inmueble AS InmuebleId,
            inm.id_direccion AS IdDireccion,
            inm.id_propietario AS IdPropietario,
@@ -50,9 +50,9 @@ public class RepositorioContrato: RepositorioBase
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        Inquilino = new Inquilino{
                            InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
-                           Nombre = reader.GetString(nameof(Inquilino.Nombre)),
-                           Apellido = reader.GetString(nameof(Inquilino.Apellido)),
-                           Dni = reader.GetString(nameof(Inquilino.Dni))
+                           NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                           ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                           DniI = reader.GetString(nameof(Inquilino.DniI))
                        },
                        Inmueble = new Inmueble{
                            InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
@@ -89,9 +89,9 @@ public class RepositorioContrato: RepositorioBase
            c.precio AS Precio,
            c.estado AS Estado,
            i.id_inquilino AS InquilinoId,
-            i.nombre AS Nombre,
-            i.apellido AS Apellido,
-            i.dni AS Dni,
+            i.nombre AS NombreI,
+            i.apellido AS ApellidoI,
+            i.dni AS DniI,
            inm.id_inmueble AS InmuebleId,
            inm.id_direccion AS IdDireccion,
            inm.id_propietario AS IdPropietario,
@@ -124,9 +124,9 @@ public class RepositorioContrato: RepositorioBase
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        Inquilino = new Inquilino{
                            InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
-                           Nombre = reader.GetString(nameof(Inquilino.Nombre)),
-                           Apellido = reader.GetString(nameof(Inquilino.Apellido)),
-                           Dni = reader.GetString(nameof(Inquilino.Dni))
+                           NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                           ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                           DniI = reader.GetString(nameof(Inquilino.DniI))
                        },
                        Inmueble = new Inmueble{
                            InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
