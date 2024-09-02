@@ -8,9 +8,9 @@ public class Contrato{
     
     public int IdInmueble { get; set; }
 
-    public DateOnly Desde { get; set; }
+    public DateTime Desde { get; set; }
 
-    public DateOnly Hasta { get; set; }
+    public DateTime Hasta { get; set; }
 
     public decimal Precio { get; set; }
 

@@ -27,7 +27,6 @@ public class PropietarioController : Controller
             return View();
         else
         {
-            TempData["Mensaje"] = "El propietario se editó con exito";
             var propietario = repo.ObtenerUno(id);
             return View(propietario);
         }
@@ -40,22 +39,29 @@ public class PropietarioController : Controller
         }
         id=propietario.PropietarioId;
         if(id == 0){
-            // repositorioDireccion.Alta(direccion);
-            TempData["Mensaje"] = "Propietario guardado";
+            int idDireccion = repositorioDireccion.Alta(direccion);
+            propietario.IdDireccion = idDireccion;
+            
             repo.Alta(propietario);
+            TempData["Mensaje"] = "Propietario guardado";
         }
         else
         {
-            // repositorioDireccion.Modificar(direccion);
-            TempData["Mensaje"] = "Cambios guardados";
+            repositorioDireccion.Modificar(direccion);
+            propietario.IdDireccion = direccion.DireccionId;
+            
             repo.Modificar(propietario);
+            TempData["Mensaje"] = "Cambios guardados";
         }
         return RedirectToAction("Index");
     }
 
     public IActionResult Eliminar(int id){
-        repo.Baja(id);
-        TempData["Mensaje"] = "El propietario se elimino";
+        int res=repo.Baja(id);
+        if(res == -1)
+            TempData["Error"] = "No se pudo eliminar el propietario";
+        else
+            TempData["Mensaje"] = "El propietario se elimino";
         return RedirectToAction("Index");
     }
 

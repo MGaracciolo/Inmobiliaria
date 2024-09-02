@@ -44,8 +44,8 @@ public class RepositorioContrato: RepositorioBase
                        ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
                        IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
-                       Desde = DateOnly.FromDateTime(reader.GetDateTime(nameof(Contrato.Desde))),
-                       Hasta = DateOnly.FromDateTime(reader.GetDateTime(nameof(Contrato.Hasta))),
+                       Desde= reader.GetDateTime(nameof(Contrato.Desde)),
+                       Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
                        Precio = reader.GetDecimal(nameof(Contrato.Precio)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        Inquilino = new Inquilino{
@@ -108,7 +108,7 @@ public class RepositorioContrato: RepositorioBase
             INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
             INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
             INNER JOIN direccion d ON d.id_direccion = inm.id_direccion
-           WHERE c.{nameof(Contrato.ContratoId)} = @id";
+           WHERE c.id_contrato = @id";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                 command.Parameters.AddWithValue("@id", id);
                connection.Open();
@@ -118,8 +118,8 @@ public class RepositorioContrato: RepositorioBase
                        ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
                        IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
-                       Desde = DateOnly.FromDateTime(reader.GetDateTime(nameof(Contrato.Desde))),
-                       Hasta = DateOnly.FromDateTime(reader.GetDateTime(nameof(Contrato.Hasta))),
+                       Desde= reader.GetDateTime(nameof(Contrato.Desde)),
+                       Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
                        Precio = reader.GetDecimal(nameof(Contrato.Precio)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        Inquilino = new Inquilino{
@@ -157,16 +157,16 @@ public class RepositorioContrato: RepositorioBase
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"INSERT INTO contrato
-           (c.id_inquilino AS IdInquilino, 
-           c.id_inmueble AS IdInmueble,
-           c.desde AS Desde, 
-           c.hasta AS Hasta, 
-           c.precio AS Precio,
-           c.estado AS Estado,)
+           (id_inquilino, 
+           id_inmueble,
+           desde, 
+           hasta, 
+           precio,
+           estado)
            VALUES(@id_inquilino,@id_inmueble,@desde,@hasta,@precio,@estado);
            SELECT LAST_INSERT_ID();";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-               command.Parameters.AddWithValue("@id_inquilino", contrato.ContratoId);
+               command.Parameters.AddWithValue("@id_inquilino", contrato.IdInquilino);
                command.Parameters.AddWithValue("@id_inmueble", contrato.IdInmueble);
                command.Parameters.AddWithValue("@desde", contrato.Desde);
                command.Parameters.AddWithValue("@hasta", contrato.Hasta);
@@ -223,7 +223,26 @@ public class RepositorioContrato: RepositorioBase
             WHERE id_contrato = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@id", nameof(Contrato.ContratoId));
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                res = command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        return res;
+    }
+
+      public int Restore(int id)
+    {
+        int res = -1;
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        {
+            var query = $@"UPDATE contrato
+            SET estado = 1
+            WHERE id_contrato = @id";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
                 connection.Open();
                 res = command.ExecuteNonQuery();
                 connection.Close();

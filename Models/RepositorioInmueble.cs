@@ -160,15 +160,15 @@ public class RepositorioInmueble: RepositorioBase
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"INSERT INTO inmueble
-           (id_direccion AS IdDireccion,
-           latitud AS Latitud,
-           longitud AS Longitud,
-           id_propietario AS IdPropietario,
-           id_uso_inmueble AS IdUso,
-           id_tipo_inmueble AS IdTipo,
-           ambientes AS Ambientes,
-           precio AS Precio,
-           estado AS Estado)
+           (id_direccion,
+           latitud,
+           longitud,
+           id_propietario,
+           id_uso_inmueble,
+           id_tipo_inmueble,
+           ambientes,
+           precio,
+           estado)
            VALUES(@id_direccion,@latitud,@longitud,@id_propietario,@id_uso_inmueble,@id_tipo_inmueble,@ambientes,@precio,@estado);
            SELECT LAST_INSERT_ID();";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
@@ -228,15 +228,30 @@ public class RepositorioInmueble: RepositorioBase
 
 
 
-    public int Baja(Inmueble Inmueble){
+    public int Baja(int id){
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"UPDATE inmueble
            SET estado = 0
            WHERE id_inmueble = @id";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-                command.Parameters.AddWithValue("@id", Inmueble.InmuebleId);
-                command.Parameters.AddWithValue("@estado", Inmueble.Estado);
+                command.Parameters.AddWithValue("@id", id);
+               connection.Open();
+               res = command.ExecuteNonQuery();
+               connection.Close();
+           }
+        }
+        return res;
+    }
+
+    public int Restore(int id){
+        int res = -1;
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"UPDATE inmueble
+           SET estado = 1
+           WHERE id_inmueble = @id";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+                command.Parameters.AddWithValue("@id", id);
                connection.Open();
                res = command.ExecuteNonQuery();
                connection.Close();

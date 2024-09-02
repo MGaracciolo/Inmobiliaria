@@ -6,7 +6,6 @@ public class Direccion
     public int DireccionId { get; set; }
 
     [Required(ErrorMessage = "La calle es obligatoria.")]//Melian
-    [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "La calle solo puede contener letras y espacios.")]
     [MinLength(2, ErrorMessage = "La calle debe tener al menos 2 caracteres.")]
     public string? Calle { get; set; }
     

@@ -67,8 +67,20 @@ public class ContratoController : Controller
     }
 
     public IActionResult Eliminar(int id){
-        repo.Baja(id);
-        TempData["Mensaje"] = "El contrato quedo inactivo";
+        int res =repo.Baja(id);
+        if(res == -1)
+            TempData["Error"] = "No se pudo dar de baja el contrato";
+        else
+            TempData["Mensaje"] = "El contrato quedo inactivo";
+        return RedirectToAction("Index");
+    }
+
+     public IActionResult Activar(int id){
+        int res =repo.Restore(id);
+        if(res == -1)
+            TempData["Error"] = "No se pudo activar el contrato";
+        else
+            TempData["Mensaje"] = "El contrato se activo";
         return RedirectToAction("Index");
     }
    

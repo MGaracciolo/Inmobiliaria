@@ -49,7 +49,8 @@
     <a asp-action="Index">Volver al listado</a>
 </div>
 
-<script>
+@section Scripts{
+    <script>
     @if (TempData["Mensaje"] != null)
     {
         <text>
@@ -62,4 +63,19 @@
             });
         </text>
     }
-</script>
+    </script>
+    <script>
+    @if (TempData["Error"] != null)
+    {
+        <text>
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            text: '@TempData["Error"]',
+            showConfirmButton: false,
+            timer: 1500
+            });
+        </text>
+    }
+    </script>
+}

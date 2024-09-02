@@ -42,34 +42,67 @@ public class InquilinoController : Controller
         }
     }
     [HttpPost]
+    // public IActionResult Guardar(int id, Inquilino inquilino)
+    // {
+
+    //     //Melian
+    //     if (!ModelState.IsValid)
+    //     {
+    //         //Si el modelo no es valido, se regresa a la vista de edicion
+    //         return View("Edicion", inquilino);
+    //     }
+
+    //     id = inquilino.InquilinoId;
+    //     if (id == 0)
+    //     {
+    //         repo.Alta(inquilino);
+    //         TempData["Mensaje"] = "Inquilino guardado";
+    //     }
+
+    //     else
+    //     {
+    //         repo.Modificar(inquilino);
+    //         TempData["Mensaje"] = "Cambios guardados";
+    //     }
+    //     return RedirectToAction("Index");
+    // }
     public IActionResult Guardar(int id, Inquilino inquilino)
     {
-
-        //Melian
-        if (!ModelState.IsValid)
+        try
         {
-            //Si el modelo no es valido, se regresa a la vista de edicion
-            return View("Edicion", inquilino);
-        }
+            if (!ModelState.IsValid)
+            {
+                return View("Edicion", inquilino);
+            }
 
-        id = inquilino.InquilinoId;
-        if (id == 0)
-        {
-            repo.Alta(inquilino);
-            TempData["Mensaje"] = "Inquilino guardado";
-        }
+            id = inquilino.InquilinoId;
+            if (id == 0)
+            {
+                repo.Alta(inquilino);
+                TempData["Mensaje"] = "Inquilino guardado";
+            }
+            else
+            {
+                repo.Modificar(inquilino);
+                TempData["Mensaje"] = "Cambios guardados";
+            }
 
-        else
-        {
-            repo.Modificar(inquilino);
-            TempData["Mensaje"] = "Cambios guardados";
+            return RedirectToAction("Index");
         }
-        return RedirectToAction("Index");
+        catch (Exception ex)
+        {
+            TempData["Error"] = ex.Message;
+            return RedirectToAction("Edicion", new { id = inquilino.InquilinoId });
+        }
     }
 
+
     public IActionResult Eliminar(int id){
-        repo.Baja(id);
-        TempData["Mensaje"] = "El inquilino se elimino";
+        int res=repo.Baja(id);
+        if(res==-1)
+            TempData["Error"] = "No se pudo eliminar el inquilino";
+        else
+            TempData["Mensaje"] = "El inquilino se elimino";
         return RedirectToAction("Index");
     }
    

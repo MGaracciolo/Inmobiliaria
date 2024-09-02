@@ -7,7 +7,7 @@
     <h3 class="display-4">Inmuebles registrados:</h3>
 	
 </div>
-<table class="table">
+<table class="table display" id="inmueblesTable">
 	<thead>
 		<tr>
 			<th>
@@ -48,13 +48,18 @@
 					@(item.TipoInmueble != null ? item.TipoInmueble.ToString() : "Tipo no disponible")
 				</td>
 				<td>
-                    <a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a>|
+					<a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a>|
 					<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a>|
-					<a href="/Inmueble/Eliminar/@item.InmuebleId"><i class="fa-solid fa-trash"></i></a>
+					@if (item.Estado == true)
+						{
+							<a href="/Inmueble/Eliminar/@item.InmuebleId"><i class="fa-solid fa-trash"></i></a>
+						}else{
+							<a href="/Inmueble/Activar/@item.InmuebleId"><i class="fa-solid fa-trash-arrow-up"></i></a>
+						}
 				</td>
 			</tr>
 		}
-		
+
 	</tbody>
 	<tfoot>
 		<tr>
@@ -67,7 +72,33 @@
 
 
 @section Scripts{
+
+    <script>
+    @if (TempData["Mensaje"] != null)
+    {
+        <text>
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            text: '@TempData["Mensaje"]',
+            showConfirmButton: false,
+            timer: 1500
+            });
+        </text>
+    }
+    </script>
 	<script>
-		
-	</script>
+    @if (TempData["Error"] != null)
+    {
+        <text>
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            text: '@TempData["Error"]',
+            showConfirmButton: false,
+            timer: 1500
+            });
+        </text>
+    }
+    </script>
 }

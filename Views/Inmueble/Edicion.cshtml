@@ -5,11 +5,6 @@
 	var Propietarios = (IList<Propietario>)ViewBag.Propietarios;
     var Usos = (IList<UsoInmueble>)ViewBag.Usos;
     var Tipos = (IList<TipoInmueble>)ViewBag.Tipos;
-    var Direcciones = (IList<Direccion>)ViewBag.Direcciones;
-    @* var Direcciones = ViewBag.Direcciones as IList<Direccion> ?? new List<Direccion>();
-    var Propietarios = ViewBag.Propietarios as IList<Propietario> ?? new List<Propietario>();
-    var Usos = ViewBag.Usos as IList<UsoInmueble> ?? new List<UsoInmueble>();
-    var Tipos = ViewBag.Tipos as IList<TipoInmueble> ?? new List<TipoInmueble>(); *@
 }
 
 <div class="text-center">
@@ -68,23 +63,23 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Uso</label>
-                <select class="form-control" name="UsoInmueble">
+                <select class="form-control" name="IdUso">
                     @foreach (var item in Usos)
                     {
                         @:<option @(item.UsoId==Model?.IdUso ? "selected" : "") value="@item.UsoId">@(item.UsoValor)</option>
                     }
                 </select>
-                <span asp-validation-for="UsoInmueble" class="text-danger"></span>
+                <span asp-validation-for="IdUso" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Tipo</label>
-                <select class="form-control" name="TipoInmueble">
+                <select class="form-control" name="IdTipo">
                     @foreach (var item in Tipos)
                     {
                         @:<option @(item.TipoId==Model?.IdTipo ? "selected" : "") value="@item.TipoId">@(item.Valor)</option>
                     }
                 </select>
-                <span asp-validation-for="TipoInmueble" class="text-danger"></span>
+                <span asp-validation-for="IdTipo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Ambientes" class="control-label">Ambientes</label>
@@ -97,14 +92,6 @@
                 <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Estado" class="control-label">Estado</label>
-                <select asp-for="Estado" class="form-control">
-                    <option value=1>Activo</option>
-                    <option value=0>Inactivo</option>
-                </select>
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
@@ -115,7 +102,8 @@
     <a asp-action="Index">Volver al listado</a>
 </div>
 
-<script>
+@section Scripts{
+    <script>
     @if (TempData["Mensaje"] != null)
     {
         <text>
@@ -128,4 +116,19 @@
             });
         </text>
     }
-</script>
+    </script>
+    <script>
+    @if (TempData["Error"] != null)
+    {
+        <text>
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            text: '@TempData["Error"]',
+            showConfirmButton: false,
+            timer: 1500
+            });
+        </text>
+    }
+    </script>
+}

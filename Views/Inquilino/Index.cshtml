@@ -39,24 +39,7 @@
 </table>
 
 @section Scripts{
-	<!-- jQuery para las dependencias de la datatables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- script de DataTables.net y abajo estan los estilos -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
-
-
     <script>
-        $(document).ready(function () {
-            $('#inquilinosTable').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
-                },
-				"columnDefs": [
-                    { "orderable": false, "targets": 3 }
-                ]
-            });
-        });
         @if (TempData["Mensaje"] != null)
             {
                 <text>
@@ -68,5 +51,19 @@
                 });
                 </text>
             }
+    </script>
+    <script>
+    @if (TempData["Error"] != null)
+    {
+        <text>
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            text: '@TempData["Error"]',
+            showConfirmButton: false,
+            timer: 1500
+            });
+        </text>
+    }
     </script>
 }

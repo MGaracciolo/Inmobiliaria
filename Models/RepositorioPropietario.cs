@@ -56,7 +56,10 @@ public class RepositorioPropietario : RepositorioBase
             p.id_direccion AS IdDireccion,
             d.id_direccion AS DireccionId,
             d.calle AS Calle,
-            d.altura AS Altura
+            d.altura AS Altura,
+            d.piso AS Piso,
+            d.departamento AS Departamento,
+            d.observaciones AS Observaciones
            FROM propietario p
            INNER JOIN direccion d ON d.id_direccion = p.id_direccion
            WHERE id_propietario = @id";
@@ -76,7 +79,10 @@ public class RepositorioPropietario : RepositorioBase
                         Direccion = new Direccion{
                             DireccionId = reader.GetInt32(nameof(Direccion.DireccionId)),
                             Calle = reader.GetString(nameof(Direccion.Calle)),
-                            Altura = reader.GetInt32(nameof(Direccion.Altura))
+                            Altura = reader.GetInt32(nameof(Direccion.Altura)),
+                            Piso = reader.IsDBNull(reader.GetOrdinal(nameof(Direccion.Piso))) ? (int?)null : reader.GetInt32(nameof(Direccion.Piso)),
+                            Departamento = reader.IsDBNull(reader.GetOrdinal(nameof(Direccion.Departamento))) ? null : reader.GetString(nameof(Direccion.Departamento)),
+                            Observaciones = reader.IsDBNull(reader.GetOrdinal(nameof(Direccion.Observaciones))) ? null : reader.GetString(nameof(Direccion.Observaciones))
                         }
                    };
                }
@@ -96,7 +102,7 @@ public class RepositorioPropietario : RepositorioBase
             email,
             telefono,
             id_direccion)
-           VALUES(@nombre,@apellido,@dni,@email,@telefono);
+           VALUES(@nombre,@apellido,@dni,@email,@telefono,@id_direccion);
            SELECT LAST_INSERT_ID();";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                command.Parameters.AddWithValue("@nombre", propietario.Nombre);
@@ -136,7 +142,7 @@ public class RepositorioPropietario : RepositorioBase
            dni = @dni,
            email  = @email,
            telefono = @telefono,
-           id_direccion = @id_direccion,
+           id_direccion = @id_direccion
            WHERE id_propietario = @id_propietario";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                command.Parameters.AddWithValue("@id_propietario", propietario.PropietarioId);

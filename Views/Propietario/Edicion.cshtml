@@ -13,6 +13,7 @@
         <form asp-action="Guardar">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" readonly name="PropietarioId" value="@id" />
+             <input type="hidden" readonly name="Direccion.DireccionId" value="@(Model?.Direccion?.DireccionId ?? 0)" />
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" />
@@ -75,17 +76,33 @@
     <a asp-action="Index">Volver al listado</a>
 </div>
 
-<script>
-    @if (TempData["Mensaje"] != null)
+@section Scripts{
+    <script>
+        @if (TempData["Mensaje"] != null)
+        {
+            <text>
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                text: '@TempData["Mensaje"]',
+                showConfirmButton: false,
+                timer: 1500
+                });
+            </text>
+        }
+    </script>
+    <script>
+    @if (TempData["Error"] != null)
     {
         <text>
         Swal.fire({
             position: "center",
-            icon: "success",
-            text: '@TempData["Mensaje"]',
+            icon: "error",
+            text: '@TempData["Error"]',
             showConfirmButton: false,
             timer: 1500
             });
         </text>
     }
-</script>
+    </script>
+}
