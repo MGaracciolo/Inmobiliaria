@@ -26,7 +26,7 @@
                 <td class="text-end">
                     <a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a> |
                     <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a> |
-                    <a href="/Inquilino/Eliminar/@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
+                    <a href="#" class="text-danger eliminar" data-url="/Inquilino/Eliminar/@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>
         }
@@ -40,6 +40,26 @@
 
 @section Scripts{
     <script>
+        $(document).ready(function() {
+            $('.eliminar').click(function(e) {
+                e.preventDefault(); 
+                var url = $(this).data('url'); 
+                Swal.fire({
+                    title: "¿Eliminar Inquilino?",
+                    text: "Los datos se eliminan definitivamente",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
         @if (TempData["Mensaje"] != null)
             {
                 <text>

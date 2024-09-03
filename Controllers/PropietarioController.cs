@@ -55,9 +55,9 @@ public class PropietarioController : Controller
         }
         return RedirectToAction("Index");
     }
-
-    public IActionResult Eliminar(int id){
-        int res=repo.Baja(id);
+    //va a eliminar tanto al propietario como la direccion del PROPIETARIO siempre y cuando no tenga inmubeles registrados
+    public IActionResult Eliminar(int id, int direccion){
+        int res=repo.Baja(id,direccion);
         if(res == -1)
             TempData["Error"] = "No se pudo eliminar el propietario";
         else
@@ -72,7 +72,6 @@ public class PropietarioController : Controller
         else
         {
             var propietario = repo.ObtenerUno(id);
-            // var direccion = repositorioDireccion.ObtenerUno(propietario.IdDireccion);
             return View(propietario);
         }
     }

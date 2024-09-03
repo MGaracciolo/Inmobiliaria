@@ -32,9 +32,9 @@
                     <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>|
                     @if (item.Estado == true)
 						{
-							<a href="/Contrato/Eliminar/@item.ContratoId"><i class="fa-solid fa-trash"></i></a>
+							<a href="#" data-url="/Contrato/Eliminar/@item.ContratoId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
 						}else{
-							<a href="/Contrato/Activar/@item.ContratoId"><i class="fa-solid fa-trash-arrow-up"></i></a>
+							<a href="#" data-url="/Contrato/Activar/@item.ContratoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
 						}
                 </td>
             </tr>
@@ -52,6 +52,46 @@
 
 @section Scripts{
     <script>
+        $(document).ready(function() {
+            $('.desactivar').click(function(e) {
+                e.preventDefault(); 
+                var url = $(this).data('url'); 
+                Swal.fire({
+                    title: "¿Desactivar contrato?",
+                    text: "El inmueble volvera a estar disponible",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Desactivar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+
+            $('.activar').click(function(e) {
+                e.preventDefault(); 
+                var url = $(this).data('url'); 
+                Swal.fire({
+                    title: "¿Activar contrato?",
+                    text: "El inmueble volvera a estar ocupado",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Activar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+
         @if (TempData["Mensaje"] != null)
         {
             <text>
@@ -64,19 +104,17 @@
                 });
             </text>
         }
-    </script>
-    <script>
-    @if (TempData["Error"] != null)
-    {
-        <text>
-        Swal.fire({
-            position: "center",
-            icon: "error",
-            text: '@TempData["Error"]',
-            showConfirmButton: false,
-            timer: 1500
-            });
-        </text>
-    }
+        @if (TempData["Error"] != null)
+        {
+            <text>
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                text: '@TempData["Error"]',
+                showConfirmButton: false,
+                timer: 1500
+                });
+            </text>
+        }
     </script>
 }

@@ -160,12 +160,15 @@ public class RepositorioPropietario : RepositorioBase
         return res;
     }
 
-    public int Baja(int id){
+    public int Baja(int id, int id_direccion){
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
-           var query = $@"DELETE FROM propietario
-           WHERE  id_propietario = @id";
+           var query = $@"DELETE FROM direccion
+            WHERE id_direccion = @id_direccion;
+            DELETE FROM propietario
+            WHERE  id_propietario = @id;";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
+              command.Parameters.AddWithValue("@id_direccion", id_direccion);
                command.Parameters.AddWithValue("@id", id);
                connection.Open();
                res = command.ExecuteNonQuery();
@@ -174,6 +177,4 @@ public class RepositorioPropietario : RepositorioBase
         }
         return res;
     }
-
-
 }
