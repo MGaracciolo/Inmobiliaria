@@ -8,6 +8,8 @@ public class ContratoController : Controller
 {
     private readonly ILogger<ContratoController> _logger;
     private RepositorioContrato repo = new RepositorioContrato();
+    private readonly RepositorioInquilino repoInquilino = new RepositorioInquilino();
+    private RepositorioInmueble repoInmueble = new RepositorioInmueble();
 
     public ContratoController(ILogger<ContratoController> logger)
     {
@@ -22,10 +24,15 @@ public class ContratoController : Controller
     /*endpoint*/
     public IActionResult Edicion(int id)
     {
-        if(id == 0)  
+        ViewBag.Inquilinos = repoInquilino.ObtenerTodos();
+        ViewBag.Inmuebles = repoInmueble.ObtenerTodos();
+        if(id == 0) {
+            
             return View();
+        }
         else
         {
+            
             var contrato = repo.ObtenerUno(id);
             return View(contrato);
         }
@@ -37,22 +44,44 @@ public class ContratoController : Controller
         else
         {
             var contrato = repo.ObtenerUno(id);
+            var inquilino = repoInquilino.ObtenerUno(contrato.IdInquilino);
+            var inmueble = repoInmueble.ObtenerUno(contrato.IdInmueble);
+            contrato.Inquilino = inquilino;
+            contrato.Inmueble = inmueble;
             return View(contrato);
         }
     }
     [HttpPost]
     public IActionResult Guardar(int id, Contrato contrato){
-        id=contrato.id_contrato;
-        if(id == 0)
+        id=contrato.ContratoId;
+        if(id == 0){
             repo.Alta(contrato);
+            TempData["Mensaje"] = "Contrato generado";
+        }
         else
+        {
             repo.Modificar(contrato);
+            TempData["Mensaje"] = "Cambios guardados";
+        }
         return RedirectToAction("Index");
     }
 
-    // public IActionResult Eliminar(int id){
-    //     repo.Baja(id);
-    //     return RedirectToAction("Index");
-    // }
+    public IActionResult Eliminar(int id){
+        int res =repo.Baja(id);
+        if(res == -1)
+            TempData["Error"] = "No se pudo dar de baja el contrato";
+        else
+            TempData["Mensaje"] = "El contrato quedo inactivo";
+        return RedirectToAction("Index");
+    }
+
+     public IActionResult Activar(int id){
+        int res =repo.Restore(id);
+        if(res == -1)
+            TempData["Error"] = "No se pudo activar el contrato";
+        else
+            TempData["Mensaje"] = "El contrato se activo";
+        return RedirectToAction("Index");
+    }
    
 }

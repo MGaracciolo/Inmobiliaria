@@ -7,7 +7,7 @@
     <h3 class="display-4">Inmuebles registrados:</h3>
 	
 </div>
-<table class="table">
+<table class="table display" id="inmueblesTable">
 	<thead>
 		<tr>
 			<th>
@@ -22,6 +22,9 @@
 			<th>
 				Uso
 			</th>
+			<th>
+				Tipo
+			</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -30,25 +33,33 @@
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.id_inmueble)
+					@Html.DisplayFor(modelItem => item.InmuebleId)
 				</td>
 				<td>
-					@(item.direccion != null ? item.direccion.ToString() : "Dirección no disponible")
+					@(item.Direccion != null ? item.Direccion.ToString() : "Dirección no disponible")
 				</td>
 				<td>
-					@(item.propietario != null ? item.propietario.ToString() : "Propietario no disponible")
+					@(item.Propietario != null ? item.Propietario.ToString() : "Propietario no disponible")
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.uso)
+					@(item.UsoInmueble != null ? item.UsoInmueble.ToString() : "Uso no disponible")
 				</td>
 				<td>
-                    <a href="/Inmueble/Edicion/@item.id_inmueble"><i class="fa-solid fa-pen-to-square"></i></a>|
-					<a href="/Inmueble/Detalle/@item.id_inmueble"><i class="fa-solid fa-eye"></i></a>|
-					<a href="/Inmueble/Eliminar/@item.id_inmueble"><i class="fa-solid fa-trash"></i></a>
+					@(item.TipoInmueble != null ? item.TipoInmueble.ToString() : "Tipo no disponible")
+				</td>
+				<td>
+					<a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a>|
+					<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a>|
+					@if (item.Estado == true)
+						{
+							<a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
+						}else{
+							<a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+						}
 				</td>
 			</tr>
 		}
-		
+
 	</tbody>
 	<tfoot>
 		<tr>
@@ -62,6 +73,70 @@
 
 @section Scripts{
 	<script>
-		
+		$(document).ready(function() {
+			$('.desactivar').click(function(e) {
+				e.preventDefault(); 
+				var url = $(this).data('url'); 
+				Swal.fire({
+					title: "¿Desactivar inmueble?",
+					text: "No estara disponible para nuevos contratos",
+					icon: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#d33",
+					confirmButtonText: "Desactivar",
+					cancelButtonText: "Cancelar"
+				}).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = url;
+					}
+				});
+			});
+
+			$('.activar').click(function(e) {
+				e.preventDefault(); 
+				console.log("Activar clickeado");
+				var url = $(this).data('url'); 
+				Swal.fire({
+					title: "¿Activar inmueble?",
+					text: "Estara disponible para nuevos contratos",
+					icon: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#d33",
+					confirmButtonText: "Activar",
+					cancelButtonText: "Cancelar"
+				}).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = url;
+					}
+				});
+			});
+		});
+		@if (TempData["Mensaje"] != null)
+		{
+			<text>
+			Swal.fire({
+				position: "center",
+				icon: "success",
+				text: '@TempData["Mensaje"]',
+				showConfirmButton: false,
+				timer: 1500
+				});
+			</text>
+		}
+
+		@if (TempData["Error"] != null)
+		{
+			<text>
+			Swal.fire({
+				position: "center",
+				icon: "error",
+				text: '@TempData["Error"]',
+				showConfirmButton: false,
+				timer: 1500
+				});
+			</text>
+		}
 	</script>
 }

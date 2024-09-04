@@ -9,12 +9,13 @@
 	
 </div>
 
-<table class="table" id="contratosTable">
+<table id="contratosTable" class="table display" >
     <thead>
         <tr>
             <th>ID</th>
             <th>Inquilino</th>
             <th>Inmueble</th>
+            <th>Propietario</th>
             <th></th>
         </tr>
     </thead>
@@ -22,20 +23,26 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.id_contrato)</td>
-                <td>@(item.inquilino != null ? item.inquilino.ToString() : "Inquilino no disponible")</td>
-                <td>@(item.inmueble?.direccion != null ? item.inmueble.direccion.ToString() : "Direccion no disponible")</td>
+                <td>@Html.DisplayFor(modelItem => item.ContratoId)</td>
+                <td>@(item.Inquilino != null ? item.Inquilino.ToString() : "Inquilino no disponible")</td>
+                <td>@(item.Inmueble?.Direccion != null ? item.Inmueble.Direccion.ToString() : "Direccion no disponible")</td>
+                <td>@(item.Inmueble?.Propietario != null ? item.Inmueble.Propietario.ToString() : "Propietario no disponible")</td>
                 <td>
-                    <a href="/Contrato/Edicion/@item.id_contrato"><i class="fa-solid fa-pen-to-square"></i></a>|
-                    <a href="/Contrato/Detalle/@item.id_contrato"><i class="fa-solid fa-eye"></i></a>|
-                    <a href="/Contrato/Eliminar/@item.id_contrato"><i class="fa-solid fa-trash"></i></a>
+                    <a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a>|
+                    <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>|
+                    @if (item.Estado == true)
+						{
+							<a href="#" data-url="/Contrato/Eliminar/@item.ContratoId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
+						}else{
+							<a href="#" data-url="/Contrato/Activar/@item.ContratoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+						}
                 </td>
             </tr>
         }
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="4">
+            <td colspan="5">
                 <a href="/Contrato/Edicion/"> <i class="fa-solid fa-plus"></i></a>
             </td>
         </tr>
@@ -44,19 +51,70 @@
 
 
 @section Scripts{
-    <!-- jQuery para las dependencias de la datatables -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- script de DataTables.net y abajo estan los estilos -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
-
     <script>
         $(document).ready(function() {
-            $('#contratosTable').DataTable({//Inicializa sobre el id que le ponga a la tabla
-                "language": {//Esto es para el idioma espaniol
-                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
-                }
+            $('.desactivar').click(function(e) {
+                e.preventDefault(); 
+                var url = $(this).data('url'); 
+                Swal.fire({
+                    title: "¿Desactivar contrato?",
+                    text: "El inmueble volvera a estar disponible",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Desactivar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+
+            $('.activar').click(function(e) {
+                e.preventDefault(); 
+                var url = $(this).data('url'); 
+                Swal.fire({
+                    title: "¿Activar contrato?",
+                    text: "El inmueble volvera a estar ocupado",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Activar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
             });
         });
+
+        @if (TempData["Mensaje"] != null)
+        {
+            <text>
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                text: '@TempData["Mensaje"]',
+                showConfirmButton: false,
+                timer: 1500
+                });
+            </text>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <text>
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                text: '@TempData["Error"]',
+                showConfirmButton: false,
+                timer: 1500
+                });
+            </text>
+        }
     </script>
 }

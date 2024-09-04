@@ -1,0 +1,70 @@
+@model IEnumerable<net.Models.TipoInmueble>
+@{
+    ViewData["Title"] = "Tipo de Inmueble";
+}
+
+<div class="text-center">
+    <h3 class="display-4">Tipo de Inmueble</h3>
+	
+</div>
+<table id="TipoInmuebleTable" class="table display">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tipo de Inmueble</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.TipoId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Valor)</td>
+                <td class="text-end">
+                    <a href="/TipoInmueble/Edicion/@item.TipoId"><i class="fa-solid fa-pen-to-square"></i></a> |
+                    <a href="/TipoInmueble/Detalle/@item.TipoId"><i class="fa-solid fa-eye"></i></a> |
+                    <a href="#" class="text-danger eliminar" data-url="/TipoInmueble/Baja?id=@item.TipoId"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"><a href="/TipoInmueble/Edicion/"><i class="fa-solid fa-plus"></i></a></td>
+        </tr>
+    </tfoot>
+</table>
+
+@section Scripts{
+
+    <script>
+        
+        @if (TempData["Mensaje"] != null)
+        {
+            <text>
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                text: '@TempData["Mensaje"]',
+                showConfirmButton: false,
+                timer: 1500
+                });
+            </text>
+        }
+    </script>
+    <script>
+    @if (TempData["Error"] != null)
+    {
+        <text>
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            text: '@TempData["Error"]',
+            showConfirmButton: false,
+            timer: 1500
+            });
+        </text>
+    }
+    </script>
+}

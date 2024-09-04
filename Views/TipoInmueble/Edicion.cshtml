@@ -1,0 +1,81 @@
+﻿@model net.Models.TipoInmueble
+@{
+    ViewData["Title"] = "Editar Tipo de Inmueble";
+	int id = Model==null ? 0 : Model.TipoId;
+}
+
+<div class="text-center">
+    <h1 class="display-4">@((id== 0) ? "Crear nuevo Tipo de Inmueble" : "Editar Tipo de Inmueble"):</h1>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Guardar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" readonly name="TipoInmuebleId" value="@id" />
+             
+            <div class="form-group">
+                <label asp-for="Valor" class="control-label"> Tipo</label>
+                <input asp-for="Valor" class="form-control" />
+                <span asp-validation-for="Valor" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" id="guardar"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $('#guardar').click(function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: "¿Guardar cambios?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Guardar",
+                    denyButtonText: "No guardar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                         $('form').off('submit').submit();
+                    }
+                });
+            });
+        });
+        @if (TempData["Mensaje"] != null)
+        {
+            <text>
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                text: '@TempData["Mensaje"]',
+                showConfirmButton: false,
+                timer: 1500
+                });
+            </text>
+        }
+    </script>
+    <script>
+    @if (TempData["Error"] != null)
+    {
+        <text>
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            text: '@TempData["Error"]',
+            showConfirmButton: false,
+            timer: 1500
+            });
+        </text>
+    }
+    </script>
+}

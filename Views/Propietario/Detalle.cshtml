@@ -1,7 +1,7 @@
 @model net.Models.Propietario
 @{
     ViewData["Title"] = "Detalle";
-	int id = Model==null ? 0 : Model.id_propietario;
+	int id = Model==null ? 0 : Model.PropietarioId;
 }
 
 
@@ -13,34 +13,57 @@
     <div class="col-md-4">
         <form>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" readonly name="PropietarioId" value="@id" />
             <div class="form-group">
-                <label asp-for="id_propietario" class="control-label"></label>
-                <input asp-for="id_propietario" class="form-control" />
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" readonly/>
+                <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="nombre" class="control-label"></label>
-                <input asp-for="nombre" class="form-control" />
-                <span asp-validation-for="nombre" class="text-danger"></span>
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" readonly/>
+                <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="apellido" class="control-label"></label>
-                <input asp-for="apellido" class="form-control" />
-                <span asp-validation-for="apellido" class="text-danger"></span>
+                <label asp-for="Dni" class="control-label"></label>
+                <input asp-for="Dni" class="form-control"readonly/>
+                <span asp-validation-for="Dni" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="dni" class="control-label"></label>
-                <input asp-for="dni" class="form-control" />
-                <span asp-validation-for="dni" class="text-danger"></span>
+                <label asp-for="Telefono" class="control-label"></label>
+                <input asp-for="Telefono" class="form-control" readonly/>
+                <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="telefono" class="control-label"></label>
-                <input asp-for="telefono" class="form-control" />
-                <span asp-validation-for="telefono" class="text-danger"></span>
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" readonly/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <input type="hidden" readonly name="IdDireccion"/>
+            <div class="form-group">
+                <label asp-for="Direccion.Calle" class="control-label"></label>
+                <input asp-for="Direccion.Calle" class="form-control" readonly/>
+                <span asp-validation-for="Direccion.Calle" class="text-danger"></span>
+            </div>
+               <div class="form-group">
+                <label asp-for="Direccion.Altura" class="control-label"></label>
+                <input asp-for="Direccion.Altura" class="form-control" readonly/>
+                <span asp-validation-for="Direccion.Altura" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="email" class="control-label"></label>
-                <input asp-for="email" class="form-control" />
-                <span asp-validation-for="email" class="text-danger"></span>
+                <label asp-for="Direccion.Piso" class="control-label"></label>
+                <input asp-for="Direccion.Piso" class="form-control" readonly/>
+                <span asp-validation-for="Direccion.Piso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion.Departamento" class="control-label"></label>
+                <input asp-for="Direccion.Departamento" class="form-control" readonly/>
+                <span asp-validation-for="Direccion.Departamento" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label asp-for="Direccion.Observaciones" class="control-label"></label>
+                <input asp-for="Direccion.Observaciones" class="form-control" readonly/>
+                <span asp-validation-for="Direccion.Observaciones" class="text-danger"></span>
             </div>
         </form>
     </div>

@@ -8,6 +8,7 @@ public class PropietarioController : Controller
 {
     private readonly ILogger<PropietarioController> _logger;
     private RepositorioPropietario repo = new RepositorioPropietario();
+    private RepositorioDireccion repositorioDireccion = new RepositorioDireccion();
 
     public PropietarioController(ILogger<PropietarioController> logger)
     {
@@ -31,22 +32,36 @@ public class PropietarioController : Controller
         }
     }
     [HttpPost]
-    public IActionResult Guardar(int id, Propietario propietario){
+    public IActionResult Guardar(int id, Propietario propietario,Direccion direccion){
 
         if (!ModelState.IsValid) {
             return View("Edicion", propietario);
         }
-
-        id=propietario.id_propietario;
-        if(id == 0)
+        id=propietario.PropietarioId;
+        if(id == 0){
+            int idDireccion = repositorioDireccion.Alta(direccion);
+            propietario.IdDireccion = idDireccion;
+            
             repo.Alta(propietario);
+            TempData["Mensaje"] = "Propietario guardado";
+        }
         else
+        {
+            repositorioDireccion.Modificar(direccion);
+            propietario.IdDireccion = direccion.DireccionId;
+            
             repo.Modificar(propietario);
+            TempData["Mensaje"] = "Cambios guardados";
+        }
         return RedirectToAction("Index");
     }
-
-    public IActionResult Eliminar(int id){
-        repo.Baja(id);
+    //va a eliminar tanto al propietario como la direccion del PROPIETARIO siempre y cuando no tenga inmubeles registrados
+    public IActionResult Eliminar(int id, int direccion){
+        int res=repo.Baja(id,direccion);
+        if(res == -1)
+            TempData["Error"] = "No se pudo eliminar el propietario";
+        else
+            TempData["Mensaje"] = "El propietario se elimino";
         return RedirectToAction("Index");
     }
 
@@ -56,8 +71,8 @@ public class PropietarioController : Controller
             return View();
         else
         {
-            var inquilino = repo.ObtenerUno(id);
-            return View(inquilino);
+            var propietario = repo.ObtenerUno(id);
+            return View(propietario);
         }
     }
    

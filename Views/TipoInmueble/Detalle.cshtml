@@ -1,0 +1,31 @@
+@model net.Models.TipoInmueble
+@{
+    ViewData["Title"] = "Detalle";
+	int id = Model==null ? 0 : Model.TipoId;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Tipo de Inmueble:</h1>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Guardar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <input type="hidden" readonly name="TipoInmuebleId" value="@id" />
+             
+            <div class="form-group">
+                <label asp-for="Valor" class="control-label"> Tipo</label>
+                <input asp-for="Valor" class="form-control" readonly />
+                <span asp-validation-for="Valor" class="text-danger"></span>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>

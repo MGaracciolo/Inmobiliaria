@@ -1,10 +1,17 @@
 namespace net.Models;
+using System.ComponentModel.DataAnnotations;
 
 public class Pago{
 
-    public int id_pago { get; set; }
-    public int id_contrato { get; set; }
-    public int numero { get; set; }
-    public double importe { get; set; }
-    public DateTime fecha { get; set; }
+    public int PagoId { get; set; }
+
+    public int IdContrato { get; set; }
+
+    
+    public int Numero { get; set; }
+    
+    [Required(ErrorMessage = "Ingrese el importe")]
+    public decimal Importe { get; set; }
+
+    public DateOnly Fecha { get; set; }
 }

@@ -1,28 +1,40 @@
 namespace net.Models;
+using System.ComponentModel.DataAnnotations;
 
 public class Inmueble{
-    public int id_inmueble { get; set; }
+    public int InmuebleId { get; set; }
 
-    public int id_direccion { get; set; }
+    public int IdDireccion { get; set; }
 
-    public string? latitud { get; set; }
+    [Required(ErrorMessage = "La latitud es obligatoria.")]
+    public string? Latitud { get; set; }
 
-    public string? longitud { get; set; }
+     [Required(ErrorMessage = "La longitud es obligatoria.")]
+    public string? Longitud { get; set; }
 
-    public int id_propietario { get; set; }
+     [Required(ErrorMessage = "Seleccione un propietario.")]
+    public int IdPropietario { get; set; }
 
-    public string? uso { get; set; }
+    [Required(ErrorMessage = "Seleccione un uso.")]
+    public int IdUso { get; set; }
 
-    public string? tipo { get; set; }
+    [Required(ErrorMessage = "Seleccione un tipo de inmueble.")]
+    public int IdTipo { get; set; }
 
-    public int ambientes { get; set; }
+    [Required(ErrorMessage = "La cantidad de ambientes es obligatoria.")]
+    public int Ambientes { get; set; }
 
-    public double precio { get; set; }
+    [Required(ErrorMessage = "El precio es obligatorio.")]
+    public decimal Precio { get; set; }
 
-    public bool estado { get; set; }  = true;
+    public bool Estado { get; set; }  = true;
 
-    public Propietario? propietario { get; set; }
+    public Propietario? Propietario { get; set; }
 
-    public Direccion? direccion { get; set; }
+    public Direccion? Direccion { get; set; }
+
+    public TipoInmueble? TipoInmueble { get; set; }
+
+    public UsoInmueble? UsoInmueble { get; set; }
 
 }
