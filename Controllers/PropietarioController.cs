@@ -8,7 +8,6 @@ public class PropietarioController : Controller
 {
     private readonly ILogger<PropietarioController> _logger;
     private RepositorioPropietario repo = new RepositorioPropietario();
-    private RepositorioDireccion repositorioDireccion = new RepositorioDireccion();
 
     public PropietarioController(ILogger<PropietarioController> logger)
     {
@@ -32,32 +31,26 @@ public class PropietarioController : Controller
         }
     }
     [HttpPost]
-    public IActionResult Guardar(int id, Propietario propietario,Direccion direccion){
+    public IActionResult Guardar(int id, Propietario propietario){
 
         if (!ModelState.IsValid) {
             return View("Edicion", propietario);
         }
         id=propietario.PropietarioId;
-        if(id == 0){
-            int idDireccion = repositorioDireccion.Alta(direccion);
-            propietario.IdDireccion = idDireccion;
-            
+        if(id == 0){          
             repo.Alta(propietario);
             TempData["Mensaje"] = "Propietario guardado";
         }
         else
         {
-            repositorioDireccion.Modificar(direccion);
-            propietario.IdDireccion = direccion.DireccionId;
-            
             repo.Modificar(propietario);
             TempData["Mensaje"] = "Cambios guardados";
         }
         return RedirectToAction("Index");
     }
     //va a eliminar tanto al propietario como la direccion del PROPIETARIO siempre y cuando no tenga inmubeles registrados
-    public IActionResult Eliminar(int id, int direccion){
-        int res=repo.Baja(id,direccion);
+    public IActionResult Eliminar(int id){
+        int res=repo.Baja(id);
         if(res == -1)
             TempData["Error"] = "No se pudo eliminar el propietario";
         else
@@ -75,5 +68,16 @@ public class PropietarioController : Controller
             return View(propietario);
         }
     }
+
+      public IActionResult Activar(int id)
+    {
+        int res = repo.Restore(id);
+        if (res == -1)
+            TempData["Error"] = "No se pudo activar el propietario";
+        else
+            TempData["Mensaje"] = "El propietario se activo";
+        return RedirectToAction("Index");
+    }
+
    
 }

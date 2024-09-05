@@ -105,5 +105,14 @@ public class InquilinoController : Controller
             TempData["Mensaje"] = "El inquilino se elimino";
         return RedirectToAction("Index");
     }
-   
+     public IActionResult Activar(int id)
+    {
+        int res = repo.Restore(id);
+        if (res == -1)
+            TempData["Error"] = "No se pudo activar el inquilino";
+        else
+            TempData["Mensaje"] = "El inquilino se activo";
+        return RedirectToAction("Index");
+    }
+
 }

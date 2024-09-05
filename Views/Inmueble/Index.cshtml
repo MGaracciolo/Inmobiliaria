@@ -7,7 +7,7 @@
     <h3 class="display-4">Inmuebles registrados:</h3>
 	
 </div>
-<table class="table display" id="inmueblesTable">
+<table class="table row-border" id="inmueblesTable">
 	<thead>
 		<tr>
 			<th>
@@ -36,7 +36,7 @@
 					@Html.DisplayFor(modelItem => item.InmuebleId)
 				</td>
 				<td>
-					@(item.Direccion != null ? item.Direccion.ToString() : "Dirección no disponible")
+					@(item.DireccionI != null ? item.DireccionI : "Dirección no disponible")
 				</td>
 				<td>
 					@(item.Propietario != null ? item.Propietario.ToString() : "Propietario no disponible")
@@ -47,16 +47,19 @@
 				<td>
 					@(item.TipoInmueble != null ? item.TipoInmueble.ToString() : "Tipo no disponible")
 				</td>
-				<td>
-					<a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a>|
-					<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a>|
 					@if (item.Estado == true)
 						{
-							<a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
+							<td>
+								<a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a>|
+								<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a>|
+								<a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
+							</td>
 						}else{
-							<a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+							<td>
+								<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a>|
+								<a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+							</td>
 						}
-				</td>
 			</tr>
 		}
 

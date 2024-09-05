@@ -5,7 +5,6 @@
     var Propietarios = (IList<Propietario>)ViewBag.Propietarios;
     var Inmuebles = (IList<Inmueble>)ViewBag.Inmuebles;
     var Inquilinos = (IList<Inquilino>)ViewBag.Inquilinos;
-    var Direcciones = (IList<Direccion>)ViewBag.Direcciones;
 }
 
 <div class="text-center">
@@ -32,7 +31,7 @@
                 <select class="form-control" name="IdInmueble">
                     @foreach (var item in Inmuebles)
                     {
-                        @:<option @(item.InmuebleId==Model?.IdInmueble ? "selected" : "") value="@item.InmuebleId">@(item.Direccion?.ToString())</option>
+                        @:<option @(item.InmuebleId==Model?.IdInmueble ? "selected" : "") value="@item.InmuebleId">@(item.DireccionI)</option>
                     }
                 </select>
                 <span asp-validation-for="IdInmueble" class="text-danger"></span>

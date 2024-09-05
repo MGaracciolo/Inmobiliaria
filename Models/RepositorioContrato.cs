@@ -17,25 +17,21 @@ public class RepositorioContrato: RepositorioBase
            c.precio AS Precio,
            c.estado AS Estado,
            i.id_inquilino AS InquilinoId,
-            i.nombre AS NombreI,
-            i.apellido AS ApellidoI,
-            i.dni AS DniI,
+           i.nombre AS NombreI,
+           i.apellido AS ApellidoI,
+           i.dni AS DniI,
            inm.id_inmueble AS InmuebleId,
-           inm.id_direccion AS IdDireccion,
+           inm.direccion AS DireccionI,
            inm.id_propietario AS IdPropietario,
            inm.precio AS Precio,
            p.id_propietario AS PropietarioId,
-            p.nombre AS Nombre,
-            p.apellido AS Apellido,
-            p.dni AS Dni,
-           d.id_direccion AS DireccionId,
-           d.calle AS Calle,
-           d.altura AS Altura
+           p.nombre AS Nombre,
+           p.apellido AS Apellido,
+           p.dni AS Dni
            FROM contrato c
            INNER JOIN inquilino i ON i.id_inquilino = c.id_inquilino
-            INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
-            INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
-            INNER JOIN direccion d ON d.id_direccion = inm.id_direccion";
+           INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
+           INNER JOIN propietario p ON p.id_propietario = inm.id_propietario";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                connection.Open();
                var reader = command.ExecuteReader();
@@ -56,7 +52,7 @@ public class RepositorioContrato: RepositorioBase
                        },
                        Inmueble = new Inmueble{
                            InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
-                           IdDireccion = reader.GetInt32(nameof(Inmueble.IdDireccion)),
+                           DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
                            IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
                            Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
                            Propietario = new Propietario{
@@ -64,11 +60,134 @@ public class RepositorioContrato: RepositorioBase
                                Nombre = reader.GetString(nameof(Propietario.Nombre)),
                                Apellido = reader.GetString(nameof(Propietario.Apellido)),
                                Dni = reader.GetString(nameof(Propietario.Dni))
-                           },
-                           Direccion = new Direccion{
-                               DireccionId = reader.GetInt32(nameof(Direccion.DireccionId)),
-                               Calle = reader.GetString(nameof(Direccion.Calle)),
-                               Altura = reader.GetInt32(nameof(Direccion.Altura))
+                           }
+                       }
+                   });
+               }
+           }
+        }
+        return contratos;
+    }
+    public List<Contrato> ObtenerActivos(){
+        List<Contrato> contratos = new List<Contrato>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+           c.id_contrato AS ContratoId, 
+           c.id_inquilino AS IdInquilino, 
+           c.id_inmueble AS IdInmueble,
+           c.desde AS Desde, 
+           c.hasta AS Hasta, 
+           c.precio AS Precio,
+           c.estado AS Estado,
+           i.id_inquilino AS InquilinoId,
+           i.nombre AS NombreI,
+           i.apellido AS ApellidoI,
+           i.dni AS DniI,
+           inm.id_inmueble AS InmuebleId,
+           inm.direccion AS DireccionI,
+           inm.id_propietario AS IdPropietario,
+           inm.precio AS Precio,
+           p.id_propietario AS PropietarioId,
+           p.nombre AS Nombre,
+           p.apellido AS Apellido,
+           p.dni AS Dni
+           FROM contrato c
+           INNER JOIN inquilino i ON i.id_inquilino = c.id_inquilino
+           INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
+           INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
+           WHERE c.estado = 1";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  contratos.Add(new Contrato{
+                       ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
+                       IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                       IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
+                       Desde= reader.GetDateTime(nameof(Contrato.Desde)),
+                       Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Precio = reader.GetDecimal(nameof(Contrato.Precio)),
+                       Estado = reader.GetBoolean(nameof(Contrato.Estado)),
+                       Inquilino = new Inquilino{
+                           InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                           NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                           ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                           DniI = reader.GetString(nameof(Inquilino.DniI))
+                       },
+                       Inmueble = new Inmueble{
+                           InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                           DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
+                           IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                           Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
+                           Propietario = new Propietario{
+                               PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+                               Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                               Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                               Dni = reader.GetString(nameof(Propietario.Dni))
+                           }
+                       }
+                   });
+               }
+           }
+        }
+        return contratos;
+    }
+    public List<Contrato> ObtenerInactivos(){
+        List<Contrato> contratos = new List<Contrato>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+           c.id_contrato AS ContratoId, 
+           c.id_inquilino AS IdInquilino, 
+           c.id_inmueble AS IdInmueble,
+           c.desde AS Desde, 
+           c.hasta AS Hasta, 
+           c.precio AS Precio,
+           c.estado AS Estado,
+           i.id_inquilino AS InquilinoId,
+           i.nombre AS NombreI,
+           i.apellido AS ApellidoI,
+           i.dni AS DniI,
+           inm.id_inmueble AS InmuebleId,
+           inm.direccion AS DireccionI,
+           inm.id_propietario AS IdPropietario,
+           inm.precio AS Precio,
+           p.id_propietario AS PropietarioId,
+           p.nombre AS Nombre,
+           p.apellido AS Apellido,
+           p.dni AS Dni
+           FROM contrato c
+           INNER JOIN inquilino i ON i.id_inquilino = c.id_inquilino
+           INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
+           INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
+           WHERE c.estado = 0";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  contratos.Add(new Contrato{
+                       ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
+                       IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                       IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
+                       Desde= reader.GetDateTime(nameof(Contrato.Desde)),
+                       Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Precio = reader.GetDecimal(nameof(Contrato.Precio)),
+                       Estado = reader.GetBoolean(nameof(Contrato.Estado)),
+                       Inquilino = new Inquilino{
+                           InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                           NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                           ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                           DniI = reader.GetString(nameof(Inquilino.DniI))
+                       },
+                       Inmueble = new Inmueble{
+                           InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                           DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
+                           IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                           Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
+                           Propietario = new Propietario{
+                               PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+                               Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                               Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                               Dni = reader.GetString(nameof(Propietario.Dni))
                            }
                        }
                    });
@@ -82,33 +201,29 @@ public class RepositorioContrato: RepositorioBase
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
           var query = $@"SELECT 
           c.id_contrato AS ContratoId, 
-           c.id_inquilino AS IdInquilino, 
-           c.id_inmueble AS IdInmueble,
-           c.desde AS Desde, 
-           c.hasta AS Hasta, 
-           c.precio AS Precio,
-           c.estado AS Estado,
-           i.id_inquilino AS InquilinoId,
-            i.nombre AS NombreI,
-            i.apellido AS ApellidoI,
-            i.dni AS DniI,
-           inm.id_inmueble AS InmuebleId,
-           inm.id_direccion AS IdDireccion,
-           inm.id_propietario AS IdPropietario,
-           inm.precio AS Precio,
-           p.id_propietario AS PropietarioId,
-            p.nombre AS Nombre,
-            p.apellido AS Apellido,
-            p.dni AS Dni,
-           d.id_direccion AS DireccionId,
-           d.calle AS Calle,
-           d.altura AS Altura
-           FROM contrato c
-           INNER JOIN inquilino i ON i.id_inquilino = c.id_inquilino
-            INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
-            INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
-            INNER JOIN direccion d ON d.id_direccion = inm.id_direccion
-           WHERE c.id_contrato = @id";
+          c.id_inquilino AS IdInquilino, 
+          c.id_inmueble AS IdInmueble,
+          c.desde AS Desde, 
+          c.hasta AS Hasta, 
+          c.precio AS Precio,
+          c.estado AS Estado,
+          i.id_inquilino AS InquilinoId,
+          i.nombre AS NombreI,
+          i.apellido AS ApellidoI,
+          i.dni AS DniI,
+          inm.id_inmueble AS InmuebleId,
+          inm.direccion AS DireccionI,
+          inm.id_propietario AS IdPropietario,
+          inm.precio AS Precio,
+          p.id_propietario AS PropietarioId,
+          p.nombre AS Nombre,
+          p.apellido AS Apellido,
+          p.dni AS Dni
+          FROM contrato c
+          INNER JOIN inquilino i ON i.id_inquilino = c.id_inquilino
+          INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
+          INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
+          WHERE c.id_contrato = @id";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                 command.Parameters.AddWithValue("@id", id);
                connection.Open();
@@ -130,7 +245,7 @@ public class RepositorioContrato: RepositorioBase
                        },
                        Inmueble = new Inmueble{
                            InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
-                           IdDireccion = reader.GetInt32(nameof(Inmueble.IdDireccion)),
+                           DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
                            IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
                            Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
                            Propietario = new Propietario{
@@ -138,11 +253,6 @@ public class RepositorioContrato: RepositorioBase
                                Nombre = reader.GetString(nameof(Propietario.Nombre)),
                                Apellido = reader.GetString(nameof(Propietario.Apellido)),
                                Dni = reader.GetString(nameof(Propietario.Dni))
-                           },
-                           Direccion = new Direccion{
-                               DireccionId = reader.GetInt32(nameof(Direccion.DireccionId)),
-                               Calle = reader.GetString(nameof(Direccion.Calle)),
-                               Altura = reader.GetInt32(nameof(Direccion.Altura))
                            }
                        }
                    };
@@ -206,11 +316,6 @@ public class RepositorioContrato: RepositorioBase
         }
         return res;
     }
-
-
-
-    //Para borrar el contrato hacer baja LOGICA, a estado asignarle false
-
 
 
     public int Baja(int id)

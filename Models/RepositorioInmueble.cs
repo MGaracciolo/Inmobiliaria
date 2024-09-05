@@ -9,7 +9,7 @@ public class RepositorioInmueble: RepositorioBase
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"SELECT 
            i.id_inmueble AS InmuebleId,
-           i.id_direccion AS IdDireccion,
+           i.direccion AS DireccionI,
            i.latitud AS Latitud,
            i.longitud AS Longitud,
            i.id_propietario AS IdPropietario,
@@ -22,16 +22,12 @@ public class RepositorioInmueble: RepositorioBase
             p.nombre AS Nombre,
             p.apellido AS Apellido,
             p.dni AS Dni,
-           d.id_direccion AS DireccionId,
-           d.calle AS Calle,
-           d.altura AS Altura,
            t.id_tipo_inmueble AS TipoId,
            t.valor as Valor,
            u.id_uso_inmueble AS UsoId,
            u.valor as UsoValor
             FROM inmueble i
             INNER JOIN propietario p ON i.id_propietario = p.id_propietario
-            INNER JOIN direccion d ON i.id_direccion = d.id_direccion
             INNER JOIN tipo_inmueble t ON i.id_tipo_inmueble = t.id_tipo_inmueble
             INNER JOIN uso_inmueble u ON i.id_uso_inmueble = u.id_uso_inmueble";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
@@ -40,7 +36,7 @@ public class RepositorioInmueble: RepositorioBase
                while(reader.Read()){
                   inmuebles.Add(new Inmueble{
                         InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
-                        IdDireccion = reader.GetInt32(nameof(Inmueble.IdDireccion)),
+                        DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
                         Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                         Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                         IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
@@ -56,12 +52,136 @@ public class RepositorioInmueble: RepositorioBase
 								Apellido = reader.GetString(nameof(Propietario.Apellido)),
                                 Dni = reader.GetString(nameof(Propietario.Dni))
 							},
-                        Direccion = new Direccion
+                        UsoInmueble = new UsoInmueble
                             {
-                                DireccionId = reader.GetInt32(nameof(Direccion.DireccionId)),
-                                Calle = reader.GetString(nameof(Direccion.Calle)),
-                                Altura = reader.GetInt32(nameof(Direccion.Altura))
+                                UsoId = reader.GetInt32(nameof(UsoInmueble.UsoId)),
+                               UsoValor = reader.GetString(nameof(UsoInmueble.UsoValor))
                             },
+                        TipoInmueble = new TipoInmueble
+                            {
+                                TipoId = reader.GetInt32(nameof(TipoInmueble.TipoId)),
+                               Valor = reader.GetString(nameof(TipoInmueble.Valor))
+                            }
+                   });
+               }
+           }
+        }
+        return inmuebles;
+    }
+    public List<Inmueble> ObtenerActivos(){
+        List<Inmueble> inmuebles = new List<Inmueble>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+           i.id_inmueble AS InmuebleId,
+           i.direccion AS DireccionI,
+           i.latitud AS Latitud,
+           i.longitud AS Longitud,
+           i.id_propietario AS IdPropietario,
+           i.id_uso_inmueble AS IdUso,
+           i.id_tipo_inmueble AS IdTipo,
+           i.ambientes AS Ambientes,
+           i.precio AS Precio,
+           i.estado AS Estado,
+           p.id_propietario AS PropietarioId,
+            p.nombre AS Nombre,
+            p.apellido AS Apellido,
+            p.dni AS Dni,
+           t.id_tipo_inmueble AS TipoId,
+           t.valor as Valor,
+           u.id_uso_inmueble AS UsoId,
+           u.valor as UsoValor
+            FROM inmueble i
+            INNER JOIN propietario p ON i.id_propietario = p.id_propietario
+            INNER JOIN tipo_inmueble t ON i.id_tipo_inmueble = t.id_tipo_inmueble
+            INNER JOIN uso_inmueble u ON i.id_uso_inmueble = u.id_uso_inmueble
+            WHERE i.estado = 1";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  inmuebles.Add(new Inmueble{
+                        InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                        DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
+                        Latitud = reader.GetString(nameof(Inmueble.Latitud)),
+                        Longitud = reader.GetString(nameof(Inmueble.Longitud)),
+                        IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                        IdUso = reader.GetInt32(nameof(Inmueble.IdUso)),
+                        IdTipo = reader.GetInt32(nameof(Inmueble.IdTipo)),
+                        Ambientes = reader.GetInt32(nameof(Inmueble.Ambientes)),
+                        Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
+                        Estado = reader.GetBoolean(nameof(Inmueble.Estado)),
+                        Propietario = new Propietario
+							{
+								PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+								Nombre = reader.GetString(nameof(Propietario.Nombre)),
+								Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                                Dni = reader.GetString(nameof(Propietario.Dni))
+							},
+                        UsoInmueble = new UsoInmueble
+                            {
+                                UsoId = reader.GetInt32(nameof(UsoInmueble.UsoId)),
+                               UsoValor = reader.GetString(nameof(UsoInmueble.UsoValor))
+                            },
+                        TipoInmueble = new TipoInmueble
+                            {
+                                TipoId = reader.GetInt32(nameof(TipoInmueble.TipoId)),
+                               Valor = reader.GetString(nameof(TipoInmueble.Valor))
+                            }
+                   });
+               }
+           }
+        }
+        return inmuebles;
+    }
+    public List<Inmueble> ObtenerInactivos(){
+        List<Inmueble> inmuebles = new List<Inmueble>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+           i.id_inmueble AS InmuebleId,
+           i.direccion AS DireccionI,
+           i.latitud AS Latitud,
+           i.longitud AS Longitud,
+           i.id_propietario AS IdPropietario,
+           i.id_uso_inmueble AS IdUso,
+           i.id_tipo_inmueble AS IdTipo,
+           i.ambientes AS Ambientes,
+           i.precio AS Precio,
+           i.estado AS Estado,
+           p.id_propietario AS PropietarioId,
+            p.nombre AS Nombre,
+            p.apellido AS Apellido,
+            p.dni AS Dni,
+           t.id_tipo_inmueble AS TipoId,
+           t.valor as Valor,
+           u.id_uso_inmueble AS UsoId,
+           u.valor as UsoValor
+            FROM inmueble i
+            INNER JOIN propietario p ON i.id_propietario = p.id_propietario
+            INNER JOIN tipo_inmueble t ON i.id_tipo_inmueble = t.id_tipo_inmueble
+            INNER JOIN uso_inmueble u ON i.id_uso_inmueble = u.id_uso_inmueble
+            WHERE i.estado = 0";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  inmuebles.Add(new Inmueble{
+                        InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                        DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
+                        Latitud = reader.GetString(nameof(Inmueble.Latitud)),
+                        Longitud = reader.GetString(nameof(Inmueble.Longitud)),
+                        IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                        IdUso = reader.GetInt32(nameof(Inmueble.IdUso)),
+                        IdTipo = reader.GetInt32(nameof(Inmueble.IdTipo)),
+                        Ambientes = reader.GetInt32(nameof(Inmueble.Ambientes)),
+                        Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
+                        Estado = reader.GetBoolean(nameof(Inmueble.Estado)),
+                        Propietario = new Propietario
+							{
+								PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+								Nombre = reader.GetString(nameof(Propietario.Nombre)),
+								Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                                Dni = reader.GetString(nameof(Propietario.Dni))
+							},
                         UsoInmueble = new UsoInmueble
                             {
                                 UsoId = reader.GetInt32(nameof(UsoInmueble.UsoId)),
@@ -83,7 +203,7 @@ public class RepositorioInmueble: RepositorioBase
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"SELECT 
           i.id_inmueble AS InmuebleId,
-           i.id_direccion AS IdDireccion,
+           i.direccion AS DireccionI,
            i.latitud AS Latitud,
            i.longitud AS Longitud,
            i.id_propietario AS IdPropietario,
@@ -96,16 +216,12 @@ public class RepositorioInmueble: RepositorioBase
             p.nombre AS Nombre,
             p.apellido AS Apellido,
             p.dni AS Dni,
-           d.id_direccion AS DireccionId,
-           d.calle AS Calle,
-           d.altura AS Altura,
            t.id_tipo_inmueble AS TipoId,
            t.valor as Valor,
            u.id_uso_inmueble AS UsoId,
            u.valor as UsoValor
             FROM inmueble i
             INNER JOIN propietario p ON i.id_propietario = p.id_propietario
-            INNER JOIN direccion d ON i.id_direccion = d.id_direccion
             INNER JOIN tipo_inmueble t ON t.id_tipo_inmueble = i.id_tipo_inmueble
             INNER JOIN uso_inmueble u ON u.id_uso_inmueble = i.id_uso_inmueble
            WHERE i.id_inmueble = @id";
@@ -116,7 +232,7 @@ public class RepositorioInmueble: RepositorioBase
                if(reader.Read()){
                    inmueble = new Inmueble{
                        InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
-                        IdDireccion = reader.GetInt32(nameof(Inmueble.IdDireccion)),
+                        DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
                         Latitud = reader.GetString(nameof(Inmueble.Latitud)),
                         Longitud = reader.GetString(nameof(Inmueble.Longitud)),
                         IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
@@ -132,12 +248,6 @@ public class RepositorioInmueble: RepositorioBase
 								Apellido = reader.GetString(nameof(Propietario.Apellido)),
                                 Dni = reader.GetString(nameof(Propietario.Dni))
 							},
-                        Direccion = new Direccion
-                            {
-                                DireccionId = reader.GetInt32(nameof(Direccion.DireccionId)),
-                                Calle = reader.GetString(nameof(Direccion.Calle)),
-                                Altura = reader.GetInt32(nameof(Direccion.Altura))
-                            },
                         UsoInmueble = new UsoInmueble
                             {
                                 UsoId = reader.GetInt32(nameof(UsoInmueble.UsoId)),
@@ -160,7 +270,7 @@ public class RepositorioInmueble: RepositorioBase
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"INSERT INTO inmueble
-           (id_direccion,
+           (direccion,
            latitud,
            longitud,
            id_propietario,
@@ -169,10 +279,10 @@ public class RepositorioInmueble: RepositorioBase
            ambientes,
            precio,
            estado)
-           VALUES(@id_direccion,@latitud,@longitud,@id_propietario,@id_uso_inmueble,@id_tipo_inmueble,@ambientes,@precio,@estado);
+           VALUES(@direccion,@latitud,@longitud,@id_propietario,@id_uso_inmueble,@id_tipo_inmueble,@ambientes,@precio,@estado);
            SELECT LAST_INSERT_ID();";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-               command.Parameters.AddWithValue("@id_direccion", inmueble.IdDireccion);
+               command.Parameters.AddWithValue("@direccion", inmueble.DireccionI);
                command.Parameters.AddWithValue("@latitud", inmueble.Latitud);
                command.Parameters.AddWithValue("@longitud", inmueble.Longitud);
                command.Parameters.AddWithValue("@id_propietario", inmueble.IdPropietario);
@@ -193,7 +303,7 @@ public class RepositorioInmueble: RepositorioBase
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
            var query = $@"UPDATE inmueble
-           SET id_direccion = @id_direccion,
+           SET direccion = @direccion,
            latitud = @latitud,
            longitud = @longitud,
            id_propietario = @id_propietario,
@@ -205,7 +315,7 @@ public class RepositorioInmueble: RepositorioBase
            WHERE id_inmueble = @id_inmueble";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                command.Parameters.AddWithValue("@id_inmueble", inmueble.InmuebleId);
-               command.Parameters.AddWithValue("@id_direccion", inmueble.IdDireccion);
+               command.Parameters.AddWithValue("@direccion", inmueble.DireccionI);
                command.Parameters.AddWithValue("@latitud", inmueble.Latitud);
                command.Parameters.AddWithValue("@longitud", inmueble.Longitud);
                command.Parameters.AddWithValue("@id_propietario", inmueble.IdPropietario);

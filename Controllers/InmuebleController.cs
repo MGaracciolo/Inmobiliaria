@@ -11,7 +11,6 @@ public class InmuebleController : Controller
     private RepositorioPropietario repoPropietario = new RepositorioPropietario();
     private RepositorioTipo repoTipo = new RepositorioTipo();
     private RepositorioUso repoUso = new RepositorioUso();
-    private RepositorioDireccion repoDireccion = new RepositorioDireccion();
 
     public InmuebleController(ILogger<InmuebleController> logger)
     {
@@ -50,85 +49,66 @@ public class InmuebleController : Controller
             var inmueble = repo.ObtenerUno(id);
             var propietario = repoPropietario.ObtenerUno(inmueble.IdPropietario);
             var uso = repoUso.ObtenerUno(inmueble.IdUso);
-            var direccion = repoDireccion.ObtenerUno(inmueble.IdDireccion);
             var tipo = repoTipo.ObtenerUno(inmueble.IdTipo);
             inmueble.Propietario = propietario;
             inmueble.UsoInmueble = uso;
-            inmueble.Direccion = direccion;
             inmueble.TipoInmueble = tipo;
             return View(inmueble);
         }
     }
 
+    [HttpPost]
+    public IActionResult Guardar(int id, Inmueble inmueble)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View("Edicion", inmueble);
+        }
+        id = inmueble.InmuebleId;
+        if (id == 0)
+        {
+            repo.Alta(inmueble);
+            TempData["Mensaje"] = "Inmueble guardado";
+        }
+        else
+        {
+            repo.Modificar(inmueble);
+            TempData["Mensaje"] = "Cambios guardados";
+        }
+        return RedirectToAction("Index");
+    }
     // [HttpPost]
-    // public IActionResult Guardar(int id, Inmueble inmueble, Direccion direccion)
+    // public IActionResult Guardar(int id, Inmueble inmueble)
     // {
     //     if (!ModelState.IsValid)
     //     {
+    //         ViewBag.Propietarios = repoPropietario.ObtenerTodos();
+    //         ViewBag.Usos = repoUso.ObtenerTodos();
+    //         ViewBag.Tipos = repoTipo.ObtenerTodos();
     //         return View("Edicion", inmueble);
     //     }
+
+    //     if (inmueble == null)
+    //     {
+    //         ModelState.AddModelError("", "Inmueble no puede ser nulo.");
+    //         return View("Edicion", inmueble);
+    //     }
+
+
     //     id = inmueble.InmuebleId;
     //     if (id == 0)
     //     {
-    //         int idDireccion = repoDireccion.Alta(direccion);
-    //         inmueble.IdDireccion = idDireccion;
-
     //         repo.Alta(inmueble);
     //         TempData["Mensaje"] = "Inmueble guardado";
     //     }
     //     else
     //     {
-    //         repoDireccion.Modificar(direccion);
-    //         inmueble.IdDireccion = direccion.DireccionId;
-
     //         repo.Modificar(inmueble);
     //         TempData["Mensaje"] = "Cambios guardados";
     //     }
+
     //     return RedirectToAction("Index");
     // }
-    [HttpPost]
-public IActionResult Guardar(int id, Inmueble inmueble, Direccion direccion)
-{
-    if (!ModelState.IsValid)
-    {
-        ViewBag.Propietarios = repoPropietario.ObtenerTodos();
-        ViewBag.Usos = repoUso.ObtenerTodos();
-        ViewBag.Tipos = repoTipo.ObtenerTodos();
-        return View("Edicion", inmueble);
-    }
-
-    if (inmueble == null)
-    {
-        ModelState.AddModelError("", "Inmueble no puede ser nulo.");
-        return View("Edicion", inmueble);
-    }
-
-    if (direccion == null)
-    {
-        ModelState.AddModelError("", "Dirección no puede ser nula.");
-        return View("Edicion", inmueble);
-    }
-
-    id = inmueble.InmuebleId;
-    if (id == 0)
-    {
-        int idDireccion = repoDireccion.Alta(direccion);
-        inmueble.IdDireccion = idDireccion;
-
-        repo.Alta(inmueble);
-        TempData["Mensaje"] = "Inmueble guardado";
-    }
-    else
-    {
-        repoDireccion.Modificar(direccion);
-        inmueble.IdDireccion = direccion.DireccionId;
-
-        repo.Modificar(inmueble);
-        TempData["Mensaje"] = "Cambios guardados";
-    }
-
-    return RedirectToAction("Index");
-}
 
 
     public IActionResult Eliminar(int id)

@@ -9,7 +9,7 @@
 	
 </div>
 
-<table id="contratosTable" class="table display" >
+<table id="contratosTable" class="table row-border" >
     <thead>
         <tr>
             <th>ID</th>
@@ -25,19 +25,24 @@
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.ContratoId)</td>
                 <td>@(item.Inquilino != null ? item.Inquilino.ToString() : "Inquilino no disponible")</td>
-                <td>@(item.Inmueble?.Direccion != null ? item.Inmueble.Direccion.ToString() : "Direccion no disponible")</td>
+                <td>@(item.Inmueble?.DireccionI != null ? item.Inmueble.DireccionI: "Direccion no disponible")</td>
                 <td>@(item.Inmueble?.Propietario != null ? item.Inmueble.Propietario.ToString() : "Propietario no disponible")</td>
-                <td>
-                    <a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a>|
-                    <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>|
                     @if (item.Estado == true)
 						{
-							<a href="#" data-url="/Contrato/Eliminar/@item.ContratoId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
+                            <td>
+                                <a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a>|
+                                <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>|
+                                <a href="#" data-url="/Contrato/Eliminar/@item.ContratoId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
+                            </td>
 						}else{
-							<a href="#" data-url="/Contrato/Activar/@item.ContratoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+                            <td>
+                                <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>|
+                                <a href="#" data-url="/Contrato/Activar/@item.ContratoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+                            </td>
+							
 						}
-                </td>
-            </tr>
+                </tr>
+            
         }
     </tbody>
     <tfoot>

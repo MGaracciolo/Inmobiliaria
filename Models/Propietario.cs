@@ -27,10 +27,11 @@ public class Propietario
     [Phone(ErrorMessage = "El telefono no tiene un formato válido.")]
     public string? Telefono { get; set; }
 
-    public int IdDireccion { get; set; }
+    [Required(ErrorMessage = "La dirección es obligatoria.")]
+    [MinLength(10, ErrorMessage = "La dirección debe tener al menos 10 caracteres.")]
+    public string? DireccionP { get; set; }
 
-    public Direccion? Direccion { get; set; }
-
+    public bool EstadoP { get; set; }
     public override string ToString()
 		{
 			var res = $"{Dni} {Nombre} {Apellido}";

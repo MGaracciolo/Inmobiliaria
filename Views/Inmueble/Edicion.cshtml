@@ -17,29 +17,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="InmuebleId" value="@id"/>
             <div class="form-group">
-                <label asp-for="Direccion.Calle" class="control-label"></label>
-                <input asp-for="Direccion.Calle" class="form-control" />
-                <span asp-validation-for="Direccion.Calle" class="text-danger"></span>
-            </div>
-               <div class="form-group">
-                <label asp-for="Direccion.Altura" class="control-label"></label>
-                <input asp-for="Direccion.Altura" class="form-control" />
-                <span asp-validation-for="Direccion.Altura" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Direccion.Piso" class="control-label"></label>
-                <input asp-for="Direccion.Piso" class="form-control" />
-                <span asp-validation-for="Direccion.Piso" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Direccion.Departamento" class="control-label"></label>
-                <input asp-for="Direccion.Departamento" class="form-control" />
-                <span asp-validation-for="Direccion.Departamento" class="text-danger"></span>
-            </div>
-             <div class="form-group">
-                <label asp-for="Direccion.Observaciones" class="control-label"></label>
-                <input asp-for="Direccion.Observaciones" class="form-control" />
-                <span asp-validation-for="Direccion.Observaciones" class="text-danger"></span>
+                <label asp-for="DireccionI" class="control-label">Direccion</label>
+                <input asp-for="DireccionI" class="form-control" />
+                <span asp-validation-for="DireccionI" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Latitud" class="control-label">Latitud</label>

@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Inmueble" class="control-label">Inmueble</label>
-                <input asp-for="Inmueble" class="form-control" value="@Model?.Inmueble?.Direccion?.ToString()" readonly/>
+                <input asp-for="Inmueble" class="form-control" value="@Model?.Inmueble?.DireccionI" readonly/>
                 <span asp-validation-for="Inmueble" class="text-danger"></span>
             </div>
             <div class="form-group">

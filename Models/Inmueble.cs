@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations;
 public class Inmueble{
     public int InmuebleId { get; set; }
 
-    public int IdDireccion { get; set; }
+    [Required(ErrorMessage = "La dirección es obligatoria.")]
+    [MinLength(10, ErrorMessage = "La dirección debe tener al menos 10 caracteres.")]
+    public string? DireccionI { get; set; }
 
     [Required(ErrorMessage = "La latitud es obligatoria.")]
     public string? Latitud { get; set; }
@@ -30,8 +32,6 @@ public class Inmueble{
     public bool Estado { get; set; }  = true;
 
     public Propietario? Propietario { get; set; }
-
-    public Direccion? Direccion { get; set; }
 
     public TipoInmueble? TipoInmueble { get; set; }
 

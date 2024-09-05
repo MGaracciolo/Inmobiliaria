@@ -27,6 +27,8 @@ public class Inquilino
     [Phone(ErrorMessage = "El telefono no tiene un formato válido.")]
     public string? TelefonoI { get; set; }
 
+    public bool EstadoI { get; set; }
+
     public override string ToString()
 		{
 			var res = $"{DniI} {NombreI} {ApellidoI}";

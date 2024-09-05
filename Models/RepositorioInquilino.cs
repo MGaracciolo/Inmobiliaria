@@ -33,6 +33,69 @@ public class RepositorioInquilino: RepositorioBase
         }
         return inquilinos;
     }
+    public List<Inquilino> ObtenerActivos(){
+        List<Inquilino> inquilinos = new List<Inquilino>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+            id_inquilino AS InquilinoId,
+            nombre AS NombreI,
+            apellido AS ApellidoI,
+            dni AS DniI,
+            email AS EmailI,
+            telefono AS TelefonoI 
+            estado AS EstadoI
+           FROM inquilino
+           WHERE estado = 1";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  inquilinos.Add(new Inquilino{
+                        InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                        NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                        ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                        DniI = reader.GetString(nameof(Inquilino.DniI)),
+                        EmailI = reader.GetString(nameof(Inquilino.EmailI)),
+                        TelefonoI = reader.GetString(nameof(Inquilino.TelefonoI)),
+                        EstadoI = reader.GetBoolean(nameof(Inquilino.EstadoI)),
+                   });
+               }
+           }
+        }
+        return inquilinos;
+    }
+    public List<Inquilino> ObtenerInactivos(){
+        List<Inquilino> inquilinos = new List<Inquilino>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+            id_inquilino AS InquilinoId,
+            nombre AS NombreI,
+            apellido AS ApellidoI,
+            dni AS DniI,
+            email AS EmailI,
+            telefono AS TelefonoI 
+            estado AS EstadoI
+           FROM inquilino
+           WHERE estado = 0";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  inquilinos.Add(new Inquilino{
+                        InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                        NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                        ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                        DniI = reader.GetString(nameof(Inquilino.DniI)),
+                        EmailI = reader.GetString(nameof(Inquilino.EmailI)),
+                        TelefonoI = reader.GetString(nameof(Inquilino.TelefonoI)),
+                        EstadoI = reader.GetBoolean(nameof(Inquilino.EstadoI)),
+                   });
+               }
+           }
+        }
+        return inquilinos;
+    }
+
     public Inquilino? ObtenerUno(int id){
         Inquilino? inquilino = null;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
@@ -141,7 +204,8 @@ public class RepositorioInquilino: RepositorioBase
     public int Baja(int id){
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
-           var query = $@"DELETE FROM inquilino
+           var query = $@"UPDATE inquilino
+           SET estado = 0
            WHERE id_inquilino = @id";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                command.Parameters.AddWithValue("@id", id);
@@ -153,5 +217,23 @@ public class RepositorioInquilino: RepositorioBase
         return res;
     }
 
+    public int Restore(int id)
+    {
+        int res = -1;
+        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        {
+            var query = $@"UPDATE inquilino
+            SET estado = 1
+            WHERE id_inquilino = @id";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                connection.Open();
+                res = command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+        return res;
+    }
 
 }

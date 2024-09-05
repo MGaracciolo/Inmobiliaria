@@ -7,7 +7,7 @@
     <h3 class="display-4">Inquilinos registrados:</h3>
 </div>
 
-<table id="inquilinosTable" class="table display">
+<table id="inquilinosTable" class="table row-border">
     <thead>
         <tr>
             <th>DNI</th>
@@ -28,6 +28,20 @@
                     <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a> |
                     <a href="#" class="text-danger eliminar" data-url="/Inquilino/Eliminar/@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
                 </td>
+                @if (item.EstadoI== true)
+						{
+                            <td>
+                                <a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a> |
+                                <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a> |
+                                <a href="#" class="text-danger eliminar" data-url="/Inquilino/Eliminar/@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+						}else{
+                            <td>
+                               <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a>  |
+                                <a href="#" data-url="/Inquilino/Activar/@item.InquilinoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+                            </td>
+							
+						}
             </tr>
         }
     </tbody>
@@ -59,6 +73,23 @@
                     }
                 });
             });
+            $('.activar').click(function(e) {
+				e.preventDefault(); 
+				var url = $(this).data('url'); 
+				Swal.fire({
+					title: "¿Activar inquilino?",
+					text: "Estara disponible para nuevos contratos",
+					icon: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#d33",
+					confirmButtonText: "Activar",
+					cancelButtonText: "Cancelar"
+				}).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = url;
+					}
+				});
         });
         @if (TempData["Mensaje"] != null)
             {
