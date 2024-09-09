@@ -23,12 +23,7 @@
                 <td>@Html.DisplayFor(modelItem => item.DniI)</td>
                 <td>@Html.DisplayFor(modelItem => item.NombreI)</td>
                 <td>@Html.DisplayFor(modelItem => item.ApellidoI)</td>
-                <td class="text-end">
-                    <a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a> |
-                    <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a> |
-                    <a href="#" class="text-danger eliminar" data-url="/Inquilino/Eliminar/@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
-                </td>
-                @if (item.EstadoI== true)
+               @if (item.EstadoI== true)
 						{
                             <td>
                                 <a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a> |
