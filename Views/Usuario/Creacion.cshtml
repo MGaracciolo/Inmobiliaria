@@ -1,55 +1,59 @@
-﻿@model net.Models.Propietario
+﻿@model net.Models.Usuario
 @{
-    ViewData["Title"] = "Editar Propietario";
-	int id = Model==null ? 0 : Model.PropietarioId;
+    ViewData["Title"] = "Crear Usuario";
+	int id = Model==null ? 0 : Model.UsuarioId;
 }
 
 <div class="text-center">
-    <h1 class="display-4">@((id== 0) ? "Crear nuevo propietario" : "Editar propietario"):</h1>
+    <h3 class="display-4"> Crear nuevo usuario:</h3>
 </div>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Guardar">
+        <form asp-action="Creacion" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" readonly name="PropietarioId" value="@id" />
+            <input type="hidden" readonly name="UsuarioId" value="@id" />
             <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
+                <label asp-for="Nombre" class="control-label">Nombre</label>
                 <input asp-for="Nombre" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
+                <label asp-for="Apellido" class="control-label">Apellido</label>
                 <input asp-for="Apellido" class="form-control" />
                 <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Dni" class="control-label"></label>
-                <input asp-for="Dni" class="form-control"/>
-                <span asp-validation-for="Dni" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">Email</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DireccionP" class="control-label">Direccion</label>
-                <input asp-for="DireccionP" class="form-control" />
-                <span asp-validation-for="DireccionP" class="text-danger"></span>
+                <label asp-for="Password" class="control-label">Clave</label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+					<label class="control-label">Rol</label>
+					<select class="form-control" name="Rol">
+						@foreach (var rol in (IDictionary<int, string>)ViewBag.Roles)
+						{
+							@:<option @(rol.Key == Model.Rol ? "selected" : "") value="@rol.Key">@rol.Value</option>
+						}
+					</select>
+					<span asp-validation-for="Rol" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+                <label asp-for="AvatarFile" class="control-label">Avatar</label>
+                <input asp-for="AvatarFile"  type="file"/>
+                <span asp-validation-for="AvatarFile" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" id="guardar"/>
+                <input type="button" value="Guardar" class="btn btn-primary" id="guardar"/>
             </div>
         </form>
     </div>
 </div>
-
 
 <div>
     <a asp-action="Index">Volver al listado</a>
@@ -77,8 +81,8 @@
         {
             <text>
             Swal.fire({
-                position: "center",
-                icon: "success",
+                position: 'center',
+                icon: 'success',
                 text: '@TempData["Mensaje"]',
                 showConfirmButton: false,
                 timer: 1500
@@ -89,8 +93,8 @@
         {
             <text>
             Swal.fire({
-                position: "center",
-                icon: "error",
+                position: 'center',
+                icon: 'error,
                 text: '@TempData["Error"]',
                 showConfirmButton: false,
                 timer: 1500

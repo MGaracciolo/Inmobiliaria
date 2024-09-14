@@ -7,7 +7,7 @@
     <h3 class="display-4">Inquilinos registrados:</h3>
 </div>
 
-<table id="inquilinosTable" class="table row-border">
+<table id="inquilinosTable" class="table row-border dt-center">
     <thead>
         <tr>
             <th>DNI</th>
@@ -23,7 +23,7 @@
                 <td>@Html.DisplayFor(modelItem => item.DniI)</td>
                 <td>@Html.DisplayFor(modelItem => item.NombreI)</td>
                 <td>@Html.DisplayFor(modelItem => item.ApellidoI)</td>
-               @if (item.EstadoI== true)
+               @if (item.EstadoI == true)
 						{
                             <td>
                                 <a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a> |
@@ -85,31 +85,31 @@
 						window.location.href = url;
 					}
 				});
+            });
         });
         @if (TempData["Mensaje"] != null)
             {
                 <text>
                 Swal.fire({
-                    title: '¡Éxito!',
+                    position: "center",
                     text: '@TempData["Mensaje"]',
                     icon: 'success',
-                    confirmButtonText: 'OK'
+                    showConfirmButton: false,
+                    timer: 1500
                 });
                 </text>
             }
-    </script>
-    <script>
-    @if (TempData["Error"] != null)
-    {
-        <text>
-        Swal.fire({
-            position: "center",
-            icon: "error",
-            text: '@TempData["Error"]',
-            showConfirmButton: false,
-            timer: 1500
-            });
-        </text>
-    }
+        @if (TempData["Error"] != null)
+        {
+            <text>
+            Swal.fire({
+                position: "center",
+                text: '@TempData["Error"]',
+                icon: "error",
+                showConfirmButton: false,
+                timer: 1500
+                });
+            </text>
+        }
     </script>
 }

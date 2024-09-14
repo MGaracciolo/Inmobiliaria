@@ -13,7 +13,8 @@ public class RepositorioInquilino: RepositorioBase
             apellido AS ApellidoI,
             dni AS DniI,
             email AS EmailI,
-            telefono AS TelefonoI 
+            telefono AS TelefonoI,
+            estado AS EstadoI
            FROM inquilino";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
                connection.Open();
@@ -26,7 +27,7 @@ public class RepositorioInquilino: RepositorioBase
                         DniI = reader.GetString(nameof(Inquilino.DniI)),
                         EmailI = reader.GetString(nameof(Inquilino.EmailI)),
                         TelefonoI = reader.GetString(nameof(Inquilino.TelefonoI)),
-                            
+                        EstadoI = reader.GetBoolean(nameof(Inquilino.EstadoI))
                    });
                }
            }
