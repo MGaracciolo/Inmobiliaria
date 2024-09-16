@@ -16,7 +16,8 @@
             <th>Inquilino</th>
             <th>Inmueble</th>
             <th>Propietario</th>
-            <th></th>
+            <th>Fecha</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,7 @@
                 <td>@(item.Inquilino != null ? item.Inquilino.ToString() : "Inquilino no disponible")</td>
                 <td>@(item.Inmueble?.Direccion != null ? item.Inmueble.Direccion.ToString() : "Direccion no disponible")</td>
                 <td>@(item.Inmueble?.Propietario != null ? item.Inmueble.Propietario.ToString() : "Propietario no disponible")</td>
+                <td>@(item.Hasta >= DateTime.Now ? "Vigente" : "Expirado")</td>
                 <td>
                     <a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a>|
                     <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>|
@@ -52,6 +54,7 @@
 
 @section Scripts{
     <script>
+
         $(document).ready(function() {
             $('.desactivar').click(function(e) {
                 e.preventDefault(); 

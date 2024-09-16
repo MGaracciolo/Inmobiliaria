@@ -27,6 +27,8 @@ public class Propietario
     [Phone(ErrorMessage = "El telefono no tiene un formato válido.")]
     public string? Telefono { get; set; }
 
+    public int Estado { get; set; }  = 1;
+
     public int IdDireccion { get; set; }
 
     public Direccion? Direccion { get; set; }

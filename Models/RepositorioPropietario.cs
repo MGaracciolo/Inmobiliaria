@@ -43,6 +43,55 @@ public class RepositorioPropietario : RepositorioBase
         }
         return propietarios;
     }
+
+    /*public List<Propietario> ObtenerPropietariosActivos(){
+        List<Propietario> propietarios = new List<Propietario>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+           p.id_propietario AS PropietarioId,
+           p.nombre AS Nombre,
+           p.apellido AS Apellido,
+           p.dni AS Dni,
+           p.email AS Email,
+           p.telefono AS Telefono,
+           p.estado AS Estado,
+           d.id_direccion AS DireccionId,
+           d.calle AS Calle,
+           d.altura AS Altura,
+           d.piso AS Piso,
+           d.departamento AS Departamento,
+           d.observaciones AS Observaciones
+            FROM propietario p
+            INNER JOIN direccion d ON p.id_direccion = d.id_direccion
+            WHERE p.estado = 1";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               connection.Open();
+               MySqlDataReader reader = command.ExecuteReader();
+               while(reader.Read()){
+                   propietarios.Add(new Propietario{
+                       PropietarioId = reader.GetInt32(0),
+                       Nombre = reader.GetString(1),
+                       Apellido = reader.GetString(2),
+                       Dni = reader.GetString(3),
+                       Email = reader.GetString(4),
+                       Telefono = reader.GetString(5),
+                       Estado = reader.GetInt32(6),
+                       IdDireccion = reader.GetInt32(7),
+                       Direccion = new Direccion{
+                           Calle = reader.GetString(8),
+                           Altura = reader.GetInt32(9),
+                           Piso = reader.GetInt32(10),
+                           Departamento = reader.GetString(11),
+                           Observaciones = reader.GetString(12)
+                       }
+                   });
+               }
+               connection.Close();
+           }    
+        }
+        return propietarios;
+    }*/
+
     public Propietario? ObtenerUno(int id){
         Propietario? propietario = null;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){

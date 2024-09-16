@@ -18,11 +18,11 @@ public class InmuebleController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    /*public IActionResult Index()
     {
         var lista = repo.ObtenerTodos();
         return View(lista);
-    }
+    }*/
     /*endpoint*/
     public IActionResult Edicion(int id)
     {
@@ -59,6 +59,22 @@ public class InmuebleController : Controller
             return View(inmueble);
         }
     }
+
+    public IActionResult Index(bool? disponible) {
+
+        var lista = repo.ObtenerTodos();//Melian
+
+        if (disponible.HasValue) {//Se filtra por estado
+            lista = lista.Where(inmueble => inmueble.Estado == disponible.Value).ToList();
+        }
+
+        return View(lista);
+    }
+
+    /*public IActionResult Estado(String estado) {
+        var lista = repo.ObtenerXEstado(estado);//Melian
+        return View(lista);
+    }*/
 
     // [HttpPost]
     // public IActionResult Guardar(int id, Inmueble inmueble, Direccion direccion)

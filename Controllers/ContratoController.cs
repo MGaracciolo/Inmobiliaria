@@ -19,6 +19,10 @@ public class ContratoController : Controller
     public IActionResult Index()
     {
         var lista = repo.ObtenerTodos();
+        //Melian
+        var hoy = DateTime.Now;//En base a la fecha de hoy muestro los contratos vigentes
+        var contratosVigentes = lista.Where(c => c.Desde <= hoy && c.Hasta >= hoy).ToList();
+
         return View(lista);
     }
     /*endpoint*/
