@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
 
+[Authorize]
 public class ContratoController : Controller
 {
     private readonly ILogger<ContratoController> _logger;

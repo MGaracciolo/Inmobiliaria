@@ -1,7 +1,27 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+	.AddCookie(options =>
+	{
+		options.LoginPath = "/Usuario/Login";
+		options.LogoutPath = "/Usuario/Logout";
+		options.AccessDeniedPath = "/Home/Index";
+		options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+	});
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("Administrador", policy =>
+     policy.RequireRole("Administrador")
+    );
+	options.AddPolicy("Empleado", policy =>
+        policy.RequireRole("Empleado")
+	);
+	
+});
 
 var app = builder.Build();
 
@@ -17,7 +37,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+	MinimumSameSitePolicy = SameSiteMode.None,
+});
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

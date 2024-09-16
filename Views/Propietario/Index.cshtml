@@ -5,7 +5,6 @@
 
 <div class="text-center">
     <h3 class="display-4">Propietarios registrados:</h3>
-	
 </div>
 <table id="propietariosTable" class="table row-border dt-center">
     <thead>
@@ -56,7 +55,7 @@
                 var url = $(this).data('url'); 
                 Swal.fire({
                     title: "¿Eliminar Propietario?",
-                    text: "Los datos se eliminan definitivamente",
+                    text: "Quedará inactivo",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -71,7 +70,6 @@
             });
             $('.activar').click(function(e) {
 				e.preventDefault(); 
-				console.log("Activar clickeado");
 				var url = $(this).data('url'); 
 				Swal.fire({
 					title: "¿Activar propietario?",
@@ -89,30 +87,6 @@
 				});
             });
         });
-        @if (TempData["Mensaje"] != null)
-        {
-            <text>
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                text: '@TempData["Mensaje"]',
-                showConfirmButton: false,
-                timer: 1500
-                });
-            </text>
-        }
         
-        @if (TempData["Error"] != null)
-        {
-            <text>
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                text: '@TempData["Error"]',
-                showConfirmButton: false,
-                timer: 1500
-                });
-            </text>
-        }
     </script>
 }

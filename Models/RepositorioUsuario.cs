@@ -70,7 +70,7 @@ public class RepositorioUsuario: RepositorioBase
     }
 
     public int Alta(Usuario usuario){
-
+        // modificar esto para que sea un try catch y que muestre un alert cuando el email ya este registrado
         //Melian
         if (EmailYaRegistrado(usuario.Email))
         {
@@ -164,4 +164,37 @@ public class RepositorioUsuario: RepositorioBase
         return res;
     }
 
+   public Usuario? ObtenerPorEmail(string email){
+        Usuario? usuario = null;
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+            id_usuario AS UsuarioId,
+            nombre AS Nombre,
+            apellido AS Apellido,
+            email AS Email,
+            password AS Password,
+            rol AS Rol,
+            avatar AS Avatar
+           FROM usuario
+           WHERE email = @email";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+                command.Parameters.AddWithValue("@email", email);
+               connection.Open();
+               var reader = command.ExecuteReader();
+               if(reader.Read()){
+                   usuario = new Usuario{
+                        UsuarioId = reader.GetInt32(nameof(Usuario.UsuarioId)),
+                        Nombre = reader.GetString(nameof(Usuario.Nombre)),
+                        Apellido = reader.GetString(nameof(Usuario.Apellido)),
+                        Email = reader.GetString(nameof(Usuario.Email)),
+                        Password = reader.GetString(nameof(Usuario.Password)),
+                        Rol = reader.GetInt32(nameof(Usuario.Rol)),
+                        Avatar = reader.IsDBNull(reader.GetOrdinal(nameof(Usuario.Avatar))) ? null : reader.GetString(nameof(Usuario.Avatar))
+                   };
+               }
+               connection.Close();
+           }
+        }
+        return usuario;
+    }
 }

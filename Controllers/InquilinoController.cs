@@ -1,9 +1,10 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
-
+[Authorize ]
 public class InquilinoController : Controller
 {
     private readonly ILogger<InquilinoController> _logger;
@@ -19,7 +20,7 @@ public class InquilinoController : Controller
         var lista = repo.ObtenerTodos();
         return View(lista);
     }
-    /*endpoint*/
+   
     public IActionResult Edicion(int id)
     {
         if(id == 0)  
@@ -31,6 +32,7 @@ public class InquilinoController : Controller
             return View(inquilino);
         }
     }
+
     public IActionResult Detalle(int id)
     {
         if(id == 0)  
@@ -41,6 +43,7 @@ public class InquilinoController : Controller
             return View(inquilino);
         }
     }
+
     [HttpPost]
     // public IActionResult Guardar(int id, Inquilino inquilino)
     // {
@@ -105,6 +108,7 @@ public class InquilinoController : Controller
             TempData["Mensaje"] = "El inquilino se elimino";
         return RedirectToAction("Index");
     }
+
      public IActionResult Activar(int id)
     {
         int res = repo.Restore(id);

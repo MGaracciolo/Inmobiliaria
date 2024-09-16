@@ -1,30 +1,19 @@
 ﻿@model IEnumerable<net.Models.Inmueble>
 @{
-    ViewData["Title"] = "Inmuebles";
+	ViewData["Title"] = "Inmuebles";
 }
 
 <div class="text-center">
-    <h3 class="display-4">Inmuebles registrados:</h3>
-	
+	<h3 class="display-4">Inmuebles registrados:</h3>
 </div>
 <table class="table row-border dt-center" id="inmueblesTable">
 	<thead>
 		<tr>
-			<th>
-				ID
-			</th>
-			<th>
-				Dirección
-			</th>
-			<th>
-				Propietario
-			</th>
-			<th>
-				Uso
-			</th>
-			<th>
-				Tipo
-			</th>
+			<th>ID</th>
+			<th>Dirección</th>
+			<th>Propietario</th>
+			<th>Uso</th>
+			<th>Tipo</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -32,40 +21,32 @@
 		@foreach (var item in Model)
 		{
 			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.InmuebleId)
-				</td>
-				<td>
-					@(item.DireccionI != null ? item.DireccionI : "Dirección no disponible")
-				</td>
-				<td>
-					@(item.Propietario != null ? item.Propietario.ToString() : "Propietario no disponible")
-				</td>
-				<td>
-					@(item.UsoInmueble != null ? item.UsoInmueble.ToString() : "Uso no disponible")
-				</td>
-				<td>
-					@(item.TipoInmueble != null ? item.TipoInmueble.ToString() : "Tipo no disponible")
-				</td>
-					@if (item.Estado == true)
-						{
-							<td>
-								<a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a>|
-								<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a>|
-								<a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
-							</td>
-						}else{
-							<td>
-								<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a>|
-								<a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
-							</td>
-						}
+				<td>@Html.DisplayFor(modelItem => item.InmuebleId)</td>
+				<td>@(item.DireccionI != null ? item.DireccionI : "Dirección no disponible")</td>
+				<td>@(item.Propietario != null ? item.Propietario.ToString() : "Propietario no disponible")</td>
+				<td>@(item.UsoInmueble != null ? item.UsoInmueble.ToString() : "Uso no disponible")</td>
+				<td>@(item.TipoInmueble != null ? item.TipoInmueble.ToString() : "Tipo no disponible")</td>
+				@if (item.Estado == true)
+				{
+					<td>
+						<a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a> |
+						<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a> |
+						<a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
+					</td>
+				}
+				else
+				{
+					<td>
+						<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a> |
+						<a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+					</td>
+				}
 			</tr>
 		}
 
 	</tbody>
 	<tfoot>
-		<tr >
+		<tr>
 			<td colspan="6">
 				<a href="/Inmueble/Edicion/"> <i class="fa-solid fa-plus"></i></a>
 			</td>
@@ -74,12 +55,12 @@
 </table>
 
 
-@section Scripts{
+@section Scripts {
 	<script>
-		$(document).ready(function() {
-			$('.desactivar').click(function(e) {
-				e.preventDefault(); 
-				var url = $(this).data('url'); 
+		$(document).ready(function () {
+			$('.desactivar').click(function (e) {
+				e.preventDefault();
+				var url = $(this).data('url');
 				Swal.fire({
 					title: "¿Desactivar inmueble?",
 					text: "No estara disponible para nuevos contratos",
@@ -96,10 +77,10 @@
 				});
 			});
 
-			$('.activar').click(function(e) {
-				e.preventDefault(); 
+			$('.activar').click(function (e) {
+				e.preventDefault();
 				console.log("Activar clickeado");
-				var url = $(this).data('url'); 
+				var url = $(this).data('url');
 				Swal.fire({
 					title: "¿Activar inmueble?",
 					text: "Estara disponible para nuevos contratos",
@@ -116,30 +97,5 @@
 				});
 			});
 		});
-		@if (TempData["Mensaje"] != null)
-		{
-			<text>
-			Swal.fire({
-				position: "center",
-				icon: "success",
-				text: '@TempData["Mensaje"]',
-				showConfirmButton: false,
-				timer: 1500
-				});
-			</text>
-		}
-
-		@if (TempData["Error"] != null)
-		{
-			<text>
-			Swal.fire({
-				position: "center",
-				icon: "error",
-				text: '@TempData["Error"]',
-				showConfirmButton: false,
-				timer: 1500
-				});
-			</text>
-		}
 	</script>
 }

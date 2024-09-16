@@ -87,29 +87,6 @@
 				});
             });
         });
-        @if (TempData["Mensaje"] != null)
-            {
-                <text>
-                Swal.fire({
-                    position: "center",
-                    text: '@TempData["Mensaje"]',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                </text>
-            }
-        @if (TempData["Error"] != null)
-        {
-            <text>
-            Swal.fire({
-                position: "center",
-                text: '@TempData["Error"]',
-                icon: "error",
-                showConfirmButton: false,
-                timer: 1500
-                });
-            </text>
-        }
+       
     </script>
 }
