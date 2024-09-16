@@ -87,5 +87,24 @@ public class ContratoController : Controller
             TempData["Mensaje"] = "El contrato se activo";
         return RedirectToAction("Index");
     }
+
+    public IActionResult FiltrarPorPlazo(int? plazo)
+    {
+        var lista = repo.ObtenerTodos();
+        var hoy = DateTime.Now;
+        List<Contrato> contratosFiltrados = lista;//Si no se filtra, se muestra todos los contratos
+
+        if (plazo.HasValue && plazo != 0)
+        {
+            //Se calcula en funcion del plazo seleccionado
+            var fechaLimite = hoy.AddDays(plazo.Value);
+            //Esto filtra los contratos que expiran dentro del plazo seleccionado
+            contratosFiltrados = lista.Where(c => c.Hasta <= fechaLimite && c.Hasta >= hoy).ToList();
+        }
+        //ViewBag para mostrar el plazo seleccionado, osea le setea el plazo a la vista
+        ViewBag.PlazoSeleccionado = plazo;
+
+        return View("Index", contratosFiltrados);
+    }
    
 }
