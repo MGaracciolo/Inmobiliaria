@@ -1,9 +1,10 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
-
+[Authorize]
 public class InmuebleController : Controller
 {
     private readonly ILogger<InmuebleController> _logger;

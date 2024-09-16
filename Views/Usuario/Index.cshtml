@@ -8,7 +8,7 @@
     <h3 class="display-4">Usuarios registrados:</h3>
 </div>
 
-<table id="usuariosTable" class="table row-border">
+<table id="usuariosTable" class="table row-border dt-center">
     <thead>
         <tr>
             <th>Avatar</th>
@@ -38,11 +38,7 @@
                 <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
                 <td>@Html.DisplayFor(modelItem => item.Email)</td>
                 <td>
-                    @if(item.Rol == 0){
-                        <span>Administrador</span>
-                    }else{
-                        <span>Empleado</span>
-                    }
+                   @Html.DisplayFor(modelItem => item.RolNombre)
                 </td>
                 <td>
                     <a href="/Usuario/Edicion/@item.UsuarioId"><i class="fa-solid fa-pen-to-square"></i></a> |
@@ -55,7 +51,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="4"><a href="/Usuario/Edicion/"><i class="fa-solid fa-plus"></i></a></td>
+            <td colspan="6"><a href="/Usuario/Creacion"><i class="fa-solid fa-plus"></i></a></td>
         </tr>
     </tfoot>
 </table>
@@ -82,28 +78,5 @@
                 });
             });
         });
-        @if (TempData["Mensaje"] != null)
-            {
-                <text>
-                Swal.fire({
-                    title: '¡Éxito!',
-                    text: '@TempData["Mensaje"]',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-                </text>
-            }
-        @if (TempData["Error"] != null)
-        {
-            <text>
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                text: '@TempData["Error"]',
-                showConfirmButton: false,
-                timer: 1500
-                });
-            </text>
-        }
     </script>
 }

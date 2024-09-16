@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@sweetalert2/theme-borderless": "^5.0.18",
-    "sweetalert2": "^11.12.4"
-  }
-}

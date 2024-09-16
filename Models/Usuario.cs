@@ -3,6 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 public class Usuario
 {
+    public enum Roles
+	{
+		Administrador = 1,
+		Empleado = 2,
+	}
     public int UsuarioId { get; set; }
     [Required(ErrorMessage = "El nombre es obligatorio.")]
     [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "El nombre solo puede contener letras y espacios.")]
@@ -16,11 +21,21 @@ public class Usuario
     [Required(ErrorMessage = "El email es obligatorio.")]
     [EmailAddress(ErrorMessage = "El email no tiene un formato válido.")]
     public string? Email { get; set; }
-
-    [Required(ErrorMessage = "La contraseña es obligatoria.")]
     public string? Password { get; set; }
     [Required(ErrorMessage = "El rol es obligatorio.")]
     public int Rol { get; set; }
-    public string? Avatar { get; set; }
-    //public IFormFile Avatar { get; set; }
+    //Ruta del avatar
+    public string? Avatar { get; set; } ="";
+    public IFormFile? AvatarFile { get; set; }
+    public string RolNombre => Rol > 0 ? ((Roles)Rol).ToString() : "-";
+    public static IDictionary<int, string> ObtenerRoles()
+		{
+			SortedDictionary<int, string> roles = new SortedDictionary<int, string>();
+			Type tipoRoles = typeof(Roles);
+			foreach (var valor in Enum.GetValues(tipoRoles))
+			{
+				roles.Add((int)valor, Enum.GetName(tipoRoles, valor));
+			}
+			return roles;
+		}
 }

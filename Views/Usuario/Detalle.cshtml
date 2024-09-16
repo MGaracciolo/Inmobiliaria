@@ -1,6 +1,6 @@
 @model net.Models.Usuario
 @{
-    ViewData["Title"] = "Detalle";
+    ViewData["Title"] = "Mi perfil";
 	int id = Model==null ? 0 : Model.UsuarioId;
 }
 
@@ -13,7 +13,7 @@
     <div class="col-md-4">
         <form>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" readonly name="InquilinoId" value="@id" />
+            <input type="hidden" readonly name="UsuarioId" value="@id" />
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
                 <input asp-for="Nombre" class="form-control" readonly/>
@@ -50,5 +50,5 @@
 </div>
 
 <div>
-    <a asp-action="Index">Volver al listado</a>
+    <a asp-action="Index">Volver</a>
 </div>
