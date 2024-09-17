@@ -6,6 +6,16 @@
 <div class="text-center">
     <h3 class="display-4">Propietarios registrados:</h3>
 </div>
+<div class="row mb-3">
+    <div class="col-md-6 d-flex align-items-center">
+
+        <div class="btn-group" role="group" aria-label="Filtros de estado">
+            <button type="button" class="btn btn-outline-primary" id="todosBtn">Todos</button>
+            <button type="button" class="btn btn-outline-success" id="activoBtn">Activos</button>
+            <button type="button" class="btn btn-outline-danger" id="desactivadoBtn">Inactivos</button>
+        </div>
+    </div>
+</div>
 <table id="propietariosTable" class="table row-border dt-center">
     <thead>
         <tr>
@@ -18,7 +28,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr  data-estado="@item.EstadoP">
                 <td>@Html.DisplayFor(modelItem => item.Dni)</td>
                 <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                 <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
@@ -50,6 +60,7 @@
 
     <script>
         $(document).ready(function() {
+            
             $('.eliminar').click(function(e) {
                 e.preventDefault(); 
                 var url = $(this).data('url'); 

@@ -21,6 +21,8 @@ public class ContratoController : Controller
     public IActionResult Index()
     {
         var lista = repo.ObtenerTodos();
+        var hoy = DateTime.Now;//En base a la fecha de hoy muestro los contratos vigentes
+        var contratosVigentes = lista.Where(c => c.Desde <= hoy && c.Hasta >= hoy).ToList();
         return View(lista);
     }
     /*endpoint*/
@@ -86,4 +88,22 @@ public class ContratoController : Controller
         return RedirectToAction("Index");
     }
    
+    public IActionResult FiltrarPorPlazo(int? plazo)
+    {
+        var lista = repo.ObtenerTodos();
+        var hoy = DateTime.Now;
+        List<Contrato> contratosFiltrados = lista;//Si no se filtra, se muestra todos los contratos
+
+        if (plazo.HasValue && plazo != 0)
+        {
+            //Se calcula en funcion del plazo seleccionado
+            var fechaLimite = hoy.AddDays(plazo.Value);
+            //Esto filtra los contratos que expiran dentro del plazo seleccionado
+            contratosFiltrados = lista.Where(c => c.Hasta <= fechaLimite && c.Hasta >= hoy).ToList();
+        }
+        //ViewBag para mostrar el plazo seleccionado, osea le setea el plazo a la vista
+        ViewBag.PlazoSeleccionado = plazo;
+
+        return View("Index", contratosFiltrados);
+    }
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
-[Authorize]//para q permita solo a logueados, la validacion si es admin la hago abajo
+//[Authorize]//para q permita solo a logueados, la validacion si es admin la hago abajo
 public class UsuarioController : Controller
 {
 	private readonly IConfiguration configuration;
@@ -61,7 +61,7 @@ public class UsuarioController : Controller
 			return Redirect("/Home/Index");
 		}else{
 			ViewBag.Roles = Usuario.ObtenerRoles();
-			return View(new Usuario());
+			return View();
 		}
 	}
 
@@ -86,6 +86,7 @@ public class UsuarioController : Controller
 			int res = repo.Alta(usuario);
 			if (usuario.AvatarFile != null && usuario.UsuarioId > 0)
 			{
+				
 				//para entrar a wwwroot
 				string wwwPath = environment.WebRootPath;
 				//para entrar a avatars dentro de wwwroot
@@ -96,7 +97,16 @@ public class UsuarioController : Controller
 				}
 				string fileName = "avatar_" + usuario.UsuarioId + Path.GetExtension(usuario.AvatarFile.FileName);
 				string pathCompleto = Path.Combine(path, fileName);
-				usuario.Avatar = Path.Combine("/avatars", fileName);
+				usuario.Avatar = Path.Combine("/Avatars", fileName);
+
+
+
+				 if (ModelState.ContainsKey("AvatarFile"))
+				{
+					var errors = ModelState["AvatarFile"].Errors;
+				}
+				return View(usuario);
+
 				// Esta operación guarda la foto en memoria en la ruta que necesitamos
 				using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
 				{
@@ -145,6 +155,8 @@ public class UsuarioController : Controller
 		}
 		catch (Exception ex)
 		{//colocar breakpoints en la siguiente línea por si algo falla
+			TempData["Error"] = ex.Message;
+			return RedirectToAction(vista);
 			throw;
 		}
 	}

@@ -6,7 +6,16 @@
 <div class="text-center">
     <h3 class="display-4">Inquilinos registrados:</h3>
 </div>
+<div class="row mb-3">
+    <div class="col-md-6 d-flex align-items-center">
 
+        <div class="btn-group" role="group" aria-label="Filtros de estado">
+            <button type="button" class="btn btn-outline-primary" id="todosBtn">Todos</button>
+            <button type="button" class="btn btn-outline-success" id="activoBtn">Activos</button>
+            <button type="button" class="btn btn-outline-danger" id="desactivadoBtn">Inactivos</button>
+        </div>
+    </div>
+</div>
 <table id="inquilinosTable" class="table row-border dt-center">
     <thead>
         <tr>

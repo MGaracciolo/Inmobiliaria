@@ -6,7 +6,7 @@
 $(document).ready(function() {
     $('#inmueblesTable').DataTable({
         "columnDefs": [
-            { "orderable": false, "targets":5}
+            { "orderable": false, "targets": 6}
         ],
         "language": {
             "emptyTable": "No hay datos",
@@ -89,7 +89,7 @@ $(document).ready(function() {
     });
     $('#contratosTable').DataTable({
         "columnDefs": [
-            { "orderable": false, "targets": 4}
+            { "orderable": false, "targets": 5 }
         ],
       "language": {
             "emptyTable": "No hay datos",
