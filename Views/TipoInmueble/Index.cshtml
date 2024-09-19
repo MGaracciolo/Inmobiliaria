@@ -1,0 +1,82 @@
+﻿@model IEnumerable<net.Models.TipoInmueble>
+@{
+	ViewData["Title"] = "Tipos";
+}
+
+<div class="text-center">
+	<h3 class="display-4">Tipos registrados:</h3>
+</div>
+<table class="table row-border dt-center" id="tiposTable">
+	<thead>
+		<tr>
+			<th>Tipo</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@Html.DisplayFor(modelItem => item.Valor)</td>
+				<td><a href="#" data-url="/TipoInmueble/Baja/@item.TipoId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a></td>
+			</tr>
+		}
+
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="6">
+				<a href="#" data-bs-toggle="modal" data-bs-target="#modal_tipo"> <i class="fa-solid fa-plus"></i></a>
+			</td>
+		</tr>
+	</tfoot>
+</table>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal_tipo">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo tipo:</h5> 
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="TipoInmueble" asp-action="Guardar" method="post">
+                    <div class="form-group">
+                        <label for="Valor" class="control-label">Valor:</label>
+                        <input type="text" id="Valor" name="Valor" class="form-control" />
+                        <span class="text-danger" ></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Guardar" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			$('.desactivar').click(function (e) {
+				e.preventDefault();
+				var url = $(this).data('url');
+				Swal.fire({
+					title: "¿Eliminar tipo?",
+					text: "El dato se elimina de forma permanente",
+					icon: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#d33",
+					confirmButtonText: "Desactivar",
+					cancelButtonText: "Cancelar"
+				}).then((result) => {
+					if (result.isConfirmed) {
+						window.location.href = url;
+					}
+				});
+			});
+		});
+	</script>
+}

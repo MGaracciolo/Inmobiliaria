@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
-[Authorize]//para q permita solo a logueados, la validacion si es admin la hago abajo
+[Authorize (Policy = "Administrador")]//para q permita solo a logueados, la validacion si es admin la hago abajo
 public class UsuarioController : Controller
 {
 	private readonly IConfiguration configuration;
@@ -61,14 +61,13 @@ public class UsuarioController : Controller
 			return Redirect("/Home/Index");
 		}else{
 			ViewBag.Roles = Usuario.ObtenerRoles();
-			return View(new Usuario());
+			return View();
 		}
 	}
 
 	[HttpPost]
 	public IActionResult Creacion(Usuario usuario)
 	{
-
 		if (!ModelState.IsValid)
 		{
 			return View();
@@ -84,6 +83,7 @@ public class UsuarioController : Controller
 								numBytesRequested: 256 / 8));
 			usuario.Password = hashed;
 			int res = repo.Alta(usuario);
+			usuario.UsuarioId=res;
 			if (usuario.AvatarFile != null && usuario.UsuarioId > 0)
 			{
 				//para entrar a wwwroot
@@ -97,12 +97,15 @@ public class UsuarioController : Controller
 				string fileName = "avatar_" + usuario.UsuarioId + Path.GetExtension(usuario.AvatarFile.FileName);
 				string pathCompleto = Path.Combine(path, fileName);
 				usuario.Avatar = Path.Combine("/avatars", fileName);
+
 				// Esta operación guarda la foto en memoria en la ruta que necesitamos
 				using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
 				{
 					usuario.AvatarFile.CopyTo(stream);
 				}
 				repo.Modificar(usuario);//para agregar la url en avatar
+			}else{
+				TempData["Error"] = "No se pudo subir el archivo";
 			}
 			return RedirectToAction("Index");
 		}
@@ -145,6 +148,8 @@ public class UsuarioController : Controller
 		}
 		catch (Exception ex)
 		{//colocar breakpoints en la siguiente línea por si algo falla
+			TempData["Error"] = ex.Message;
+			return RedirectToAction(vista);
 			throw;
 		}
 	}
@@ -204,6 +209,7 @@ public class UsuarioController : Controller
 
 				var claims = new List<Claim>
 				{
+					new Claim("Id", usuario.UsuarioId.ToString()),
 					new Claim(ClaimTypes.Name, usuario.Email),
 					new Claim("FullName", usuario.Nombre + " " + usuario.Apellido),
 					new Claim(ClaimTypes.Role, usuario.RolNombre)

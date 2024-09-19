@@ -18,9 +18,12 @@ public class InmuebleController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(bool? disponible)
     {
         var lista = repo.ObtenerTodos();
+        if (disponible.HasValue) {//Se filtra por estado
+            lista = lista.Where(inmueble => inmueble.Estado == disponible.Value).ToList();
+        }
         return View(lista);
     }
     /*endpoint*/

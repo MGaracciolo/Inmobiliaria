@@ -6,14 +6,24 @@
 <div class="text-center">
 	<h3 class="display-4">Inmuebles registrados:</h3>
 </div>
+<div class="row mb-3">
+    <div class="col-md-6 d-flex align-items-center">
+
+        <div class="btn-group" role="group" aria-label="Filtros de estado">
+            <button type="button" class="btn btn-outline-primary" id="todosBtn">Todos</button>
+            <button type="button" class="btn btn-outline-success" id="activoBtn">Activos</button>
+            <button type="button" class="btn btn-outline-danger" id="desactivadoBtn">Inactivos</button>
+        </div>
+    </div>
+</div>
 <table class="table row-border dt-center" id="inmueblesTable">
 	<thead>
 		<tr>
-			<th>ID</th>
 			<th>Dirección</th>
 			<th>Propietario</th>
 			<th>Uso</th>
 			<th>Tipo</th>
+			<th>Estado</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -21,11 +31,11 @@
 		@foreach (var item in Model)
 		{
 			<tr>
-				<td>@Html.DisplayFor(modelItem => item.InmuebleId)</td>
 				<td>@(item.DireccionI != null ? item.DireccionI : "Dirección no disponible")</td>
 				<td>@(item.Propietario != null ? item.Propietario.ToString() : "Propietario no disponible")</td>
 				<td>@(item.UsoInmueble != null ? item.UsoInmueble.ToString() : "Uso no disponible")</td>
 				<td>@(item.TipoInmueble != null ? item.TipoInmueble.ToString() : "Tipo no disponible")</td>
+				<td>@(item.Estado ? "Activo" : "Inactivo")</td>
 				@if (item.Estado == true)
 				{
 					<td>
@@ -47,7 +57,7 @@
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="6">
+			<td colspan="5">
 				<a href="/Inmueble/Edicion/"> <i class="fa-solid fa-plus"></i></a>
 			</td>
 		</tr>
@@ -58,6 +68,19 @@
 @section Scripts {
 	<script>
 		$(document).ready(function () {
+			var table = $('#inmueblesTable').DataTable();
+            //Sin filtro
+            $('#todosBtn').on('click', function() {
+                table.columns(4).search('').draw();//Aca le seteas el filtro a la columna de estados
+            });
+            //Aca Filtro por activados
+            $('#activoBtn').on('click', function() {
+                table.columns(4).search('Activo').draw();//Aca le seteo el Activo
+            });
+            //Aca filtro por desactivados
+            $('#desactivadoBtn').on('click', function() {
+                table.columns(4).search('Desactivado').draw();//Aca le seteo desactivado
+            });
 			$('.desactivar').click(function (e) {
 				e.preventDefault();
 				var url = $(this).data('url');

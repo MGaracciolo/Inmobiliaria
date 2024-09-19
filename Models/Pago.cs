@@ -13,5 +13,11 @@ public class Pago{
     [Required(ErrorMessage = "Ingrese el importe")]
     public decimal Importe { get; set; }
 
-    public DateOnly Fecha { get; set; }
+    public DateTime Fecha { get; set; }
+
+    public int CreadorId { get; set; }
+
+    public int? AnuladorId { get; set; }
+
+    public string? Concepto { get; set; }
 }

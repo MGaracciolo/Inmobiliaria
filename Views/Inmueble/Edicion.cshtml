@@ -13,7 +13,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Guardar">
+        <form asp-action="Guardar" id="guardarForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="InmuebleId" value="@id"/>
             <div class="form-group">
@@ -85,8 +85,9 @@
 @section Scripts{
     <script>
     $(document).ready(function() {
-            $('#guardar').click(function(e) {
-                e.preventDefault();
+        const btnEnviar = document.getElementById("guardar");
+            btnEnviar.addEventListener("click",(event)=> {
+                event.preventDefault();
                 Swal.fire({
                     title: "¿Guardar cambios?",
                     showDenyButton: true,
@@ -95,7 +96,8 @@
                     denyButtonText: "No guardar"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                         $('form').off('submit').submit();
+                        const formCrea = document.getElementById("guardarForm");
+                        formCrea.submit();
                     }
                 });
             });
