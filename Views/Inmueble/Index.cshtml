@@ -19,7 +19,6 @@
 <table class="table row-border dt-center" id="inmueblesTable">
 	<thead>
 		<tr>
-			<th>ID</th>
 			<th>Dirección</th>
 			<th>Propietario</th>
 			<th>Uso</th>
@@ -32,7 +31,6 @@
 		@foreach (var item in Model)
 		{
 			<tr>
-				<td>@Html.DisplayFor(modelItem => item.InmuebleId)</td>
 				<td>@(item.DireccionI != null ? item.DireccionI : "Dirección no disponible")</td>
 				<td>@(item.Propietario != null ? item.Propietario.ToString() : "Propietario no disponible")</td>
 				<td>@(item.UsoInmueble != null ? item.UsoInmueble.ToString() : "Uso no disponible")</td>
@@ -59,7 +57,7 @@
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="6">
+			<td colspan="5">
 				<a href="/Inmueble/Edicion/"> <i class="fa-solid fa-plus"></i></a>
 			</td>
 		</tr>
@@ -73,15 +71,15 @@
 			var table = $('#inmueblesTable').DataTable();
             //Sin filtro
             $('#todosBtn').on('click', function() {
-                table.columns(5).search('').draw();//Aca le seteas el filtro a la columna de estados
+                table.columns(4).search('').draw();//Aca le seteas el filtro a la columna de estados
             });
             //Aca Filtro por activados
             $('#activoBtn').on('click', function() {
-                table.columns(5).search('Activo').draw();//Aca le seteo el Activo
+                table.columns(4).search('Activo').draw();//Aca le seteo el Activo
             });
             //Aca filtro por desactivados
             $('#desactivadoBtn').on('click', function() {
-                table.columns(5).search('Desactivado').draw();//Aca le seteo desactivado
+                table.columns(4).search('Desactivado').draw();//Aca le seteo desactivado
             });
 			$('.desactivar').click(function (e) {
 				e.preventDefault();

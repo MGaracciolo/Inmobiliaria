@@ -12,11 +12,21 @@ public class Contrato{
 
     public DateTime Hasta { get; set; }
 
-    public decimal Precio { get; set; }
+    public decimal PrecioContrato { get; set; }
 
     public bool Estado { get; set; }  = true;
+
+    public int IdCreador { get; set; }
+
+    public int? IdAnulador { get; set; }
+
+    public DateTime? Anulacion { get; set; } // FechaAnulacion
 
     public Inquilino? Inquilino { get; set; }
 
     public Inmueble? Inmueble { get; set; }
+
+    public Usuario? Creador { get; set; }
+
+    public Usuario? Anulador { get; set; }
 }

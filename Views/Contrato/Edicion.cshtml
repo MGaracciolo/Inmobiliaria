@@ -13,9 +13,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Guardar">
+        <form asp-action="Guardar" id="guardarForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input  type="hidden" name="ContratoId" value="@id" readonly/>
+            <input asp-for="IdCreador" value="@User.Claims.First().Value" type="hidden" readonly>
             <div class="form-group">
                 <label class="control-label">Inquilino</label>
                 <select class="form-control" name="IdInquilino">
@@ -47,9 +48,9 @@
                 <span asp-validation-for="Hasta" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Precio" class="control-label">Precio</label>
-                <input asp-for="Precio" class="form-control" />
-                <span asp-validation-for="Precio" class="text-danger"></span>
+                <label asp-for="PrecioContrato" class="control-label">Precio</label>
+                <input asp-for="PrecioContrato" class="form-control" />
+                <span asp-validation-for="PrecioContrato" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" id="guardar" />
@@ -65,8 +66,9 @@
 @section Scripts{
     <script>
      $(document).ready(function() {
-            $('#guardar').click(function(e) {
-                e.preventDefault();
+           const btnEnviar = document.getElementById("guardar");
+            btnEnviar.addEventListener("click",(event)=> {
+                event.preventDefault();
                 Swal.fire({
                     title: "¿Guardar cambios?",
                     showDenyButton: true,
@@ -75,7 +77,8 @@
                     denyButtonText: "No guardar"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                         $('form').off('submit').submit();
+                        const formCrea = document.getElementById("guardarForm");
+                        formCrea.submit();
                     }
                 });
             });

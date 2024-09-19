@@ -31,11 +31,12 @@
 <table id="contratosTable" class="table row-border dt-center" >
     <thead>
         <tr>
-            <th>ID</th>
             <th>Inquilino</th>
             <th>Inmueble</th>
             <th>Propietario</th>
-            <th>Fecha</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Estado</th>
             <th></th>
         </tr>
     </thead>
@@ -43,11 +44,12 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.ContratoId)</td>
                 <td>@(item.Inquilino != null ? item.Inquilino.ToString() : "Inquilino no disponible")</td>
                 <td>@(item.Inmueble?.DireccionI != null ? item.Inmueble.DireccionI: "Direccion no disponible")</td>
                 <td>@(item.Inmueble?.Propietario != null ? item.Inmueble.Propietario.ToString() : "Propietario no disponible")</td>
-                <td>@(item.Hasta >= DateTime.Now ? "Vigente" : "Expirado")</td>
+                <td>@(item.Desde != default(DateTime) ? item.Desde.ToString("dd/MM/yyyy") : "-" )</td>
+                <td>@(item.Hasta != default(DateTime) ? item.Hasta.ToString("dd/MM/yyyy") : "-" )</td>
+                <td>@(item.Hasta >= DateTime.Now ? "Ocupado" : "Disponible")</td>
                     @if (item.Estado == true)
 						{
                             <td>
@@ -68,7 +70,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="5">
+            <td colspan="7">
                 <a href="/Contrato/Edicion/"> <i class="fa-solid fa-plus"></i></a>
             </td>
         </tr>
