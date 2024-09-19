@@ -49,6 +49,7 @@
                 <td>@(item.Inmueble?.Propietario != null ? item.Inmueble.Propietario.ToString() : "Propietario no disponible")</td>
                 <td>@(item.Desde != default(DateTime) ? item.Desde.ToString("dd/MM/yyyy") : "-" )</td>
                 <td>@(item.Hasta != default(DateTime) ? item.Hasta.ToString("dd/MM/yyyy") : "-" )</td>
+                <td>@(item.Anulacion != null ? item.Anulacion.Value.ToString("dd/MM/yyyy") : "-" )</td>
                 <td>@(item.Hasta >= DateTime.Now ? "Ocupado" : "Disponible")</td>
                     @if (item.Estado == true)
 						{

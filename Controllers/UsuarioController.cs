@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
-[Authorize (Policy = "Administrador")]//para q permita solo a logueados, la validacion si es admin la hago abajo
+[Authorize ]//para q permita solo a logueados, la validacion si es admin la hago abajo
 public class UsuarioController : Controller
 {
 	private readonly IConfiguration configuration;
