@@ -32,20 +32,20 @@
                 <td>@Html.DisplayFor(modelItem => item.DniI)</td>
                 <td>@Html.DisplayFor(modelItem => item.NombreI)</td>
                 <td>@Html.DisplayFor(modelItem => item.ApellidoI)</td>
-               @if (item.EstadoI == true)
-						{
-                            <td>
-                                <a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a> |
-                                <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a> |
-                                <a href="#" class="text-danger eliminar" data-url="/Inquilino/Eliminar/@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
-                            </td>
-						}else{
-                            <td>
-                               <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a>  |
-                                <a href="#" data-url="/Inquilino/Activar/@item.InquilinoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
-                            </td>
-							
-						}
+                <td>
+                    <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a>
+                    @if(item.EstadoI == true && User.IsInRole("Administrador"))
+					{
+                        <span> | </span><a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
+                        <a href="#" class="text-danger eliminar" data-url="/Inquilino/Eliminar/@item.InquilinoId"><i class="fa-solid fa-trash"></i></a>
+					}else if(item.EstadoI == false && User.IsInRole("Administrador"))
+                    {
+                        <span> | </span><a href="#" data-url="/Inquilino/Activar/@item.InquilinoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+					}else if(item.EstadoI == true )
+                    {
+                        <span> | </span><a href="/Inquilino/Edicion/@item.InquilinoId"><i class="fa-solid fa-pen-to-square"></i></a>
+                    }
+                </td>
             </tr>
         }
     </tbody>

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
 namespace net.Controllers;
-[Authorize]
+[Authorize (Policy = "Administrador")]
 public class UsoInmuebleController : Controller
 {
     private readonly ILogger<UsoInmuebleController> _logger;

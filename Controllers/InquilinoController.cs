@@ -44,7 +44,7 @@ public class InquilinoController : Controller
         }
     }
 
-    [HttpPost]
+    
     // public IActionResult Guardar(int id, Inquilino inquilino)
     // {
 
@@ -69,6 +69,7 @@ public class InquilinoController : Controller
     //     }
     //     return RedirectToAction("Index");
     // }
+    [HttpPost]
     public IActionResult Guardar(int id, Inquilino inquilino)
     {
         try
@@ -101,22 +102,31 @@ public class InquilinoController : Controller
 
 
     public IActionResult Eliminar(int id){
-        int res=repo.Baja(id);
-        if(res==-1)
-            TempData["Error"] = "No se pudo eliminar el inquilino";
-        else
-            TempData["Mensaje"] = "El inquilino se elimino";
-        return RedirectToAction("Index");
+        if(!User.IsInRole("Administrador")){
+			TempData["Error"] = "Acceso denegado";
+			return Redirect("/Home/Index");
+		}else{
+            int res=repo.Baja(id);
+            if(res==-1)
+                TempData["Error"] = "No se pudo eliminar el inquilino";
+            else
+                TempData["Mensaje"] = "El inquilino se elimino";
+            return RedirectToAction("Index");
+        }
     }
 
      public IActionResult Activar(int id)
     {
-        int res = repo.Restore(id);
-        if (res == -1)
-            TempData["Error"] = "No se pudo activar el inquilino";
-        else
-            TempData["Mensaje"] = "El inquilino se activo";
-        return RedirectToAction("Index");
+        if(!User.IsInRole("Administrador")){
+			TempData["Error"] = "Acceso denegado";
+			return Redirect("/Home/Index");
+		}else{
+            int res = repo.Restore(id);
+            if (res == -1)
+                TempData["Error"] = "No se pudo activar el inquilino";
+            else
+                TempData["Mensaje"] = "El inquilino se activo";
+            return RedirectToAction("Index");
+        }
     }
-
 }

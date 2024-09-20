@@ -6,7 +6,7 @@
 $(document).ready(function() {
     $('#inmueblesTable').DataTable({
         "columnDefs": [
-            { "orderable": false, "targets": 6}
+            { "orderable": false, "targets":5}
         ],
         "language": {
             "emptyTable": "No hay datos",

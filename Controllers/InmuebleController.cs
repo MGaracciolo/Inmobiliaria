@@ -114,25 +114,34 @@ public class InmuebleController : Controller
     //     return RedirectToAction("Index");
     // }
 
-
+    //solo puede admin
     public IActionResult Eliminar(int id)
     {
-        int res = repo.Baja(id);
-        if (res == -1)
-            TempData["Error"] = "No se pudo eliminar el inmueble";
-        else
-            TempData["Mensaje"] = "El inmueble quedo inactivo";
-        return RedirectToAction("Index");
+        if(!User.IsInRole("Administrador")){
+			TempData["Error"] = "Acceso denegado";
+			return Redirect("/Home/Index");
+		}else{
+			int res = repo.Baja(id);
+            if (res == -1)
+                TempData["Error"] = "No se pudo eliminar el inmueble";
+            else
+                TempData["Mensaje"] = "El inmueble quedo inactivo";
+            return RedirectToAction("Index");
+		}
     }
-
+    //solo puede admin
     public IActionResult Activar(int id)
     {
-        int res = repo.Restore(id);
-        if (res == -1)
-            TempData["Error"] = "No se pudo activar el inmueble";
-        else
-            TempData["Mensaje"] = "El inmueble se activo";
-        return RedirectToAction("Index");
+        if(!User.IsInRole("Administrador")){
+			TempData["Error"] = "Acceso denegado";
+			return Redirect("/Home/Index");
+		}else{
+            int res = repo.Restore(id);
+            if (res == -1)
+                TempData["Error"] = "No se pudo activar el inmueble";
+            else
+                TempData["Mensaje"] = "El inmueble se activo";
+            return RedirectToAction("Index");
+        }
     }
-
 }

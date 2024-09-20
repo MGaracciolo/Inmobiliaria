@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using net.Models;
 
@@ -71,11 +72,13 @@ public class ContratoController : Controller
     }
 
     public IActionResult Eliminar(int id){
-        int res =repo.Baja(id);
+        int res =repo.Baja(id,int.Parse(User.Claims.First().Value),DateTime.Now);
         if(res == -1)
             TempData["Error"] = "No se pudo dar de baja el contrato";
-        else
+        else{
             TempData["Mensaje"] = "El contrato quedo inactivo";
+        }
+           
         return RedirectToAction("Index");
     }
 
