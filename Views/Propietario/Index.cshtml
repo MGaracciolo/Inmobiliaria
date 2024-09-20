@@ -32,20 +32,20 @@
                 <td>@Html.DisplayFor(modelItem => item.Dni)</td>
                 <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
                 <td>@Html.DisplayFor(modelItem => item.Apellido)</td>
-                @if (item.EstadoP == true)
-						{
-                            <td>
-                                <a href="/Propietario/Edicion/@item.PropietarioId"><i class="fa-solid fa-pen-to-square"></i></a> |
-                                <a href="/Propietario/Detalle/@item.PropietarioId"><i class="fa-solid fa-eye"></i></a> |
-                                <a href="#" class="text-danger eliminar" data-url="/Propietario/Eliminar?id=@item.PropietarioId"><i class="fa-solid fa-trash"></i></a>
-                            </td>
-						}else{
-                            <td>
-                               <a href="/Propietario/Detalle/@item.PropietarioId"><i class="fa-solid fa-eye"></i></a> |
-                                <a href="#" data-url="/Propietario/Activar/@item.PropietarioId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
-                            </td>
-							
-						}
+                <td>
+                    <a href="/Propietario/Detalle/@item.PropietarioId"><i class="fa-solid fa-eye"></i></a>
+                    @if(item.EstadoP == true && User.IsInRole("Administrador"))
+					{
+                        <span> | </span><a href="/Propietario/Edicion/@item.PropietarioId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
+                        <a href="#" class="text-danger eliminar" data-url="/Propietario/Eliminar?id=@item.PropietarioId"><i class="fa-solid fa-trash"></i></a>
+					}else if(item.EstadoP == false && User.IsInRole("Administrador"))
+                    {
+                        <span> | </span><a href="#" data-url="/Propietario/Activar/@item.PropietarioId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+					}else if(item.EstadoP == true )
+                    {
+                        <span> | </span><a href="/Propietario/Edicion/@item.PropietarioId"><i class="fa-solid fa-pen-to-square"></i></a>
+                    }
+                </td>
             </tr>
         }
     </tbody>

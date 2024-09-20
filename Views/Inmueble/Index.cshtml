@@ -36,28 +36,27 @@
 				<td>@(item.UsoInmueble != null ? item.UsoInmueble.ToString() : "Uso no disponible")</td>
 				<td>@(item.TipoInmueble != null ? item.TipoInmueble.ToString() : "Tipo no disponible")</td>
 				<td>@(item.Estado ? "Activo" : "Inactivo")</td>
-				@if (item.Estado == true)
-				{
-					<td>
-						<a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a> |
-						<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a> |
-						<a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
-					</td>
-				}
-				else
-				{
-					<td>
-						<a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a> |
-						<a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
-					</td>
-				}
+				<td>
+                    <a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a>
+                    @if(item.Estado == true && User.IsInRole("Administrador"))
+					{
+                        <span> | </span><a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
+                        <a href="#" data-url="/Inmueble/Eliminar/@item.InmuebleId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
+					}else if(item.Estado == false && User.IsInRole("Administrador"))
+                    {
+                        <span> | </span><a href="#" data-url="/Inmueble/Activar/@item.InmuebleId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
+					}else if(item.Estado == true )
+                    {
+                        <span> | </span><a href="/Inmueble/Edicion/@item.InmuebleId"><i class="fa-solid fa-pen-to-square"></i></a>
+                    }
+                </td>
 			</tr>
 		}
 
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="5">
+			<td colspan="6">
 				<a href="/Inmueble/Edicion/"> <i class="fa-solid fa-plus"></i></a>
 			</td>
 		</tr>

@@ -16,7 +16,9 @@
         <form asp-action="Guardar" id="guardarForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input  type="hidden" name="ContratoId" value="@id" readonly/>
-            <input asp-for="IdCreador" value="@User.Claims.First().Value" type="hidden" readonly>
+            @if(@id == 0){
+                <input asp-for="IdCreador" value="@User.Claims.First().Value" type="hidden" readonly>
+            }
             <div class="form-group">
                 <label class="control-label">Inquilino</label>
                 <select class="form-control" name="IdInquilino">

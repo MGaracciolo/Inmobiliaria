@@ -434,17 +434,21 @@ public class RepositorioContrato: RepositorioBase
     }
 
 
-    public int Baja(int id)
+    public int Baja(int id,int anulador, DateTime fecha)
     {
         int res = -1;
         using (MySqlConnection connection = new MySqlConnection(ConnectionString))
         {
             var query = $@"UPDATE contrato
-            SET estado = 0
+            SET estado = 0,
+            id_anulacion = @anulador,
+            fecha_anulacion = @fecha
             WHERE id_contrato = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@anulador", anulador);
+                command.Parameters.AddWithValue("@fecha", fecha);
                 connection.Open();
                 res = command.ExecuteNonQuery();
                 connection.Close();
