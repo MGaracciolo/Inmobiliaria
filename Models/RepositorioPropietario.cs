@@ -112,7 +112,8 @@ public class RepositorioPropietario : RepositorioBase
             dni AS Dni,
             email AS Email,
             telefono AS Telefono,
-            direccion AS DireccionP
+            direccion AS DireccionP,
+            estado AS EstadoP
            FROM propietario 
            WHERE id_propietario = @id";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
@@ -127,7 +128,8 @@ public class RepositorioPropietario : RepositorioBase
                         Dni = reader.GetString(nameof(Propietario.Dni)),
                         Email = reader.GetString(nameof(Propietario.Email)),
                         Telefono = reader.GetString(nameof(Propietario.Telefono)),
-                        DireccionP = reader.GetString(nameof(Propietario.DireccionP))
+                        DireccionP = reader.GetString(nameof(Propietario.DireccionP)),
+                        EstadoP = reader.GetBoolean(nameof(Propietario.EstadoP))
                    };
                }
                connection.Close();
@@ -163,18 +165,25 @@ public class RepositorioPropietario : RepositorioBase
         }
     }
 
-    public bool EmailYaRegistrado(string email){
+    public bool VerificarPropietario(string nombre, string apellido, string dni){
         using (MySqlConnection connection = new MySqlConnection(ConnectionString))
         {
-            using (MySqlCommand command = new MySqlCommand("SELECT COUNT(*) FROM propietario WHERE email = @email", connection))
-            {
-                command.Parameters.AddWithValue("@email", email);
-                connection.Open();
-                int count = Convert.ToInt32(command.ExecuteScalar());
-                connection.Close();
-                return count > 0;
-            }
+        var query = $@"SELECT COUNT(*) 
+        FROM propietario
+         WHERE LOWER(nombre) = LOWER(@nombre)
+         AND LOWER(apellido) = LOWER(@apellido) 
+         AND dni = @dni";
+        using (MySqlCommand command = new MySqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@nombre", nombre);
+            command.Parameters.AddWithValue("@apellido", apellido);
+            command.Parameters.AddWithValue("@dni", dni);
+            connection.Open();
+            int count = Convert.ToInt32(command.ExecuteScalar());
+            connection.Close();
+            return count > 0;
         }
+    }
     }
 
     public int Modificar(Propietario propietario){

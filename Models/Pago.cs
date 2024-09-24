@@ -7,7 +7,6 @@ public class Pago{
 
     public int IdContrato { get; set; }
 
-    
     public int Numero { get; set; }
     
     [Required(ErrorMessage = "Ingrese el importe")]
@@ -20,4 +19,12 @@ public class Pago{
     public int? AnuladorId { get; set; }
 
     public string? Concepto { get; set; }
+
+    public bool Estado { get; set; }
+
+    public Contrato? Contrato { get; set; }
+
+    public Usuario? Creador { get; set; }
+
+    public Usuario? Anulador { get; set; }
 }

@@ -16,22 +16,26 @@
         </div>
     </div>
 </div>
-<table id="inquilinosTable" class="table row-border dt-center">
-    <thead>
+<table id="inquilinosTable" class="hover compact row-border">
+    <thead  class="bg-dark text-white">
         <tr>
             <th>DNI</th>
             <th>Nombre</th>
             <th>Apellido</th>
+            <th>Telefono</th>
+            <th>Email</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.DniI)</td>
-                <td>@Html.DisplayFor(modelItem => item.NombreI)</td>
-                <td>@Html.DisplayFor(modelItem => item.ApellidoI)</td>
+            <tr class="@(item.EstadoI == false ?  "bg-inactivos" : "")">
+                <td>@(item.DniI)</td>
+                <td>@(item.NombreI)</td>
+                <td>@(item.ApellidoI)</td>
+                <td>@(item.TelefonoI)</td>
+                <td>@item.EmailI</td>
                 <td>
                     <a href="/Inquilino/Detalle/@item.InquilinoId"><i class="fa-solid fa-eye"></i></a>
                     @if(item.EstadoI == true && User.IsInRole("Administrador"))
@@ -51,7 +55,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="4"><a href="/Inquilino/Edicion/"><i class="fa-solid fa-plus"></i></a></td>
+            <td colspan="6"><a href="/Inquilino/Edicion/"><i class="fa-solid fa-plus"></i></a></td>
         </tr>
     </tfoot>
 </table>
@@ -59,42 +63,74 @@
 @section Scripts{
     <script>
         $(document).ready(function() {
-            $('.eliminar').click(function(e) {
-                e.preventDefault(); 
-                var url = $(this).data('url'); 
-                Swal.fire({
-                    title: "¿Eliminar Inquilino?",
-                    text: "Los datos se eliminan definitivamente",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Eliminar",
-                    cancelButtonText: "Cancelar"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
-                    }
-                });
-            });
-            $('.activar').click(function(e) {
-				e.preventDefault(); 
-				var url = $(this).data('url'); 
-				Swal.fire({
-					title: "¿Activar inquilino?",
-					text: "Estara disponible para nuevos contratos",
-					icon: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#3085d6",
-					cancelButtonColor: "#d33",
-					confirmButtonText: "Activar",
-					cancelButtonText: "Cancelar"
-				}).then((result) => {
-					if (result.isConfirmed) {
-						window.location.href = url;
+            function cargarInquilinos(estado) {
+				$.ajax({
+					url: '@Url.Action("Index", "Inquilino")',
+					type: 'GET',
+					data: {
+						estado: estado
+					},
+					success: function (result) {
+						$('#inquilinosTable tbody').html($(result).find('#inquilinosTable tbody').html());
+                        cargarEventos(); // PQ cuando vuelvo a cargar la tabla no carga los eventos
 					}
 				});
-            });
+			}
+            function cargarEventos() {
+                $('#todosBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarInquilinos(''); 
+                });
+
+                $('#activoBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarInquilinos('activo'); 
+                });
+
+                $('#desactivadoBtn').on('click', function (e) {
+                    e.preventDefault();
+                    cargarInquilinos('inactivo'); 
+                });
+
+                $('.eliminar').click(function(e) {
+                    e.preventDefault(); 
+                    var url = $(this).data('url'); 
+                    Swal.fire({
+                        title: "¿Eliminar Inquilino?",
+                        text: "Los datos se eliminan definitivamente",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Eliminar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+
+                $('.activar').click(function(e) {
+                    e.preventDefault(); 
+                    var url = $(this).data('url'); 
+                    Swal.fire({
+                        title: "¿Activar inquilino?",
+                        text: "Estara disponible para nuevos contratos",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Activar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+            }
+            cargarEventos();// paraq me los cargue la primera ve<
         });
        
     </script>

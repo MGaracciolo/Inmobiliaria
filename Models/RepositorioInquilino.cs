@@ -43,12 +43,12 @@ public class RepositorioInquilino: RepositorioBase
             apellido AS ApellidoI,
             dni AS DniI,
             email AS EmailI,
-            telefono AS TelefonoI 
+            telefono AS TelefonoI,
             estado AS EstadoI
            FROM inquilino
            WHERE estado = 1";
            using(MySqlCommand command = new MySqlCommand(query, connection)){
-               connection.Open();
+              connection.Open();
                var reader = command.ExecuteReader();
                while(reader.Read()){
                   inquilinos.Add(new Inquilino{
@@ -58,7 +58,7 @@ public class RepositorioInquilino: RepositorioBase
                         DniI = reader.GetString(nameof(Inquilino.DniI)),
                         EmailI = reader.GetString(nameof(Inquilino.EmailI)),
                         TelefonoI = reader.GetString(nameof(Inquilino.TelefonoI)),
-                        EstadoI = reader.GetBoolean(nameof(Inquilino.EstadoI)),
+                        EstadoI = reader.GetBoolean(nameof(Inquilino.EstadoI))
                    });
                }
            }
@@ -74,7 +74,7 @@ public class RepositorioInquilino: RepositorioBase
             apellido AS ApellidoI,
             dni AS DniI,
             email AS EmailI,
-            telefono AS TelefonoI 
+            telefono AS TelefonoI,
             estado AS EstadoI
            FROM inquilino
            WHERE estado = 0";
@@ -89,7 +89,7 @@ public class RepositorioInquilino: RepositorioBase
                         DniI = reader.GetString(nameof(Inquilino.DniI)),
                         EmailI = reader.GetString(nameof(Inquilino.EmailI)),
                         TelefonoI = reader.GetString(nameof(Inquilino.TelefonoI)),
-                        EstadoI = reader.GetBoolean(nameof(Inquilino.EstadoI)),
+                        EstadoI = reader.GetBoolean(nameof(Inquilino.EstadoI))
                    });
                }
            }

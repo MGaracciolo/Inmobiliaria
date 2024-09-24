@@ -37,4 +37,9 @@ public class Inmueble{
 
     public UsoInmueble? UsoInmueble { get; set; }
 
+    public override string ToString()
+    {
+        var res = $"{DireccionI}"; 
+        return res;
+    }
 }

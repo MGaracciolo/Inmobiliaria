@@ -12,30 +12,47 @@ public class InmuebleController : Controller
     private RepositorioPropietario repoPropietario = new RepositorioPropietario();
     private RepositorioTipo repoTipo = new RepositorioTipo();
     private RepositorioUso repoUso = new RepositorioUso();
+    private RepositorioContrato repoContrato = new RepositorioContrato();
 
     public InmuebleController(ILogger<InmuebleController> logger)
     {
         _logger = logger;
     }
 
-    public IActionResult Index(bool? disponible)
+    public IActionResult Index(DateTime? desde, DateTime? hasta, string estado)
     {
-        var lista = repo.ObtenerTodos();
-        if (disponible.HasValue) {//Se filtra por estado
-            lista = lista.Where(inmueble => inmueble.Estado == disponible.Value).ToList();
+        List<Inmueble> lista;
+        if (desde.HasValue && hasta.HasValue)
+        {
+            lista = repo.ObtenerDisponibles(desde.Value.ToString("yyyy-MM-dd"), hasta.Value.ToString("yyyy-MM-dd"));
+        }
+        else
+        {
+            lista = repo.ObtenerTodos();
+        }
+        if (!string.IsNullOrEmpty(estado))
+        {
+            if (estado == "activo")
+            {
+                lista = repo.ObtenerActivos();
+            }
+            else if (estado == "inactivo")
+            {
+                lista = repo.ObtenerInactivos();
+            }
         }
         return View(lista);
     }
+
     /*endpoint*/
     public IActionResult Edicion(int id)
     {
-        ViewBag.Propietarios = repoPropietario.ObtenerTodos();
+        ViewBag.Propietarios = repoPropietario.ObtenerActivos();
         ViewBag.Usos = repoUso.ObtenerTodos();
         ViewBag.Tipos = repoTipo.ObtenerTodos();
 
         if (id == 0)
         {
-
             return View();
         }
         else
@@ -54,6 +71,7 @@ public class InmuebleController : Controller
             var propietario = repoPropietario.ObtenerUno(inmueble.IdPropietario);
             var uso = repoUso.ObtenerUno(inmueble.IdUso);
             var tipo = repoTipo.ObtenerUno(inmueble.IdTipo);
+            ViewBag.Contratos = repoContrato.ObtenerPorInmueble(id);
             inmueble.Propietario = propietario;
             inmueble.UsoInmueble = uso;
             inmueble.TipoInmueble = tipo;
@@ -64,55 +82,42 @@ public class InmuebleController : Controller
     [HttpPost]
     public IActionResult Guardar(int id, Inmueble inmueble)
     {
+        ViewBag.Propietarios = repoPropietario.ObtenerActivos();
+        ViewBag.Usos = repoUso.ObtenerTodos();
+        ViewBag.Tipos = repoTipo.ObtenerTodos();
         if (!ModelState.IsValid)
         {
             return View("Edicion", inmueble);
         }
         id = inmueble.InmuebleId;
-        if (id == 0)
+        bool direccionDuplicada = repo.VerificarDireccion(inmueble.DireccionI);
+    
+        if (direccionDuplicada && id == 0) // Solo si es un nuevo inmueble
         {
-            repo.Alta(inmueble);
-            TempData["Mensaje"] = "Inmueble guardado";
+            TempData["Error"]= "Ya existe un inmueble activo con esta dirección.";
+            return View("Edicion", inmueble);
         }
-        else
+        try
         {
-            repo.Modificar(inmueble);
-            TempData["Mensaje"] = "Cambios guardados";
+            if (id == 0)
+            {
+                repo.Alta(inmueble);
+                TempData["Mensaje"] = "Inmueble guardado";
+            }
+            else
+            {
+                repo.Modificar(inmueble);
+                TempData["Mensaje"] = "Cambios guardados";
+            }
+            return RedirectToAction("Index");
         }
-        return RedirectToAction("Index");
+        catch(Exception ex)
+        {
+           TempData["Error"] = ex.Message;
+            return View("Edicion", inmueble);
+        }
     }
-    // [HttpPost]
-    // public IActionResult Guardar(int id, Inmueble inmueble)
-    // {
-    //     if (!ModelState.IsValid)
-    //     {
-    //         ViewBag.Propietarios = repoPropietario.ObtenerTodos();
-    //         ViewBag.Usos = repoUso.ObtenerTodos();
-    //         ViewBag.Tipos = repoTipo.ObtenerTodos();
-    //         return View("Edicion", inmueble);
-    //     }
-
-    //     if (inmueble == null)
-    //     {
-    //         ModelState.AddModelError("", "Inmueble no puede ser nulo.");
-    //         return View("Edicion", inmueble);
-    //     }
-
-
-    //     id = inmueble.InmuebleId;
-    //     if (id == 0)
-    //     {
-    //         repo.Alta(inmueble);
-    //         TempData["Mensaje"] = "Inmueble guardado";
-    //     }
-    //     else
-    //     {
-    //         repo.Modificar(inmueble);
-    //         TempData["Mensaje"] = "Cambios guardados";
-    //     }
-
-    //     return RedirectToAction("Index");
-    // }
+   
 
     //solo puede admin
     public IActionResult Eliminar(int id)
@@ -124,6 +129,8 @@ public class InmuebleController : Controller
 			int res = repo.Baja(id);
             if (res == -1)
                 TempData["Error"] = "No se pudo eliminar el inmueble";
+            else if(res == 0)
+                TempData["Error"] = "No se encontró el inmueble";
             else
                 TempData["Mensaje"] = "El inmueble quedo inactivo";
             return RedirectToAction("Index");
@@ -132,16 +139,40 @@ public class InmuebleController : Controller
     //solo puede admin
     public IActionResult Activar(int id)
     {
-        if(!User.IsInRole("Administrador")){
+        if(!User.IsInRole("Administrador")){//primero controlo que sea admin
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
-		}else{
-            int res = repo.Restore(id);
-            if (res == -1)
-                TempData["Error"] = "No se pudo activar el inmueble";
-            else
-                TempData["Mensaje"] = "El inmueble se activo";
+		}
+
+        if(!Verificaciones(id)){
             return RedirectToAction("Index");
         }
+        
+        int res = repo.Restore(id); 
+        if (res == -1)
+            TempData["Error"] = "No se pudo activar el inmueble";
+        else
+            TempData["Mensaje"] = "Se activó el inmueble";
+        return RedirectToAction("Index");
+            
+    }
+
+    public bool Verificaciones(int id){
+        Inmueble inmueble = repo.ObtenerUno(id);
+        
+        if(inmueble==null){
+            TempData["Error"] = "No se encontró el inmueble";
+            return false;
+        }
+
+        Propietario propietario = repoPropietario.ObtenerUno(inmueble.IdPropietario);
+
+        if(propietario == null || propietario.EstadoP == false){
+            TempData["Error"] = "El propietario no se encuentra activo";
+            return false;
+        }
+        
+        return true;
+        
     }
 }

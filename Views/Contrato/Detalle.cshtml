@@ -1,7 +1,7 @@
 @model net.Models.Contrato
 @{
     ViewData["Title"] = "Detalle";
-	int id = Model==null ? 0 : Model.ContratoId;
+    int id = Model == null ? 0 : Model.ContratoId;
 }
 
 
@@ -9,46 +9,122 @@
     <h3 class="display-4">Contrato:</h3>
 </div>
 <hr />
-<div class="row">
+
+<form class="row">
     <div class="col-md-4">
-        <form>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-             <input asp-for="ContratoId" class="form-control" type="hidden"/>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="ContratoId" class="form-control" type="hidden" />
+        <div class="form-group">
+            <label asp-for="Inquilino" class="control-label">Inquilino</label>
+            <input asp-for="Inquilino" class="form-control" value="@Model?.Inquilino?.ToString()" readonly />
+            <span asp-validation-for="Inquilino" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Inmueble" class="control-label">Inmueble</label>
+            <input asp-for="Inmueble" class="form-control" value="@Model?.Inmueble?.DireccionI" readonly />
+            <span asp-validation-for="Inmueble" class="text-danger"></span>
+        </div>
+         <div class="form-group">
+            <label asp-for="PrecioContrato" class="control-label">Precio</label>
+            <input asp-for="PrecioContrato" class="form-control" readonly />
+            <span asp-validation-for="PrecioContrato" class="text-danger"></span>
+        </div>
+        
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Desde" class="control-label">Desde</label>
+            <input asp-for="Desde" class="form-control" type="date" readonly />
+            <span asp-validation-for="Desde" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Hasta" class="control-label">Hasta</label>
+            <input asp-for="Hasta" class="form-control" type="date" readonly />
+            <span asp-validation-for="Hasta" class="text-danger"></span>
+        </div>
+       
+        <div class="form-group">
+            <label asp-for="Estado" class="control-label">Estado</label>
+            <input type="text" class="form-control" value="@(Model?.Estado == true ? "Activo" : "Inactivo")" readonly />
+            <span asp-validation-for="Estado" class="text-danger"></span>
+        </div>
+    </div>
+    @if (User.IsInRole("Administrador"))
+    {
+        <div class="col-md-4">
             <div class="form-group">
-                <label asp-for="Inquilino" class="control-label">Inquilino</label>
-                <input asp-for="Inquilino" class="form-control" value="@Model?.Inquilino?.ToString()" readonly/>
-                <span asp-validation-for="Inquilino" class="text-danger"></span>
+                <label asp-for="Creador" class="control-label"></label>
+                <input asp-for="Creador" class="form-control" readonly />
+                <span asp-validation-for="Creador" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Inmueble" class="control-label">Inmueble</label>
-                <input asp-for="Inmueble" class="form-control" value="@Model?.Inmueble?.DireccionI" readonly/>
-                <span asp-validation-for="Inmueble" class="text-danger"></span>
+                <label asp-for="Anulador" class="control-label"></label>
+                <input asp-for="Anulador" class="form-control" readonly />
+                <span asp-validation-for="Anulador" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Desde" class="control-label">Desde</label>
-                <input asp-for="Desde" class="form-control" type="date"readonly/>
-                <span asp-validation-for="Desde" class="text-danger"></span>
+                <label asp-for="Anulacion" class="control-label"></label>
+                <input asp-for="Anulacion" type="date" class="form-control" readonly />
+                <span asp-validation-for="Anulacion" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Hasta" class="control-label">Hasta</label>
-                <input asp-for="Hasta" class="form-control" type="date"readonly/>
-                <span asp-validation-for="Hasta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrecioContrato" class="control-label">Precio</label>
-                <input asp-for="PrecioContrato" class="form-control" readonly/>
-                <span asp-validation-for="PrecioContrato" class="text-danger"></span>
-            </div>
-           <div class="form-group">
-                <label asp-for="Estado" class="control-label">Estado</label>
-                <input type="text" class="form-control" 
-                    value="@(Model?.Estado == true ? "Activo" : "Inactivo")" readonly />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-        </form>
+        </div>
+    }
+</form>
+</div>
+</div>
+
+<div>
+    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#renovarModal" data-id="@id">
+        <i class="fa-solid fa-rotate-right"></i> Renovar contrato
+    </button>
+</div>
+<div class="row mt-5">
+    <div class="col-md-12">
+        <h4>Pagos Registrados</h4>
+        @if (Model != null && Model.Pagos != null && Model.Pagos.Any())
+        {
+            <table class="table table-striped" id="contratoPagosTable">
+                <thead>
+                    <tr>
+                        <th>Numero</th>
+                        <th>Importe</th>
+                        <th>Fecha</th>
+                        <th>Concepto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pago in Model.Pagos)
+                    {
+                        <tr>
+                            <td>@pago.Numero</td>
+                            <td>@pago.Importe</td>
+                            <td>@pago.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@pago.Concepto</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        }
+        else
+        {
+            <p>No hay pagos registrados para este contrato.</p>
+        }
     </div>
 </div>
 
 <div>
     <a asp-action="Index">Volver al listado</a>
 </div>
+
+@section Scripts{
+    <script>
+         $('#renovarModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var contratoId = button.data('id');
+            var modal = $(this);
+            
+        });
+
+    </script>
+}

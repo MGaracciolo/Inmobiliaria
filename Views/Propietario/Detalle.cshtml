@@ -1,7 +1,8 @@
 @model net.Models.Propietario
 @{
     ViewData["Title"] = "Detalle";
-	int id = Model==null ? 0 : Model.PropietarioId;
+    int id = Model == null ? 0 : Model.PropietarioId;
+    var Inmuebles = (IList<Inmueble>)ViewBag.Inmuebles;
 }
 
 
@@ -9,46 +10,78 @@
     <h3 class="display-4">Propietario:</h3>
 </div>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" readonly name="PropietarioId" value="@id" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" readonly/>
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" readonly/>
-                <span asp-validation-for="Apellido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Dni" class="control-label"></label>
-                <input asp-for="Dni" class="form-control"readonly/>
-                <span asp-validation-for="Dni" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" readonly/>
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" readonly/>
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DireccionP" class="control-label">Direccion</label>
-                <input asp-for="DireccionP" class="form-control" readonly/>
-                <span asp-validation-for="DireccionP" class="text-danger"></span>
-            </div>
-             
-        </form>
-    </div>
-</div>
 
+
+<form class="row">
+    <div class="col-md-6">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" readonly name="PropietarioId" value="@id" />
+        <div class="form-group">
+            <label asp-for="Nombre" class="control-label"></label>
+            <input asp-for="Nombre" class="form-control" readonly />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Apellido" class="control-label"></label>
+            <input asp-for="Apellido" class="form-control" readonly />
+            <span asp-validation-for="Apellido" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Dni" class="control-label"></label>
+            <input asp-for="Dni" class="form-control" readonly />
+            <span asp-validation-for="Dni" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="Telefono" class="control-label"></label>
+            <input asp-for="Telefono" class="form-control" readonly />
+            <span asp-validation-for="Telefono" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" readonly />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DireccionP" class="control-label">Direccion</label>
+            <input asp-for="DireccionP" class="form-control" readonly />
+            <span asp-validation-for="DireccionP" class="text-danger"></span>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    <h5>Inmuebles del Propietario: </h5>
+    <table class="hover compact row-border" id="inmueblesPropietarioTable">
+	<thead  class="bg-dark text-white">
+		<tr>
+			<th>Estado</th>
+			<th>Direccion</th>
+			<th>Uso</th>
+			<th>Tipo</th>
+            <th>Ambientes</th>
+			<th>Precio</th>
+            <th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Inmuebles)
+		{
+			<tr class="@(item.Estado == false ?  "bg-inactivos" : "")">
+				<td>@(item.Estado == true ? "Activo" : "Inactivo")</td>
+				<td>@(item.DireccionI)</td>
+                <td>@(item.UsoInmueble)</td>
+                <td>@(item.TipoInmueble)</td>
+                <td>@(item.Ambientes)</td>
+                <td>@(item.Precio)</td>
+                <td><a href="/Inmueble/Detalle/@item.InmuebleId"><i class="fa-solid fa-eye"></i></a></td>
+			</tr>
+		}
+
+	</tbody>
+</table>
+</div>
 <div>
     <a asp-action="Index">Volver al listado</a>
 </div>

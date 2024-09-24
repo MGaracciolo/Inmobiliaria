@@ -24,45 +24,49 @@ public class UsuarioController : Controller
 	}
 
 	public IActionResult Index()
-	{	
-		if(!User.IsInRole("Administrador")){
+	{
+		if (!User.IsInRole("Administrador"))
+		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
-		}else{
-			var lista = repo.ObtenerTodos();
-			return View(lista);
 		}
+		var lista = repo.ObtenerTodos();
+		return View(lista);
+
 	}
-	
+
 	public IActionResult Detalle()
 	{
-		if(!User.IsInRole("Administrador")){
+		if (!User.IsInRole("Administrador"))
+		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
-		}else{
-			var usuario = repo.ObtenerPorEmail(User.Identity.Name);
-			ViewBag.Roles = Usuario.ObtenerRoles();
-			return View(usuario);
 		}
+		var usuario = repo.ObtenerPorEmail(User.Identity.Name);
+		ViewBag.Roles = Usuario.ObtenerRoles();
+		return View(usuario);
+
 	}
 
 	public ActionResult Perfil()
-		{
-		
-			var usuario = repo.ObtenerPorEmail(User.Identity.Name);
-			ViewBag.Roles = Usuario.ObtenerRoles();
-			return View("Detalle", usuario);
-		}
-	
+	{
+
+		var usuario = repo.ObtenerPorEmail(User.Identity.Name);
+		ViewBag.Roles = Usuario.ObtenerRoles();
+		return View("Detalle", usuario);
+	}
+
 	public IActionResult Creacion()
 	{
-		if(!User.IsInRole("Administrador")){
+		if (!User.IsInRole("Administrador"))
+		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
-		}else{
-			ViewBag.Roles = Usuario.ObtenerRoles();
-			return View();
 		}
+
+		ViewBag.Roles = Usuario.ObtenerRoles();
+		return View();
+
 	}
 
 	[HttpPost]
@@ -83,7 +87,7 @@ public class UsuarioController : Controller
 								numBytesRequested: 256 / 8));
 			usuario.Password = hashed;
 			int res = repo.Alta(usuario);
-			usuario.UsuarioId=res;
+			usuario.UsuarioId = res;
 			if (usuario.AvatarFile != null && usuario.UsuarioId > 0)
 			{
 				//para entrar a wwwroot
@@ -104,9 +108,10 @@ public class UsuarioController : Controller
 					usuario.AvatarFile.CopyTo(stream);
 				}
 				repo.Modificar(usuario);//para agregar la url en avatar
-			}else{
-				TempData["Error"] = "No se pudo subir el archivo";
 			}
+			// }else{
+			// 	TempData["Error"] = "No se pudo subir el archivo";
+			// }
 			return RedirectToAction("Index");
 		}
 		catch (Exception ex)
@@ -119,57 +124,99 @@ public class UsuarioController : Controller
 
 	public ActionResult Edicion(int id)
 	{
-		if(!User.IsInRole("Administrador")){
+		if (!User.IsInRole("Administrador")  && id != int.Parse(User.Claims.First().Value))
+		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
-		}else{
-			var usuario = repo.ObtenerUno(id);
-			ViewBag.Roles = Usuario.ObtenerRoles();
-			return View(usuario);
 		}
-		
+		if (id == 0)
+            return View();
+        ViewBag.Roles = Usuario.ObtenerRoles();
+		var usuario = repo.ObtenerUno(id);
+        return View(usuario);
 	}
 
-	[HttpPost]
-	public ActionResult Edicion(int id, Usuario u)
-	{
-		var vista = nameof(Edicion);//de que vista provengo
-		try
+	public IActionResult ModificarDatos(Usuario usuario){
+		if (!User.IsInRole("Administrador") && usuario.UsuarioId != int.Parse(User.Claims.First().Value))
 		{
-			if (!User.IsInRole("Administrador"))//no soy admin
-			{
-				vista = nameof(Perfil);//solo puedo ver mi perfil
-				var usuarioActual = repo.ObtenerPorEmail(User.Identity.Name);
-				if (usuarioActual.UsuarioId != id)//si no es admin, solo puede modificarse él mismo
-					return RedirectToAction(nameof(Index), "Home");
-			}
-
-			return RedirectToAction(vista);
+			TempData["Error"] = "Acceso denegado";
+			return Redirect("/Home/Index");
 		}
-		catch (Exception ex)
-		{//colocar breakpoints en la siguiente línea por si algo falla
-			TempData["Error"] = ex.Message;
-			return RedirectToAction(vista);
-			throw;
-		}
+		int res = repo.ModificarDatos(usuario);
+		if (res == -1)
+			TempData["Error"] = "No se pudo modificar los datos";
+		else
+			TempData["Mensaje"] = "Cambios guardados";
+		return RedirectToAction("Index","Home");
 	}
 	
+	public IActionResult ModificarPassword(Usuario usuario){
+		if (!User.IsInRole("Administrador") && usuario.UsuarioId != int.Parse(User.Claims.First().Value))
+		{
+			TempData["Error"] = "Acceso denegado";
+			return Redirect("/Home/Index");
+		}
+
+		//verificar primero que las claves coincidan 
+
+		string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+								password: usuario.Password,
+								salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+								prf: KeyDerivationPrf.HMACSHA1,
+								iterationCount: 1000,
+								numBytesRequested: 256 / 8));
+		usuario.Password = hashed;
+		int res = repo.ModificarClave(usuario);
+		if (res == -1)
+			TempData["Error"] = "No se pudo modificar la clave";
+		else
+			TempData["Mensaje"] = "Cambios guardados";
+		return RedirectToAction("Index","Home");
+	}
+	public IActionResult EliminarAvatar(Usuario usuario){
+		if (!User.IsInRole("Administrador") && usuario.UsuarioId != int.Parse(User.Claims.First().Value))
+		{
+			TempData["Error"] = "Acceso denegado";
+			return Redirect("/Home/Index");
+		}
+		int res = repo.ModificarAvatar(usuario);
+		if (res == -1)
+			TempData["Error"] = "No se pudo modificar el avatar";
+		else
+			TempData["Mensaje"] = "Se elimino el avatar";
+		return RedirectToAction("Index","Home");
+	}
+	public ActionResult ModificarAvatar(Usuario usuario){
+		if (!User.IsInRole("Administrador") && usuario.UsuarioId != int.Parse(User.Claims.First().Value))
+		{
+			TempData["Error"] = "Acceso denegado";
+			return Redirect("/Home/Index");
+		}
+		int res = repo.ModificarAvatar(usuario);
+		if (res == -1)
+			TempData["Error"] = "No se pudo modificar el avatar";
+		else
+			TempData["Mensaje"] = "Cambios guardados";
+		return RedirectToAction("Index","Home");
+	}
 	public IActionResult Eliminar(int id)
 	{
-		if(!User.IsInRole("Administrador")){
+		if (!User.IsInRole("Administrador"))
+		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
-		}else{
-			int res = repo.Baja(id);
-			if (res == -1)
-				TempData["Error"] = "No se pudo eliminar el usuario";
-			else
-				TempData["Mensaje"] = "El usuario se elimino";
-			return RedirectToAction("Index");
 		}
-		
+
+		int res = repo.Baja(id);
+		if (res == -1)
+			TempData["Error"] = "No se pudo eliminar el usuario";
+		else
+			TempData["Mensaje"] = "El usuario se elimino";
+		return RedirectToAction("Index");
+
+
 	}
-	
+
 	[AllowAnonymous]
 	public IActionResult LoginModal()
 	{

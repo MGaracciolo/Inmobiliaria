@@ -11,7 +11,20 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form>
+        <div class="form-group">
+             <label asp-for="Avatar" class="control-label"></label>
+                @if (!String.IsNullOrEmpty(Model.Avatar))
+                {
+                    <img width="64" src="@($"{Model.Avatar}?{new Random().Next()}")" alt="Avatar" />
+                }
+                else
+                {
+                    <span>Sin foto</span>
+                }
+                <span asp-validation-for="Avatar" class="text-danger"></span>
+            </div>
+    </div>
+    <div class="col-md-8">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" readonly name="UsuarioId" value="@id" />
             <div class="form-group">
@@ -30,22 +43,14 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" readonly/>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Rol" class="control-label">Rol</label>
                 <input type="text" class="form-control" 
                     value="@(Model?.Rol == 1 ? "Administrador" : "Empleado")" readonly />
                 <span asp-validation-for="Rol" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Avatar" class="control-label"></label>
-                <input asp-for="Avatar" class="form-control" type="image" readonly/>
-                <span asp-validation-for="Avatar" class="text-danger"></span>
-            </div>
-        </form>
+            </div>  
+    </div>
+    <div class="mt-3">
+        <a href="/Usuario/Edicion/@Model.UsuarioId" class="btn btn-primary">Editar datos</a>
     </div>
 </div>
 

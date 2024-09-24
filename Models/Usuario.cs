@@ -38,4 +38,9 @@ public class Usuario
 			}
 			return roles;
 		}
+    
+    public override string ToString()
+    {
+        return $"{Nombre} {Apellido}";
+    }
 }

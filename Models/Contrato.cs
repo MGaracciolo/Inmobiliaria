@@ -29,4 +29,14 @@ public class Contrato{
     public Usuario? Creador { get; set; }
 
     public Usuario? Anulador { get; set; }
+
+    public List<Pago> Pagos { get; set; }//Nuevo. Melian
+
+    public override string ToString()
+    {
+        var inquilinoStr = Inquilino != null ? $"{Inquilino.NombreI} {Inquilino.ApellidoI}" : "";
+        var inmuebleStr = Inmueble != null ? Inmueble.ToString() : "";
+        
+        return $"{inquilinoStr} - {inmuebleStr}";
+    }
 }

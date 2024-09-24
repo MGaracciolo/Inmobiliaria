@@ -1,8 +1,8 @@
 @model net.Models.Inmueble
 @{
     ViewData["Title"] = "Detalle";
-	int id = Model==null ? 0 : Model.InmuebleId;
-    
+    int id = Model == null ? 0 : Model.InmuebleId;
+    var Contratos = (IList<Contrato>)ViewBag.Contratos;
 }
 
 
@@ -10,61 +10,103 @@
     <h3 class="display-4">Inmueble:</h3>
 </div>
 <hr />
-<div class="row">
+
+<form class="row">
     <div class="col-md-4">
-        <form >
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="InmuebleId" value="@id" />
-            <div class="form-group">
-                <label asp-for="DireccionI" class="control-label">Direccion</label>
-                <input asp-for="DireccionI" class="form-control" value="@Model?.DireccionI?" readonly/>
-                <span asp-validation-for="DireccionI" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Latitud" class="control-label">Latitud</label>
-                <input asp-for="Latitud" class="form-control" readonly/>
-                <span asp-validation-for="Latitud" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitud" class="control-label">Longitud</label>
-                <input asp-for="Longitud" class="form-control" readonly/>
-                <span asp-validation-for="Longitud" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Propietario" class="control-label">Propietario</label>
-                <input asp-for="Propietario" class="form-control" value="@Model?.Propietario?.ToString()" readonly/>
-                <span asp-validation-for="Propietario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsoInmueble" class="control-label">Uso</label>
-                <input asp-for="UsoInmueble" class="form-control" value="@Model?.UsoInmueble?.UsoValor" readonly/>
-                <span asp-validation-for="UsoInmueble" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoInmueble" class="control-label">Tipo</label>
-                <input asp-for="TipoInmueble" class="form-control" value="@Model?.TipoInmueble?.Valor" readonly/>
-                <span asp-validation-for="TipoInmueble" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ambientes" class="control-label">Ambientes</label>
-                <input asp-for="Ambientes" class="form-control" readonly/>
-                <span asp-validation-for="Ambientes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Precio" class="control-label">Precio</label>
-                <input asp-for="Precio" class="form-control" readonly/>
-                <span asp-validation-for="Precio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label">Estado</label>
-                <input type="text" class="form-control" 
-                    value="@(Model?.Estado == true ? "Activo" : "Inactivo")" readonly />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-        </form>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" name="InmuebleId" value="@id" />
+        <div class="form-group">
+            <label asp-for="DireccionI" class="control-label">Dirección</label>
+            <input asp-for="DireccionI" class="form-control" value="@Model?.DireccionI" readonly />
+            <span asp-validation-for="DireccionI" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Latitud" class="control-label">Latitud</label>
+            <input asp-for="Latitud" class="form-control" readonly />
+            <span asp-validation-for="Latitud" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Longitud" class="control-label">Longitud</label>
+            <input asp-for="Longitud" class="form-control" readonly />
+            <span asp-validation-for="Longitud" class="text-danger"></span>
+        </div>
     </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Propietario" class="control-label">Propietario</label>
+            <input asp-for="Propietario" class="form-control" value="@Model?.Propietario?.ToString()" readonly />
+            <span asp-validation-for="Propietario" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UsoInmueble" class="control-label">Uso</label>
+            <input asp-for="UsoInmueble" class="form-control" value="@Model?.UsoInmueble?.UsoValor" readonly />
+            <span asp-validation-for="UsoInmueble" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TipoInmueble" class="control-label">Tipo</label>
+            <input asp-for="TipoInmueble" class="form-control" value="@Model?.TipoInmueble?.Valor" readonly />
+            <span asp-validation-for="TipoInmueble" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Ambientes" class="control-label">Ambientes</label>
+            <input asp-for="Ambientes" class="form-control" readonly />
+            <span asp-validation-for="Ambientes" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Precio" class="control-label">Precio</label>
+            <input asp-for="Precio" class="form-control" readonly />
+            <span asp-validation-for="Precio" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Estado" class="control-label">Estado</label>
+            <input type="text" class="form-control" value="@(Model?.Estado == true ? "Activo" : "Inactivo")" readonly />
+            <span asp-validation-for="Estado" class="text-danger"></span>
+        </div>
+    </div>
+</form>
+<div class="row">
+    <h5>Contratos del Inmueble: </h5>
+    <table class="hover compact row-border" id="contratosInmueblesTable">
+	<thead  class="bg-dark text-white">
+        
+		<tr>
+			<th>Estado</th>
+			<th>Desde</th>
+			<th>Hasta</th>
+			<th>Inquilino</th>
+			<th>Precio</th>
+            <th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Contratos)
+		{
+			<tr class="@(item.Estado == false ?  "bg-inactivos" : "")">
+				<td>@(item.Estado == true ? "Activo" : "Inactivo")</td>
+				<td>@(item.Desde.ToString("dd/MM/yyyy"))</td>
+				<td>@(item.Hasta.ToString("dd/MM/yyyy"))</td>
+				<td>@(item.Inquilino?.ToString())</td>
+                <td>@(item.PrecioContrato)</td>
+                <td><a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a></td>
+			</tr>
+		}
+	</tbody>
+    @if(Model.Estado){//Para que no salga la opcion de crear un contrato con un inmueble inactivo
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <a href="/Contrato/Edicion/"> <i class="fa-solid fa-plus"></i></a>
+                </td>
+            </tr>
+        </tfoot>
+    }
+</table>
 </div>
+
 
 
 <div>

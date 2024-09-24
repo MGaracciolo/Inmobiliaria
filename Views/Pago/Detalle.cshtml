@@ -1,0 +1,73 @@
+@model net.Models.Pago
+@{
+    ViewData["Title"] = "Edición de Pago";
+    int id = Model == null ? 0 : Model.PagoId;
+}
+
+<div class="text-center">
+    <h3 class="display-4">Pago:</h3>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Guardar" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="PagoId" class="form-control" type="hidden" />
+
+            <div class="form-group">
+                <label asp-for="Contrato" class="control-label">Contrato</label>
+                <input asp-for="Contrato" class="form-control"  readonly />
+                <span asp-validation-for="Contrato" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Numero" class="control-label">Número</label>
+                <input asp-for="Numero" class="form-control" readonly/>
+                <span asp-validation-for="Numero" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Importe" class="control-label">Importe</label>
+                <input asp-for="Importe" class="form-control" readonly/>
+                <span asp-validation-for="Importe" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label">Fecha</label>
+                <input asp-for="Fecha" class="form-control" type="date" readonly/>
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+             @if(User.IsInRole("Administrador")){
+                <div class="form-group">
+                    <label asp-for="Creador" class="control-label">Creador</label>
+                    <input asp-for="Creador" class="form-control" readonly />
+                    <span asp-validation-for="Creador" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Anulador" class="control-label">Anulador</label>
+                    <input asp-for="Anulador" class="form-control" readonly/>
+                    <span asp-validation-for="Anulador" class="text-danger"></span>
+                </div>
+            }
+            <div class="form-group">
+                <label asp-for="Concepto" class="control-label">Concepto</label>
+                <input asp-for="Concepto" class="form-control" readonly/>
+                <span asp-validation-for="Concepto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Estado" class="control-label">Estado</label>
+                <input asp-for="Estado" class="form-control" type="text" value="@(Model?.Estado == true ? "Activo" : "Inactivo")" readonly/>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>

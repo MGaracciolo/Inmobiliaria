@@ -1,7 +1,7 @@
 @model net.Models.Inquilino
 @{
     ViewData["Title"] = "Detalle";
-	int id = Model==null ? 0 : Model.InquilinoId;
+    int id = Model == null ? 0 : Model.InquilinoId;
 }
 
 
@@ -9,39 +9,41 @@
     <h3 class="display-4">Inquilino:</h3>
 </div>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" readonly name="InquilinoId" value="@id" />
-            <div class="form-group">
-                <label asp-for="NombreI" class="control-label"></label>
-                <input asp-for="NombreI" class="form-control" readonly/>
-                <span asp-validation-for="NombreI" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApellidoI" class="control-label"></label>
-                <input asp-for="ApellidoI" class="form-control" readonly/>
-                <span asp-validation-for="ApellidoI" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DniI" class="control-label"></label>
-                <input asp-for="DniI" class="form-control"readonly/>
-                <span asp-validation-for="DniI" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TelefonoI" class="control-label"></label>
-                <input asp-for="TelefonoI" class="form-control" readonly/>
-                <span asp-validation-for="TelefonoI" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmailI" class="control-label"></label>
-                <input asp-for="EmailI" class="form-control" readonly/>
-                <span asp-validation-for="EmailI" class="text-danger"></span>
-            </div>
-        </form>
+
+<form class="row">
+    <div class="col-md-6">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" readonly name="InquilinoId" value="@id" />
+        <div class="form-group">
+            <label asp-for="NombreI" class="control-label">Nombre</label>
+            <input asp-for="NombreI" class="form-control" readonly />
+            <span asp-validation-for="NombreI" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ApellidoI" class="control-label">Apellido</label>
+            <input asp-for="ApellidoI" class="form-control" readonly />
+            <span asp-validation-for="ApellidoI" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DniI" class="control-label">Dni</label>
+            <input asp-for="DniI" class="form-control" readonly />
+            <span asp-validation-for="DniI" class="text-danger"></span>
+        </div>
     </div>
-</div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="TelefonoI" class="control-label">Telefono</label>
+            <input asp-for="TelefonoI" class="form-control" readonly />
+            <span asp-validation-for="TelefonoI" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EmailI" class="control-label">Email</label>
+            <input asp-for="EmailI" class="form-control" readonly />
+            <span asp-validation-for="EmailI" class="text-danger"></span>
+        </div>
+    </div>
+</form>
+
 
 <div>
     <a asp-action="Index">Volver al listado</a>

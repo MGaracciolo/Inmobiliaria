@@ -8,70 +8,115 @@
     <h3 class="display-4">Contratos registrados:</h3>
 	
 </div>
-<div class="row mb-3">
-    <div class="col-md-6 d-flex align-items-center">
-
+<div class="row">
+    <div class="col d-flex align-items-center">
         <div class="btn-group" role="group" aria-label="Filtros de estado">
             <button type="button" class="btn btn-outline-primary" id="todosBtn">Todos</button>
             <button type="button" class="btn btn-outline-success" id="activoBtn">Activos</button>
             <button type="button" class="btn btn-outline-danger" id="desactivadoBtn">Inactivos</button>
+            <button type="button" class="btn btn-outline-warning" id="vigentesBtn">Vigentes</button>
+        </div>
+    </div>
+    <div class="col d-flex align-items-center">
+        <caption >Contratos entre: </caption>
+		<div class="btn-group" role="group" aria-label="Filtrar por fecha">
+			<input type="date" name="Desde" id="inicio">
+			<input type="date" name="Hasta" id="fin" min="#inicio">
+			<button type="button" class="btn btn-outline-success" id="fechasBtn">Buscar</button>
+			<button type="button" class="btn btn-outline-danger" id="sinFechasBtn">Limpiar</button>
+		</div>
+	</div>
+    <div class="col" style="max-width: 250px; margin-bottom: 15px;">
+        <label for="plazo" class="form-label">Contratos que finalizan en:</label>
+        <select class="form-select" id="plazo">
+            <option value="sinFiltro" selected="@(ViewBag.PlazoSeleccionado == null)">Sin plazo</option>
+            <option value="30" selected="@(ViewBag.PlazoSeleccionado == 30)">30 días</option>
+            <option value="60" selected="@(ViewBag.PlazoSeleccionado == 60)">60 días</option>
+            <option value="90" selected="@(ViewBag.PlazoSeleccionado == 90)">90 días</option>
+        </select>
+        <button id="filtrarBtn" class="btn btn-primary mt-2">Filtrar</button>
+    </div>
+</div>
+
+
+<!--Este es el modal para registrar los pagos. Melian-->
+<div class="modal fade" id="pagoModal" tabindex="-1" role="dialog" aria-labelledby="pagoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pagoModalLabel">Registrar Pago</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="pagoForm" asp-action="RegistrarPago" method="post">
+                    <!-- Este campo oculta el id del contrato -->
+                    <input type="hidden" name="IdContrato" id="contratoId" />
+                    
+                    <div class="form-group">
+                        <label for="importe">Importe</label>
+                        <input type="number" name="Importe" id="importe" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" name="Fecha" id="fecha" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="concepto">Concepto</label>
+                        <input type="text" name="Concepto" id="concepto" class="form-control" />
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Registrar Pago</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-<div class="mb-3" style="max-width: 250px; margin-bottom: 15px;">
-    <label for="plazo" class="form-label">Seleccione el plazo (días):</label>
-    <select class="form-select" id="plazo">
-        <option value="sinFiltro" selected="@(ViewBag.PlazoSeleccionado == null)">Sin plazo</option>
-        <option value="30" selected="@(ViewBag.PlazoSeleccionado == 30)">30 días</option>
-        <option value="60" selected="@(ViewBag.PlazoSeleccionado == 60)">60 días</option>
-        <option value="90" selected="@(ViewBag.PlazoSeleccionado == 90)">90 días</option>
-    </select>
-    <button id="filtrarBtn" class="btn btn-primary mt-2">Filtrar</button>
-</div>
-<table id="contratosTable" class="table row-border dt-center" >
-    <thead>
+
+<table id="contratosTable" class="hover compact row-border">
+    <thead  class="bg-dark text-white">
         <tr>
             <th>Inquilino</th>
             <th>Inmueble</th>
             <th>Propietario</th>
             <th>Inicio</th>
             <th>Fin</th>
-            <th>Estado</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="@(item.Estado == false ?  "bg-inactivos" : "")">
                 <td>@(item.Inquilino)</td>
                 <td>@(item.Inmueble?.DireccionI)</td>
                 <td>@(item.Inmueble?.Propietario)</td>
                 <td>@(item.Desde.ToString("dd/MM/yyyy"))</td>
                 <td>@(item.Hasta.ToString("dd/MM/yyyy"))</td>
                 @* <td>@(item.Anulacion != null ? item.Anulacion.Value.ToString("dd/MM/yyyy") : "-" )</td> *@
-                <td>@(item.Hasta >= DateTime.Now ? "Ocupado" : "Disponible")</td>
                 <td>
                     <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>
                     @if(item.Estado == true && User.IsInRole("Administrador"))
 					{
                         <span> | </span><a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
+                        <a href="#"  data-bs-toggle="modal" data-bs-target="#pagoModal" data-id="@item.ContratoId"><i class="fa-solid fa-hand-holding-dollar"></i></a><span> | </span>
                         <a href="#" data-url="/Contrato/Eliminar/@item.ContratoId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
 					}else if(item.Estado == false && User.IsInRole("Administrador"))
                     {
                         <span> | </span><a href="#" data-url="/Contrato/Activar/@item.ContratoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
 					}else if(item.Estado == true )
                     {
-                        <span> | </span><a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <span> | </span><a href="/Contrato/Edicion/@item.ContratoId" ><i class="fa-solid fa-pen-to-square"></i></a> <span> | </span>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#pagoModal" data-id="@item.ContratoId"><i class="fa-solid fa-hand-holding-dollar"></i></a>
                     }
                 </td>
                 </tr>
-            
         }
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="7">
+            <td colspan="6">
                 <a href="/Contrato/Edicion/"> <i class="fa-solid fa-plus"></i></a>
             </td>
         </tr>
@@ -79,54 +124,133 @@
 </table>
 
 
-@section Scripts{
+@section Scripts {
     <script>
-        $(document).ready(function() {
-            $('#filtrarBtn').click(function () {
-                var plazo = $('#plazo').val();
-                if (plazo === "sinFiltro") {
-                    window.location.href = '/Contrato';
-                } else {
-                    window.location.href = '/Contrato/FiltrarPorPlazo?plazo=' + plazo;
-                }
-            });
-            $('.desactivar').click(function(e) {
-                e.preventDefault(); 
-                var url = $(this).data('url'); 
-                Swal.fire({
-                    title: "¿Desactivar contrato?",
-                    text: "El inmueble volvera a estar disponible",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Desactivar",
-                    cancelButtonText: "Cancelar"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
-                    }
-                });
-            });
+        // Esto es para el modal
+        $('#pagoModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var contratoId = button.data('id');
+            var modal = $(this);
+            modal.find('#contratoId').val(contratoId);
 
-            $('.activar').click(function(e) {
-                e.preventDefault(); 
-                var url = $(this).data('url'); 
-                Swal.fire({
-                    title: "¿Activar contrato?",
-                    text: "El inmueble volvera a estar ocupado",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Activar",
-                    cancelButtonText: "Cancelar"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = url;
+            // Tira la fecha actual en el input
+            var today = new Date().toISOString().split('T')[0]; // Formato año/mes/día
+            modal.find('#fecha').val(today);
+        });
+
+       $(document).ready(function () {
+			
+			function cargarContratos(estado) {
+				$.ajax({
+					url: '@Url.Action("Index", "Contrato")',
+					type: 'GET',
+					data: {
+						estado: estado
+					},
+					success: function (result) {
+						$('#contratosTable tbody').html($(result).find('#contratosTable tbody').html());
+						 cargarEventos();
+					}
+				});
+			}
+
+			function cargarEventos() {
+				$('#todosBtn').on('click', function (e) {
+					e.preventDefault();
+					cargarContratos(''); 
+				});
+
+				$('#activoBtn').on('click', function (e) {
+					e.preventDefault();
+					cargarContratos('activo'); 
+				});
+
+				$('#desactivadoBtn').on('click', function (e) {
+					e.preventDefault();
+					cargarContratos('inactivo'); 
+				});
+                $('#vigentesBtn').on('click', function (e) {
+					e.preventDefault();
+					cargarContratos('vigente'); 
+				});
+
+                $('.desactivar').click(function (e) {
+                    e.preventDefault();
+                    var url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Desactivar contrato?",
+                        text: "El inmueble volverá a estar disponible",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Desactivar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+
+                $('.activar').click(function (e) {
+                    e.preventDefault();
+                    var url = $(this).data('url');
+                    Swal.fire({
+                        title: "¿Activar contrato?",
+                        text: "El inmueble volverá a estar ocupado",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Activar",
+                        cancelButtonText: "Cancelar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = url;
+                        }
+                    });
+                });
+
+                $('#fechasBtn').on('click', function (e) {
+                    e.preventDefault();
+                    var inicio = $('#inicio').val();
+                    var fin = $('#fin').val();
+                    $.ajax({
+                        url: '@Url.Action("Index", "Contrato")',
+                        type: 'GET',
+                        data: {
+                            desde: inicio,
+                            hasta: fin
+                        },
+                        success: function (result) {
+                            $('#contratosTable tbody').html($(result).find('#contratosTable tbody').html());
+                        }
+                    });
+                });
+
+                $('#sinFechasBtn').on('click', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '@Url.Action("Index", "Contrato")',
+                        type: 'GET',
+                        success: function (result) {
+                            $('#contratosTable tbody').html($(result).find('#contratosTable tbody').html());
+                        }
+                    });
+                });
+
+                $('#filtrarBtn').click(function () {
+                    var plazo = $('#plazo').val();
+                    if (plazo === "sinFiltro") {
+                        window.location.href = '/Contrato';
+                    } else {
+                        window.location.href = '/Contrato/FiltrarPorPlazo?plazo=' + plazo;
                     }
                 });
-            });
+            }
+
+            cargarEventos();
         });
     </script>
 }

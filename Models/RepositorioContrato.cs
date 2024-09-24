@@ -274,11 +274,286 @@ public class RepositorioContrato: RepositorioBase
         }
         return contratos;
     }
+    public List<Contrato> ObtenerVigentes(){
+        List<Contrato> contratos = new List<Contrato>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+           c.id_contrato AS ContratoId, 
+           c.id_inquilino AS IdInquilino, 
+           c.id_inmueble AS IdInmueble,
+           c.desde AS Desde, 
+           c.hasta AS Hasta, 
+           c.precio AS PrecioContrato,
+           c.estado AS Estado,
+           c.id_creacion AS IdCreador,
+           c.id_anulacion AS IdAnulador,
+           c.fecha_anulacion AS Anulacion,
+           i.id_inquilino AS InquilinoId,
+           i.nombre AS NombreI,
+           i.apellido AS ApellidoI,
+           i.dni AS DniI,
+           inm.id_inmueble AS InmuebleId,
+           inm.direccion AS DireccionI,
+           inm.id_propietario AS IdPropietario,
+           inm.precio AS Precio,
+           p.id_propietario AS PropietarioId,
+           p.nombre AS Nombre,
+           p.apellido AS Apellido,
+           p.dni AS Dni,
+           u.id_usuario AS CreadorId,
+           u.nombre AS NombreC,
+           u.apellido AS ApellidoC,
+           ua.id_usuario AS AnuladorId,
+           ua.nombre AS NombreA,
+           ua.apellido AS ApellidoA
+           FROM contrato c
+           INNER JOIN inquilino i ON i.id_inquilino = c.id_inquilino
+           INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
+           INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
+           INNER JOIN usuario u ON u.id_usuario = c.id_creacion
+           LEFT JOIN usuario ua ON ua.id_usuario = c.id_anulacion
+           WHERE CURDATE() BETWEEN Desde AND Hasta";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  contratos.Add(new Contrato{
+                       ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
+                       IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                       IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
+                       Desde= reader.GetDateTime(nameof(Contrato.Desde)),
+                       Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
+                       Estado = reader.GetBoolean(nameof(Contrato.Estado)),
+                       IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
+                       IdAnulador = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.IdAnulador))) 
+                            ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
+                        Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
+                            ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                       Creador = new Usuario{
+                            UsuarioId = reader.GetInt32("CreadorId"),
+                            Nombre = reader.GetString("NombreC"),
+                            Apellido = reader.GetString("ApellidoC")
+                        },
+                        Anulador = reader.IsDBNull(reader.GetOrdinal("AnuladorId")) ? null : new Usuario {
+                            UsuarioId = reader.GetInt32("AnuladorId"),
+                            Nombre = reader.GetString("NombreA"),
+                            Apellido = reader.GetString("ApellidoA")
+                        },
+                       Inquilino = new Inquilino{
+                           InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                           NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                           ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                           DniI = reader.GetString(nameof(Inquilino.DniI))
+                       },
+                       Inmueble = new Inmueble{
+                           InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                           DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
+                           IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                           Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
+                           Propietario = new Propietario{
+                               PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+                               Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                               Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                               Dni = reader.GetString(nameof(Propietario.Dni))
+                           }
+                       }
+                   });
+               }
+           }
+        }
+        return contratos;
+    }
+
+    public List<Contrato> ObtenerPorFecha(string inicio, string fin){ 
+        List<Contrato> contratos = new List<Contrato>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+           c.id_contrato AS ContratoId, 
+           c.id_inquilino AS IdInquilino, 
+           c.id_inmueble AS IdInmueble,
+           c.desde AS Desde, 
+           c.hasta AS Hasta, 
+           c.precio AS PrecioContrato,
+           c.estado AS Estado,
+           c.id_creacion AS IdCreador,
+           c.id_anulacion AS IdAnulador,
+           c.fecha_anulacion AS Anulacion,
+           i.id_inquilino AS InquilinoId,
+           i.nombre AS NombreI,
+           i.apellido AS ApellidoI,
+           i.dni AS DniI,
+           inm.id_inmueble AS InmuebleId,
+           inm.direccion AS DireccionI,
+           inm.id_propietario AS IdPropietario,
+           inm.precio AS Precio,
+           p.id_propietario AS PropietarioId,
+           p.nombre AS Nombre,
+           p.apellido AS Apellido,
+           p.dni AS Dni,
+           u.id_usuario AS CreadorId,
+           u.nombre AS NombreC,
+           u.apellido AS ApellidoC,
+           ua.id_usuario AS AnuladorId,
+           ua.nombre AS NombreA,
+           ua.apellido AS ApellidoA
+           FROM contrato c
+           INNER JOIN inquilino i ON i.id_inquilino = c.id_inquilino
+           INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
+           INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
+           INNER JOIN usuario u ON u.id_usuario = c.id_creacion
+           LEFT JOIN usuario ua ON ua.id_usuario = c.id_anulacion
+            WHERE c.desde >= @inicio
+            AND c.hasta <= @fin";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               command.Parameters.AddWithValue("@inicio", inicio);
+               command.Parameters.AddWithValue("@fin", fin);
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  contratos.Add(new Contrato{
+                       ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
+                       IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                       IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
+                       Desde= reader.GetDateTime(nameof(Contrato.Desde)),
+                       Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
+                       Estado = reader.GetBoolean(nameof(Contrato.Estado)),
+                       IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
+                       IdAnulador = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.IdAnulador))) 
+                            ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
+                        Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
+                            ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                       Creador = new Usuario{
+                            UsuarioId = reader.GetInt32("CreadorId"),
+                            Nombre = reader.GetString("NombreC"),
+                            Apellido = reader.GetString("ApellidoC")
+                        },
+                        Anulador = reader.IsDBNull(reader.GetOrdinal("AnuladorId")) ? null : new Usuario {
+                            UsuarioId = reader.GetInt32("AnuladorId"),
+                            Nombre = reader.GetString("NombreA"),
+                            Apellido = reader.GetString("ApellidoA")
+                        },
+                       Inquilino = new Inquilino{
+                           InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                           NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                           ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                           DniI = reader.GetString(nameof(Inquilino.DniI))
+                       },
+                       Inmueble = new Inmueble{
+                           InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                           DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
+                           IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                           Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
+                           Propietario = new Propietario{
+                               PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+                               Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                               Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                               Dni = reader.GetString(nameof(Propietario.Dni))
+                           }
+                       }
+                   });
+               }
+           }
+        }
+        return contratos;
+    }
+    public List<Contrato> ObtenerPorInmueble(int id){
+        List<Contrato> contratos = new List<Contrato>();
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"SELECT 
+           c.id_contrato AS ContratoId, 
+           c.id_inquilino AS IdInquilino, 
+           c.id_inmueble AS IdInmueble,
+           c.desde AS Desde, 
+           c.hasta AS Hasta, 
+           c.precio AS PrecioContrato,
+           c.estado AS Estado,
+           c.id_creacion AS IdCreador,
+           c.id_anulacion AS IdAnulador,
+           c.fecha_anulacion AS Anulacion,
+           i.id_inquilino AS InquilinoId,
+           i.nombre AS NombreI,
+           i.apellido AS ApellidoI,
+           i.dni AS DniI,
+           inm.id_inmueble AS InmuebleId,
+           inm.direccion AS DireccionI,
+           inm.id_propietario AS IdPropietario,
+           inm.precio AS Precio,
+           p.id_propietario AS PropietarioId,
+           p.nombre AS Nombre,
+           p.apellido AS Apellido,
+           p.dni AS Dni,
+           u.id_usuario AS CreadorId,
+           u.nombre AS NombreC,
+           u.apellido AS ApellidoC,
+           ua.id_usuario AS AnuladorId,
+           ua.nombre AS NombreA,
+           ua.apellido AS ApellidoA
+           FROM contrato c
+           INNER JOIN inquilino i ON i.id_inquilino = c.id_inquilino
+           INNER JOIN inmueble inm ON inm.id_inmueble = c.id_inmueble
+           INNER JOIN propietario p ON p.id_propietario = inm.id_propietario
+           INNER JOIN usuario u ON u.id_usuario = c.id_creacion
+           LEFT JOIN usuario ua ON ua.id_usuario = c.id_anulacion
+           WHERE c.id_inmueble = @id";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               command.Parameters.AddWithValue("@id", id);
+               connection.Open();
+               var reader = command.ExecuteReader();
+               while(reader.Read()){
+                  contratos.Add(new Contrato{
+                       ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
+                       IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                       IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
+                       Desde= reader.GetDateTime(nameof(Contrato.Desde)),
+                       Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
+                       Estado = reader.GetBoolean(nameof(Contrato.Estado)),
+                       IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
+                       IdAnulador = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.IdAnulador))) 
+                            ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
+                        Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
+                            ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                       Creador = new Usuario{
+                            UsuarioId = reader.GetInt32("CreadorId"),
+                            Nombre = reader.GetString("NombreC"),
+                            Apellido = reader.GetString("ApellidoC")
+                        },
+                        Anulador = reader.IsDBNull(reader.GetOrdinal("AnuladorId")) ? null : new Usuario {
+                            UsuarioId = reader.GetInt32("AnuladorId"),
+                            Nombre = reader.GetString("NombreA"),
+                            Apellido = reader.GetString("ApellidoA")
+                        },
+                       Inquilino = new Inquilino{
+                           InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                           NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                           ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                           DniI = reader.GetString(nameof(Inquilino.DniI))
+                       },
+                       Inmueble = new Inmueble{
+                           InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                           DireccionI = reader.GetString(nameof(Inmueble.DireccionI)),
+                           IdPropietario = reader.GetInt32(nameof(Inmueble.IdPropietario)),
+                           Precio = reader.GetDecimal(nameof(Inmueble.Precio)),
+                           Propietario = new Propietario{
+                               PropietarioId = reader.GetInt32(nameof(Propietario.PropietarioId)),
+                               Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                               Apellido = reader.GetString(nameof(Propietario.Apellido)),
+                               Dni = reader.GetString(nameof(Propietario.Dni))
+                           }
+                       }
+                   });
+               }
+           }
+        }
+        return contratos;
+    }
     public Contrato? ObtenerUno(int id){
         Contrato? contrato = null;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
           var query = $@"SELECT 
-           c.id_contrato AS ContratoId, 
+            c.id_contrato AS ContratoId, 
            c.id_inquilino AS IdInquilino, 
            c.id_inmueble AS IdInmueble,
            c.desde AS Desde, 
@@ -319,7 +594,7 @@ public class RepositorioContrato: RepositorioBase
                var reader = command.ExecuteReader();
                if(reader.Read()){
                    contrato = new Contrato{
-                       ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
+                        ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
                        IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
                        Desde= reader.GetDateTime(nameof(Contrato.Desde)),
@@ -367,6 +642,34 @@ public class RepositorioContrato: RepositorioBase
         return contrato;
     }
 
+   public bool estaOcupado(int idInmueble, string desde, string hasta)
+{
+    bool ocupado = false;
+    using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+    {
+        var query = @"
+            SELECT COUNT(*)
+            FROM contrato c
+            WHERE c.id_inmueble = @idInmueble
+            AND (c.desde <= @hasta AND c.hasta >= @desde)
+            AND c.estado = 1";
+
+        using (MySqlCommand command = new MySqlCommand(query, connection))
+        {
+            
+            command.Parameters.AddWithValue("@idInmueble", idInmueble);
+            command.Parameters.AddWithValue("@desde", desde);
+            command.Parameters.AddWithValue("@hasta", hasta);
+
+            connection.Open();
+            var result = Convert.ToInt32(command.ExecuteScalar());
+
+            
+            ocupado = result > 0;//si esta ocupaod pasa a verdadero
+        }
+    }
+    return ocupado;
+}
     public int Alta(Contrato contrato){
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){

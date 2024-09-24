@@ -40,13 +40,13 @@
                 <span asp-validation-for="IdInmueble" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Desde" class="control-label">Desde</label>
-                <input asp-for="Desde" class="form-control" type="date"/>
+                <label asp-for="Desde" class="control-label" >Desde</label>
+                <input asp-for="Desde" class="form-control" type="date" id="inicio"/> @* min="@(id == 0 ? DateTime.Now.ToString("yyyy-MM-dd") : null)"/> *@
                 <span asp-validation-for="Desde" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Hasta" class="control-label">Hasta</label>
-                <input asp-for="Hasta" class="form-control" type="date"/>
+                <input asp-for="Hasta" class="form-control" type="date" id="fin"/>
                 <span asp-validation-for="Hasta" class="text-danger"></span>
             </div>
             <div class="form-group">

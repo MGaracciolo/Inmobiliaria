@@ -120,7 +120,28 @@ public class RepositorioUsuario: RepositorioBase
             }
         }
     }
-
+    public int ModificarDatos(Usuario usuario){
+        int res = -1;
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"UPDATE usuario
+           SET nombre= @nombre,
+           apellido= @apellido,
+           email= @email,
+           rol = @rol
+           WHERE id_usuario = @id_usuario";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               command.Parameters.AddWithValue("@id_usuario", usuario.UsuarioId);
+               command.Parameters.AddWithValue("@nombre", usuario.Nombre);
+               command.Parameters.AddWithValue("@apellido", usuario.Apellido);
+               command.Parameters.AddWithValue("@email", usuario.Email);
+               command.Parameters.AddWithValue("@rol", usuario.Rol);
+               connection.Open();
+               res = command.ExecuteNonQuery();
+               connection.Close();
+           }
+        }
+        return res;
+    }
     public int Modificar(Usuario usuario){
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
@@ -148,7 +169,58 @@ public class RepositorioUsuario: RepositorioBase
         }
         return res;
     }
-
+    
+    public int ModificarClave(Usuario usuario){
+        int res = -1;
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"UPDATE usuario
+           SET 
+           password = @password
+           WHERE id_usuario = @id_usuario";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               command.Parameters.AddWithValue("@id_usuario", usuario.UsuarioId);
+               command.Parameters.AddWithValue("@password", usuario.Password);
+               connection.Open();
+               res = command.ExecuteNonQuery();
+               connection.Close();
+           }
+        }
+        return res;
+    }
+    
+    public int ModificarAvatar(Usuario usuario){
+        int res = -1;
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"UPDATE usuario
+           SET 
+           avatar = @avatar
+           WHERE id_usuario = @id_usuario";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               command.Parameters.AddWithValue("@id_usuario", usuario.UsuarioId);
+               command.Parameters.AddWithValue("@avatar", usuario.Avatar);
+               connection.Open();
+               res = command.ExecuteNonQuery();
+               connection.Close();
+           }
+        }
+        return res;
+    }
+    public int EliminarAvatar(Usuario usuario){
+        int res = -1;
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"UPDATE usuario
+           SET 
+           avatar = null
+           WHERE id_usuario = @id_usuario";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               command.Parameters.AddWithValue("@id_usuario", usuario.UsuarioId);
+               connection.Open();
+               res = command.ExecuteNonQuery();
+               connection.Close();
+           }
+        }
+        return res;
+    }
     public int Baja(int id){
         int res = -1;
         using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
