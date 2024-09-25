@@ -1,41 +1,78 @@
 @model net.Models.Contrato
-<div class="modal fade" id="renovarModal" tabindex="-1" aria-labelledby="renovarModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="renovarContratoModalLabel">Renovar Contrato</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form asp-action="Guardar" method="post">
-                <div class="modal-body">
-                    <input type="hidden" asp-for="ContratoId" value="0" />
-                    <div class="form-group">
-                        <label asp-for="Inquilino" class="control-label">Inquilino</label>
-                        <input asp-for="Inquilino" class="form-control" readonly />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Inmueble" class="control-label">Inmueble</label>
-                        <input asp-for="Inmueble" class="form-control" readonly />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Desde" class="control-label">Desde</label>
-                        <input asp-for="Desde" class="form-control" type="date" id="inicio"/>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Hasta" class="control-label">Hasta</label>
-                        <input asp-for="Hasta" class="form-control" type="date" id="fin"/>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="PrecioContrato" class="control-label">Nuevo Precio</label>
-                        <input asp-for="PrecioContrato" class="form-control" value=""/>
-                    </div>
-                </div>
+@{
+    ViewData["Title"] = "Renovar Contrato";
+	int id = Model==null ? 0 : Model.ContratoId;
+}
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Renovar</button>
-                </div>
-            </form>
+<div class="text-center">
+    <h2>Renovar contrato:</h2>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Renovar" id="guardarForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input  type="hidden" name="ContratoId" value="@id" readonly/>
+        
+                <input asp-for="IdCreador" value="@User.Claims.First().Value" type="hidden" readonly>
+            
+            <div class="form-group">
+            <label asp-for="Inquilino" class="control-label">Inquilino</label>
+            <input asp-for="Inquilino" class="form-control" value="@Model?.Inquilino?.ToString()" readonly />
+            <span asp-validation-for="Inquilino" class="text-danger"></span>
         </div>
+        <div class="form-group">
+            <label asp-for="Inmueble" class="control-label">Inmueble</label>
+            <input asp-for="Inmueble" class="form-control" value="@Model?.Inmueble?.DireccionI" readonly />
+            <span asp-validation-for="IdInmueble" class="text-danger"></span>
+        </div>
+        <input  type="hidden" name="IdInmueble" value="@Model.Inmueble.InmuebleId" readonly/>
+        <input  type="hidden" name="IdInquilino" value="@Model.Inquilino.InquilinoId" readonly/>
+            <div class="form-group">
+                <label asp-for="Desde" class="control-label" >Desde</label>
+                <input asp-for="Desde" class="form-control" type="date" id="inicio" value="@Model.Hasta.ToString("yyyy-MM-dd")" min="@Model.Hasta.ToString("yyyy-MM-dd")"/> @* min="@(id == 0 ? DateTime.Now.ToString("yyyy-MM-dd") : null)"/> *@
+                <span asp-validation-for="Desde" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hasta" class="control-label">Hasta</label>
+                <input asp-for="Hasta" class="form-control" type="date" id="fin" />
+                <span asp-validation-for="Hasta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrecioContrato" class="control-label">Precio</label>
+                <input asp-for="PrecioContrato" class="form-control" value=""/>
+                <span asp-validation-for="PrecioContrato" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" id="guardar" />
+            </div>
+        </form>
     </div>
 </div>
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>
+
+@section Scripts{
+    <script>
+     $(document).ready(function() {
+           const btnEnviar = document.getElementById("guardar");
+            btnEnviar.addEventListener("click",(event)=> {
+                event.preventDefault();
+                Swal.fire({
+                    title: "¿Guardar cambios?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Guardar",
+                    denyButtonText: "No guardar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const formCrea = document.getElementById("guardarForm");
+                        formCrea.submit();
+                    }
+                });
+            });
+        });
+    </script>
+}

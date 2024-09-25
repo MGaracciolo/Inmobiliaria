@@ -6,23 +6,23 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">@((id == 0) ? "Crear nuevo pago" : "Editar pago"):</h1>
+    <h2>@((id == 0) ? "Crear nuevo pago" : "Editar pago"):</h2>
 </div>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Guardar" id="guardarForm">
+    <div class="col-md-12">
+        <form asp-action="Edicion" id="guardarForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" name="PagoId" value="@id" readonly/>
             <input asp-for="CreadorId" value="@User.Claims.First().Value" type="hidden" readonly />
             <div class="form-group">
-                <label asp-for="IdContrato" class="control-label">Contrato</label>
-                <input asp-for="IdContrato" class="form-control"  readonly />
-                <span asp-validation-for="IdContrato" class="text-danger"></span>
+                <label asp-for="Contrato" class="control-label">Contrato</label>
+                <input asp-for="Contrato" class="form-control"  readonly />
+                <span asp-validation-for="Contrato" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Numero" class="control-label">Número</label>
-                <input asp-for="Numero" class="form-control" readonly/>
+                <input asp-for="Numero" class="form-control" type="text" value="@($"{Model.Numero} de {Model.Contrato?.Meses ?? 0}")" readonly/>
                 <span asp-validation-for="Numero" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -35,13 +35,6 @@
                 <input asp-for="Fecha" class="form-control" type="date" readonly/>
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <label asp-for="AnuladorId" class="control-label">Anulador</label>
-                <input asp-for="AnuladorId" class="form-control" readonly/>
-                <span asp-validation-for="AnuladorId" class="text-danger"></span>
-            </div>
-
             <div class="form-group">
                 <label asp-for="Concepto" class="control-label">Concepto</label>
                 <input asp-for="Concepto" class="form-control" />

@@ -15,7 +15,6 @@ $(document).ready(function() {
             "infoEmpty": "Mostrando 0 a 0 de 0 Inmuebles",
             "infoFiltered": "(Filtrado de _MAX_ total Inmuebles)",
             "search": "Buscador:",
-            "zeroRecords": "Sin resultados encontrados",
             "lengthMenu": "Mostrar _MENU_ Inmuebles",
             "paginate": {
                  "first": "Primero",
@@ -37,7 +36,6 @@ $(document).ready(function() {
             "infoEmpty": "Mostrando 0 a 0 de 0 Propietarios",
             "infoFiltered": "(Filtrado de _MAX_ total Propietarios)",
             "search": "Buscador:",
-            "zeroRecords": "Sin resultados encontrados",
             "lengthMenu": "Mostrar _MENU_ Propietarios",
             "paginate": {
                  "first": "Primero",
@@ -59,7 +57,6 @@ $(document).ready(function() {
             "infoEmpty": "Mostrando 0 a 0 de 0 Usuarios",
             "infoFiltered": "(Filtrado de _MAX_ total Usuarios)",
             "search": "Buscador:",
-            "zeroRecords": "Sin resultados encontrados",
             "lengthMenu": "Mostrar _MENU_ Usuarios",
             "paginate": {
                  "first": "Primero",
@@ -80,7 +77,6 @@ $(document).ready(function() {
             "infoEmpty": "Mostrando 0 a 0 de 0 Inquilinos",
             "infoFiltered": "(Filtrado de _MAX_ total Inquilinos)",
             "search": "Buscador:",
-            "zeroRecords": "Sin resultados encontrados",
             "lengthMenu": "Mostrar _MENU_ Inquilinos",
             "paginate": {
                  "first": "Primero",
@@ -101,7 +97,6 @@ $(document).ready(function() {
             "infoEmpty": "Mostrando 0 a 0 de 0 Contratos",
             "infoFiltered": "(Filtrado de _MAX_ total Contratos)",
             "search": "Buscador:",
-            "zeroRecords": "Sin resultados encontrados",
             "lengthMenu": "Mostrar _MENU_ Contratos",
             "paginate": {
                  "first": "Primero",
@@ -122,8 +117,43 @@ $(document).ready(function() {
             "infoEmpty": "Mostrando 0 a 0 de 0 Contratos",
             "infoFiltered": "(Filtrado de _MAX_ total Contratos)",
             "search": "Buscador:",
-            "zeroRecords": "Sin resultados encontrados",
             "lengthMenu": "Mostrar _MENU_ Contratos",
+            "paginate": {
+                 "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
+    $('#pagosTable').DataTable({
+        "columnDefs": [
+            { "orderable": false, "targets": 5 },
+            { "width": "180px", "targets": 5 }
+        ],
+      "language": {
+            "emptyTable": "No hay datos",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Pagos",
+            "infoEmpty": "Mostrando 0 a 0 de 0 Pagos",
+            "infoFiltered": "(Filtrado de _MAX_ total Pagos)",
+            "search": "Buscador:",
+            "lengthMenu": "Mostrar _MENU_ Pagos",
+            "paginate": {
+                 "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
+    $('#contratosPagosTable').DataTable({
+      "language": {
+            "emptyTable": "No hay datos",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Pagos",
+            "infoEmpty": "Mostrando 0 a 0 de 0 Pagos",
+            "infoFiltered": "(Filtrado de _MAX_ total Pagos)",
+            "search": "Buscador:",
+            "lengthMenu": "Mostrar _MENU_ Pagos",
             "paginate": {
                  "first": "Primero",
                 "last": "Ultimo",
@@ -137,36 +167,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const inicio = document.getElementById('inicio');
     const fin = document.getElementById('fin');
 
-    // Solo ejecutar si existen los elementos en la vista
+   //esto pq todas las fechas de fin sean mayores a la de inicio ndea
     if (inicio && fin) {
-        // Actualizar el min del campo "Hasta" cuando se selecciona una fecha en "Desde"
+   
         inicio.addEventListener('change', function() {
             var inicioValue = inicio.value;
 
             if (inicioValue) {
-                // Convertir el valor de "Desde" a una fecha de JavaScript
                 var fechaInicio = new Date(inicioValue);
-                
-                // Sumar 1 día
                 fechaInicio.setDate(fechaInicio.getDate() + 1);
-
-                // Formatear la nueva fecha en formato YYYY-MM-DD
                 var fechaMin = fechaInicio.toISOString().split('T')[0];
-
-                // Establecer el min en el campo "Hasta" para que sea al menos la fecha de "Desde" + 1
                 fin.setAttribute('min', fechaMin);
             } else {
-                // Si "Desde" está vacío, eliminar el min de "Hasta"
                 fin.removeAttribute('min');
             }
         });
 
-
-        // Limpiar fechas
         document.getElementById('sinFechasBtn').addEventListener('click', function() {
             inicio.value = '';
             fin.value = '';
-            fin.removeAttribute('min'); // Limpiar el min cuando se limpian los campos
+            fin.removeAttribute('min'); 
         });
     }
 });

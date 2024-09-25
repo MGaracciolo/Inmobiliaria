@@ -2,21 +2,20 @@
 
 @{
     ViewData["Title"] = "Pago";
+
 }
 
 <div class="text-center">
-    <h3 class="display-4">Pagos Registrados:</h3>
+    <h1>Pagos Registrados:</h1>
 </div>
 
 <table id="pagosTable" class="table row-border dt-center">
-    <thead>
+    <thead  class="bg-dark text-white">
         <tr>
             <th>Contrato</th>
             <th>Numero</th>
             <th>Importe</th>
             <th>Fecha</th>
-            <th>Creador</th>
-            <th>Anulador</th>
             <th>Concepto</th>
             <th></th>
         </tr>
@@ -25,19 +24,19 @@
         @foreach (var item in Model)
         {
             <tr class="@(item.Estado == false ?  "bg-inactivos" : "")">
-                <td>@(item.Contrato.ToString())</td>
-                <td>@(item.Numero != 0 ? item.Numero.ToString() : "-")</td>
-                <td>@(item.Importe != 0 ? item.Importe.ToString("C") : "Importe no disponible")</td>
-                <td>@(item.Fecha != default(DateTime) ? item.Fecha.ToString("dd/MM/yyyy") : "-")</td>
-                <td>@(item.CreadorId != 0 ? item.CreadorId.ToString() : "-")</td>
-                <td>@(item.AnuladorId.HasValue ? item.AnuladorId.ToString() : "-")</td>
-                <td>@(item.Concepto != null ? item.Concepto : "Concepto no disponible")</td>
+                <td>@(item.Contrato)</td>
+                <td>@($"{item.Numero.ToString()} de {item.Contrato.Meses}")</td>
+                <td>@( item.Importe.ToString("C"))</td>
+                <td>@(item.Fecha.ToString("dd/MM/yyyy"))</td>
+                <td>@(item.Concepto != null ? item.Concepto : "-")</td>
                 <td>
-                    <a href="/Pago/Edicion/@item.PagoId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
                     <a href="/Pago/Detalle/@item.PagoId"><i class="fa-solid fa-eye"></i></a>
-                    @if(User.IsInRole("Administrador")){
-                        <span> | </span><a href="#" data-url="/Pago/Eliminar/@item.PagoId" class="text-danger eliminar"><i class="fa-solid fa-trash"></i></a>
-                    } 
+                    @if(item.Estado){
+                        <span> | </span><a href="/Pago/Edicion/@item.PagoId"><i class="fa-solid fa-pen-to-square"></i></a>
+                        @if(User.IsInRole("Administrador")){
+                            <span> | </span><a href="#" data-url="/Pago/Eliminar/@item.PagoId" class="text-danger eliminar" ><i class="fa-solid fa-trash"></i></a>
+                        } 
+                    }
                 </td>
             </tr>
         }
@@ -53,7 +52,7 @@
                 var url = $(this).data('url');
                 Swal.fire({
                     title: "¿Eliminar pago?",
-                    text: "El pago será eliminado permanentemente.",
+                    text: "El pago será anulado.",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",

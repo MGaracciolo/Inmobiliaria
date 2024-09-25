@@ -24,7 +24,7 @@ public class ContratoController : Controller
     public IActionResult Index(DateTime? desde, DateTime? hasta, string estado)
     {
         List<Contrato> lista;
-         lista = repo.ObtenerTodos();
+        lista = repo.ObtenerTodos();
 
         if (desde.HasValue && hasta.HasValue)
         {
@@ -65,6 +65,44 @@ public class ContratoController : Controller
             return View(contrato);
         }
     }
+
+    public IActionResult Renovar(int id)
+    {
+
+        var contrato = repo.ObtenerUno(id);
+        if (contrato == null)
+        {
+            TempData["Error"] = "No se encontró el contrato";
+            return RedirectToAction("Index");
+        }
+        var inquilino = repoInquilino.ObtenerUno(contrato.IdInquilino);
+        var inmueble = repoInmueble.ObtenerUno(contrato.IdInmueble);
+        contrato.Inquilino = inquilino;
+        contrato.Inmueble = inmueble;
+
+        return View(contrato);
+    }
+
+    [HttpPost]
+    public IActionResult Renovar(Contrato contrato)
+    {
+
+        if (VerificarDisponibilidad(contrato.Desde, contrato.Hasta, contrato.IdInmueble))
+        {
+            TempData["Error"] = "El inmueble ya se encuentra ocupado entre esas fechas";
+            return RedirectToAction("Index");
+        }
+
+        // Calcular la cantidad de meses entre Desde y Hasta
+        var dias = (contrato.Hasta - contrato.Desde).TotalDays; // Obtener la diferencia en días
+        contrato.Meses = (int)Math.Ceiling(dias / 30.0); // Calcular y redondear hacia arriba
+        contrato.ContratoId = 0;
+        repo.Alta(contrato);
+        TempData["Mensaje"] = "Contrato generado";
+        return RedirectToAction("Index");
+    }
+
+
     public IActionResult Detalle(int id)
     {
         if (id == 0)
@@ -88,10 +126,15 @@ public class ContratoController : Controller
     public IActionResult Guardar(int id, Contrato contrato)
     {
         id = contrato.ContratoId;
-        if(VerificarDisponibilidad(contrato.Desde, contrato.Hasta, contrato.IdInmueble)){
+        if (VerificarDisponibilidad(contrato.Desde, contrato.Hasta, contrato.IdInmueble))
+        {
             TempData["Error"] = "El inmueble ya se encuentra ocupado entre esas fechas";
             return RedirectToAction("Edicion");
         }
+
+        var dias = (contrato.Hasta - contrato.Desde).TotalDays;
+        var mesesCalculados = (int)Math.Ceiling(dias / 30.0);
+        contrato.Meses = mesesCalculados < 1 ? 1 : mesesCalculados;
         if (id == 0)
         {
             repo.Alta(contrato);
@@ -104,50 +147,27 @@ public class ContratoController : Controller
         }
         return RedirectToAction("Index");
     }
-    public bool VerificarDisponibilidad(DateTime inicio, DateTime fin, int idInmueble){
+    public bool VerificarDisponibilidad(DateTime inicio, DateTime fin, int idInmueble)
+    {
         string desde = inicio.ToString("yyyy-MM-dd");
         string hasta = fin.ToString("yyyy-MM-dd");
         return repo.estaOcupado(idInmueble, desde, hasta);
     }
-    public IActionResult Eliminar(int id)
+    public IActionResult Eliminar(Contrato contrato)
     {
         if (!User.IsInRole("Administrador"))
         {
             TempData["Error"] = "Acceso denegado";
             return Redirect("/Home/Index");
         }
-        int res = repo.Baja(id, int.Parse(User.Claims.First().Value), DateTime.Now);
+        int res = repo.Baja(contrato.ContratoId, int.Parse(User.Claims.First().Value), DateTime.Now, contrato.Multa);
         if (res == -1)
-            TempData["Error"] = "No se pudo dar de baja el contrato";
+            TempData["Error"] = "No se pudo cancelar el contrato";
         else
-            TempData["Mensaje"] = "El contrato quedo inactivo";
+            TempData["Mensaje"] = "Se canceló el contrato";
         return RedirectToAction("Index");
 
     }
-
-    public IActionResult Activar(int id)
-    {
-        if (!User.IsInRole("Administrador"))
-        {
-            TempData["Error"] = "Acceso denegado";
-            return Redirect("/Home/Index");
-        }
-
-        if (repo.ObtenerUno(id) == null)
-        {
-            TempData["Error"] = "No se encontro el contrato";
-            return RedirectToAction("Index");
-        }
-
-        int res = repo.Restore(id);
-        if (res == -1)
-            TempData["Error"] = "No se pudo activar el contrato";
-        else
-            TempData["Mensaje"] = "El contrato se activo";
-        return RedirectToAction("Index");
-
-    }
-
 
     public IActionResult FiltrarPorPlazo(int? plazo)
     {
@@ -178,17 +198,56 @@ public class ContratoController : Controller
             if (contratoExistente == null)
             {
                 ModelState.AddModelError("", "El contrato no existe.");
-                return View("Detalle", repo.ObtenerUno(pago.IdContrato)); 
+                return View("Detalle", repo.ObtenerUno(pago.IdContrato));
             }
 
             pago.CreadorId = int.Parse(User.Claims.First().Value);
             pago.Fecha = DateTime.Now;
             pago.AnuladorId = null;
-            pago.IdContrato = contratoExistente.ContratoId; 
+            pago.IdContrato = contratoExistente.ContratoId;
             repoPago.Agregar(pago);
             return RedirectToAction("Detalle", new { id = pago.IdContrato });
         }
 
         return View("Detalle", repo.ObtenerUno(pago.IdContrato));
     }
+
+    public IActionResult Cancelar(int id)
+    {
+        var contrato = repo.ObtenerUno(id); // Obtener el contrato por ID
+        if (contrato == null)
+        {
+            TempData["Error"] = "No se encontro el contrato";
+            return RedirectToAction("Index");
+        }
+        //con esto consigo el ultimo pago
+        var pagosRealizados = repoPago.ObtenerPorContrato(id);
+        var ultimoPago = pagosRealizados.OrderByDescending(p => p.Numero).FirstOrDefault();
+        int pagosHechos = ultimoPago?.Numero ?? 0;
+        //a los pagos que deberia haber hecho le resto la cantidad de pagos hechos
+        var pagosTotales = contrato.Meses;
+        var pagosFaltantes = pagosTotales - pagosHechos;
+
+        ViewBag.PagosRealizados = pagosHechos;
+        ViewBag.PagosFaltantes = pagosFaltantes;
+        contrato.Multa = CalcularMulta(contrato, pagosFaltantes);
+
+        return View(contrato);
+    }
+
+    private decimal CalcularMulta(Contrato contrato, int pagosFaltantes)
+    {
+        if (pagosFaltantes > 0)
+        {
+            bool esMenosDeLaMitad = pagosFaltantes > contrato.Meses / 2;
+            if (esMenosDeLaMitad)
+            {
+                return 2 * contrato.PrecioContrato;
+            }
+            return 1 * contrato.PrecioContrato;
+        }
+        return 0;
+    }
+
+
 }

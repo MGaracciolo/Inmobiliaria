@@ -30,7 +30,17 @@ public class PagoController : Controller
         var pago = repo.ObtenerUno(id);
         return View(pago);
     }
-
+    public IActionResult Edicion(int id)
+    {
+        var pago = repo.ObtenerUno(id); 
+        if (pago == null) 
+        {
+            TempData["Error"] = "No se encontro el pago";
+            return RedirectToAction("Index","Pago"); 
+        }
+        return View(pago); 
+    }
+    [HttpPost]
     public IActionResult Edicion(int id, Pago pago)
     {
         id=pago.PagoId;
@@ -44,20 +54,20 @@ public class PagoController : Controller
             repo.Modificar(pago);
             TempData["Mensaje"] = "Cambios guardados";
         }
-        return RedirectToAction("Index","Contrato");
+        return RedirectToAction("Index","Pago");
     }
-    [Authorize(Policy = "Administrador")]
+  
+    [Authorize(Roles = "Administrador")]
     public IActionResult Eliminar(int id)
     {
-        var res = repo.Baja(id);
+        var pago = repo.ObtenerUno(id);
+        var num = pago.Numero - 1;
+       int res = repo.Baja(id,int.Parse(User.Claims.First().Value), num);
         if (res == -1)
-        {
             TempData["Error"] = "No se pudo eliminar el pago";
-        }
         else
-        {
-            TempData["Exito"] = "El pago se elimino";
-        }
+            TempData["Mensaje"] = "El pago se elimino";
         return RedirectToAction("Index");
+
     }
 }

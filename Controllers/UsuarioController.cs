@@ -35,14 +35,17 @@ public class UsuarioController : Controller
 
 	}
 
-	public IActionResult Detalle()
+	public IActionResult Detalle(int id)
 	{
 		if (!User.IsInRole("Administrador"))
 		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
 		}
-		var usuario = repo.ObtenerPorEmail(User.Identity.Name);
+		//cuando es admin
+			var usuario = repo.ObtenerPorEmail(User.Identity.Name);
+		//cuando no es admin
+		// var usuario =repo.ObtenerUno(id);
 		ViewBag.Roles = Usuario.ObtenerRoles();
 		return View(usuario);
 

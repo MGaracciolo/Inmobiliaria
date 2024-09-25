@@ -23,8 +23,14 @@ public class RepositorioPago: RepositorioBase
             p.estado AS Estado,
             c.id_contrato AS ContratoId,
             c.id_inmueble AS IdInmueble,
+            c.id_inquilino AS IdInquilino,
+            c.meses AS Meses,
+            inq.id_inquilino AS InquilinoId,
+            inq.dni AS DniI,
+            inq.nombre AS NombreI,
+            inq.apellido AS ApellidoI,
             i.id_inmueble AS InmuebleId,
-            i.direccion AS Direccion,
+            i.direccion AS DireccionI,
             uc.id_usuario AS CreadorId,
             uc.nombre AS CreadorNombre,
             uc.apellido AS CreadorApellido,
@@ -34,6 +40,7 @@ public class RepositorioPago: RepositorioBase
             FROM pago p
             INNER JOIN contrato c ON p.id_contrato = c.id_contrato
             INNER JOIN inmueble i ON c.id_inmueble = i.id_inmueble
+            INNER JOIN inquilino inq ON c.id_inquilino = inq.id_inquilino
             INNER JOIN usuario uc ON p.id_creacion = uc.id_usuario
             LEFT JOIN usuario ua ON p.id_anulacion = ua.id_usuario
             ";
@@ -45,22 +52,31 @@ public class RepositorioPago: RepositorioBase
                 {
                     lista.Add(new Pago
                     {
-                        PagoId = reader.GetInt32("id_pago"),
-                        IdContrato = reader.GetInt32("id_contrato"),
-                        Numero = reader.GetInt32("numero"),
-                        Importe = reader.GetDecimal("importe"),
-                        Fecha = reader.GetDateTime("fecha"),
-                        CreadorId = reader.GetInt32("id_creacion"),
-                        AnuladorId = reader.IsDBNull(reader.GetOrdinal("id_anulacion")) ? (int?)null : reader.GetInt32("id_anulacion"),
-                        Concepto = reader.IsDBNull(reader.GetOrdinal("concepto")) ? null : reader.GetString("concepto"), // Verificar nulo
-                        Estado = reader.GetBoolean("estado"),
+                        PagoId = reader.GetInt32(nameof(Pago.PagoId)),
+                        IdContrato = reader.GetInt32(nameof(Pago.IdContrato)),
+                        Numero = reader.GetInt32(nameof(Pago.Numero)),
+                        Importe = reader.GetDecimal(nameof(Pago.Importe)),
+                        Fecha = reader.GetDateTime(nameof(Pago.Fecha)),
+                        CreadorId = reader.GetInt32(nameof(Pago.CreadorId)),
+                        AnuladorId = reader.IsDBNull(reader.GetOrdinal(nameof(Pago.AnuladorId))) ? (int?)null : reader.GetInt32(nameof(Pago.AnuladorId)),
+                        Concepto = reader.IsDBNull(reader.GetOrdinal(nameof(Pago.Concepto))) ? null : reader.GetString(nameof(Pago.Concepto)), // Verificar nulo
+                        Estado = reader.GetBoolean(nameof(Pago.Estado)),
                         Contrato = new Contrato{    
-                            ContratoId = reader.GetInt32("id_contrato"),
-                            IdInmueble = reader.GetInt32("IdInmueble"),
+                            ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
+                            IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
+                            IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                            Meses = reader.GetInt32(nameof(Contrato.Meses)),
                             Inmueble = new Inmueble
                             {
-                                InmuebleId = reader.GetInt32("InmuebleId"),
-                                DireccionI = reader.GetString("direccion")
+                                InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                                DireccionI = reader.GetString(nameof(Inmueble.DireccionI))
+                            },
+                            Inquilino = new Inquilino
+                            {
+                                InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                                NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                                ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                                DniI = reader.GetString(nameof(Inquilino.DniI))
                             }
                         },
                         Creador = new Usuario
@@ -75,6 +91,7 @@ public class RepositorioPago: RepositorioBase
                             Nombre = reader.GetString("AnuladorNombre"),
                             Apellido = reader.GetString("AnuladorApellido")
                         }
+                    
                     });
                 }
             }
@@ -88,19 +105,25 @@ public class RepositorioPago: RepositorioBase
         {
             var query = $@" 
             SELECT 
-            p.id_pago,
-            p.id_contrato, 
-            p.numero, 
-            p.importe, 
-            p.fecha, 
-            p.id_creacion, 
-            p.id_anulacion, 
-            p.concepto, 
-            p.estado,
-            c.id_contrato,
-            c.id_inmueble,
-            i.id_inmueble,
-            i.direccion,
+            p.id_pago AS PagoId,
+            p.id_contrato AS IdContrato, 
+            p.numero AS Numero, 
+            p.importe AS Importe, 
+            p.fecha AS Fecha, 
+            p.id_creacion AS CreadorId, 
+            p.id_anulacion AS AnuladorId, 
+            p.concepto AS Concepto, 
+            p.estado AS Estado,
+            c.id_contrato AS ContratoId,
+            c.id_inmueble AS IdInmueble,
+            c.id_inquilino AS IdInquilino,
+            c.meses AS Meses,
+            inq.id_inquilino AS InquilinoId,
+            inq.dni AS DniI,
+            inq.nombre AS NombreI,
+            inq.apellido AS ApellidoI,
+            i.id_inmueble AS InmuebleId,
+            i.direccion AS DireccionI,
             uc.id_usuario AS CreadorId,
             uc.nombre AS CreadorNombre,
             uc.apellido AS CreadorApellido,
@@ -110,6 +133,7 @@ public class RepositorioPago: RepositorioBase
             FROM pago p
             INNER JOIN contrato c ON p.id_contrato = c.id_contrato
             INNER JOIN inmueble i ON c.id_inmueble = i.id_inmueble
+            INNER JOIN inquilino inq ON c.id_inquilino = inq.id_inquilino
             INNER JOIN usuario uc ON p.id_creacion = uc.id_usuario
             LEFT JOIN usuario ua ON p.id_anulacion = ua.id_usuario
              WHERE id_pago = @id";
@@ -122,22 +146,31 @@ public class RepositorioPago: RepositorioBase
                 {
                     pago = new Pago
                     {
-                        PagoId = reader.GetInt32("id_pago"),
-                        IdContrato = reader.GetInt32("id_contrato"),
-                        Numero = reader.GetInt32("numero"),
-                        Importe = reader.GetDecimal("importe"),
-                        Fecha = reader.GetDateTime("fecha"),
-                        CreadorId = reader.GetInt32("id_creacion"),
-                        AnuladorId = reader.IsDBNull(reader.GetOrdinal("id_anulacion")) ? (int?)null : reader.GetInt32("id_anulacion"),
-                        Concepto = reader.IsDBNull(reader.GetOrdinal("concepto")) ? null : reader.GetString("concepto"), // Verificar nulo
-                        Estado = reader.GetBoolean("estado"),
+                        PagoId = reader.GetInt32(nameof(Pago.PagoId)),
+                        IdContrato = reader.GetInt32(nameof(Pago.IdContrato)),
+                        Numero = reader.GetInt32(nameof(Pago.Numero)),
+                        Importe = reader.GetDecimal(nameof(Pago.Importe)),
+                        Fecha = reader.GetDateTime(nameof(Pago.Fecha)),
+                        CreadorId = reader.GetInt32(nameof(Pago.CreadorId)),
+                        AnuladorId = reader.IsDBNull(reader.GetOrdinal(nameof(Pago.AnuladorId))) ? (int?)null : reader.GetInt32(nameof(Pago.AnuladorId)),
+                        Concepto = reader.IsDBNull(reader.GetOrdinal(nameof(Pago.Concepto))) ? null : reader.GetString(nameof(Pago.Concepto)), // Verificar nulo
+                        Estado = reader.GetBoolean(nameof(Pago.Estado)),
                         Contrato = new Contrato{    
-                            ContratoId = reader.GetInt32("id_contrato"),
-                            IdInmueble = reader.GetInt32("id_inmueble"),
+                            ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
+                            IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
+                            IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                            Meses = reader.GetInt32(nameof(Contrato.Meses)),
                             Inmueble = new Inmueble
                             {
-                                InmuebleId = reader.GetInt32("id_inmueble"),
-                                DireccionI = reader.GetString("direccion")
+                                InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
+                                DireccionI = reader.GetString(nameof(Inmueble.DireccionI))
+                            },
+                            Inquilino = new Inquilino
+                            {
+                                InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                                NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                                ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                                DniI = reader.GetString(nameof(Inquilino.DniI))
                             }
                         },
                         Creador = new Usuario
@@ -175,6 +208,12 @@ public class RepositorioPago: RepositorioBase
             p.estado AS Estado,
             c.id_contrato AS ContratoId,
             c.id_inmueble AS IdInmueble,
+            c.id_inquilino AS IdInquilino,
+            c.meses AS Meses,
+            inq.id_inquilino AS InquilinoId,
+            inq.dni AS DniI,
+            inq.nombre AS NombreI,
+            inq.apellido AS ApellidoI,
             i.id_inmueble AS InmuebleId,
             i.direccion AS DireccionI,
             uc.id_usuario AS CreadorId,
@@ -186,6 +225,7 @@ public class RepositorioPago: RepositorioBase
             FROM pago p
             INNER JOIN contrato c ON p.id_contrato = c.id_contrato
             INNER JOIN inmueble i ON c.id_inmueble = i.id_inmueble
+            INNER JOIN inquilino inq ON c.id_inquilino = inq.id_inquilino
             INNER JOIN usuario uc ON p.id_creacion = uc.id_usuario
             LEFT JOIN usuario ua ON p.id_anulacion = ua.id_usuario
             WHERE p.id_contrato = @id";
@@ -210,10 +250,19 @@ public class RepositorioPago: RepositorioBase
                         Contrato = new Contrato{    
                             ContratoId = reader.GetInt32(nameof(Contrato.ContratoId)),
                             IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
+                            IdInquilino = reader.GetInt32(nameof(Contrato.IdInquilino)),
+                            Meses = reader.GetInt32(nameof(Contrato.Meses)),
                             Inmueble = new Inmueble
                             {
                                 InmuebleId = reader.GetInt32(nameof(Inmueble.InmuebleId)),
                                 DireccionI = reader.GetString(nameof(Inmueble.DireccionI))
+                            },
+                            Inquilino = new Inquilino
+                            {
+                                InquilinoId = reader.GetInt32(nameof(Inquilino.InquilinoId)),
+                                NombreI = reader.GetString(nameof(Inquilino.NombreI)),
+                                ApellidoI = reader.GetString(nameof(Inquilino.ApellidoI)),
+                                DniI = reader.GetString(nameof(Inquilino.DniI))
                             }
                         },
                         Creador = new Usuario
@@ -272,7 +321,6 @@ public class RepositorioPago: RepositorioBase
         {
             var query = $@"UPDATE pago SET 
             concepto = @concepto
-
             WHERE id_pago = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
@@ -287,16 +335,22 @@ public class RepositorioPago: RepositorioBase
         return res;
     }
     
-    public int Baja(int id){
+
+    public int Baja(int id, int anulador, int numero){
         int res = -1;
         using (MySqlConnection connection = new MySqlConnection(ConnectionString))
         {
             var query = $@"UPDATE pago
-            SET estado = 0
+            SET estado = 0,
+            id_anulacion = @anulador,
+            numero = @numero,
+            concepto = 'Pago anulado'
             WHERE id_pago = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@id",id);
+                command.Parameters.AddWithValue("@anulador", anulador);
+                command.Parameters.AddWithValue("@numero", numero);
                 connection.Open();
                 
                 res = command.ExecuteNonQuery();

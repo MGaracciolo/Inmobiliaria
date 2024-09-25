@@ -14,11 +14,13 @@ public class RepositorioContrato: RepositorioBase
            c.id_inmueble AS IdInmueble,
            c.desde AS Desde, 
            c.hasta AS Hasta, 
+           c.meses AS Meses,
            c.precio AS PrecioContrato,
            c.estado AS Estado,
            c.id_creacion AS IdCreador,
            c.id_anulacion AS IdAnulador,
            c.fecha_anulacion AS Anulacion,
+           c.multa AS Multa,
            i.id_inquilino AS InquilinoId,
            i.nombre AS NombreI,
            i.apellido AS ApellidoI,
@@ -53,6 +55,7 @@ public class RepositorioContrato: RepositorioBase
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
                        Desde= reader.GetDateTime(nameof(Contrato.Desde)),
                        Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Meses = reader.GetInt32(nameof(Contrato.Meses)),
                        PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
@@ -60,6 +63,7 @@ public class RepositorioContrato: RepositorioBase
                             ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
                         Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
                             ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                       Multa = reader.GetDecimal(nameof(Contrato.Multa)),
                        Creador = new Usuario{
                             UsuarioId = reader.GetInt32("CreadorId"),
                             Nombre = reader.GetString("NombreC"),
@@ -103,11 +107,13 @@ public class RepositorioContrato: RepositorioBase
            c.id_inmueble AS IdInmueble,
            c.desde AS Desde, 
            c.hasta AS Hasta, 
+           c.meses AS Meses,
            c.precio AS PrecioContrato,
            c.estado AS Estado,
            c.id_creacion AS IdCreador,
            c.id_anulacion AS IdAnulador,
            c.fecha_anulacion AS Anulacion,
+           c.multa AS Multa,
            i.id_inquilino AS InquilinoId,
            i.nombre AS NombreI,
            i.apellido AS ApellidoI,
@@ -143,6 +149,7 @@ public class RepositorioContrato: RepositorioBase
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
                        Desde= reader.GetDateTime(nameof(Contrato.Desde)),
                        Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Meses = reader.GetInt32(nameof(Contrato.Meses)),
                        PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
@@ -150,6 +157,7 @@ public class RepositorioContrato: RepositorioBase
                             ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
                         Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
                             ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                        Multa = reader.GetDecimal(nameof(Contrato.Multa)),
                        Creador = new Usuario{
                             UsuarioId = reader.GetInt32("CreadorId"),
                             Nombre = reader.GetString("NombreC"),
@@ -193,6 +201,7 @@ public class RepositorioContrato: RepositorioBase
            c.id_inmueble AS IdInmueble,
            c.desde AS Desde, 
            c.hasta AS Hasta, 
+           c.meses AS Meses,
            c.precio AS PrecioContrato,
            c.estado AS Estado,
            c.id_creacion AS IdCreador,
@@ -233,6 +242,7 @@ public class RepositorioContrato: RepositorioBase
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
                        Desde= reader.GetDateTime(nameof(Contrato.Desde)),
                        Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Meses = reader.GetInt32(nameof(Contrato.Meses)),
                        PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
@@ -240,6 +250,7 @@ public class RepositorioContrato: RepositorioBase
                             ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
                         Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
                             ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                        Multa = reader.GetDecimal(nameof(Contrato.Multa)),
                        Creador = new Usuario{
                             UsuarioId = reader.GetInt32("CreadorId"),
                             Nombre = reader.GetString("NombreC"),
@@ -283,11 +294,13 @@ public class RepositorioContrato: RepositorioBase
            c.id_inmueble AS IdInmueble,
            c.desde AS Desde, 
            c.hasta AS Hasta, 
+           c.meses AS Meses,
            c.precio AS PrecioContrato,
            c.estado AS Estado,
            c.id_creacion AS IdCreador,
            c.id_anulacion AS IdAnulador,
            c.fecha_anulacion AS Anulacion,
+           c.multa AS Multa,
            i.id_inquilino AS InquilinoId,
            i.nombre AS NombreI,
            i.apellido AS ApellidoI,
@@ -323,6 +336,7 @@ public class RepositorioContrato: RepositorioBase
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
                        Desde= reader.GetDateTime(nameof(Contrato.Desde)),
                        Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Meses = reader.GetInt32(nameof(Contrato.Meses)),
                        PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
@@ -330,6 +344,7 @@ public class RepositorioContrato: RepositorioBase
                             ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
                         Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
                             ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                        Multa = reader.GetDecimal(nameof(Contrato.Multa)),
                        Creador = new Usuario{
                             UsuarioId = reader.GetInt32("CreadorId"),
                             Nombre = reader.GetString("NombreC"),
@@ -374,11 +389,13 @@ public class RepositorioContrato: RepositorioBase
            c.id_inmueble AS IdInmueble,
            c.desde AS Desde, 
            c.hasta AS Hasta, 
+           c.meses AS Meses,
            c.precio AS PrecioContrato,
            c.estado AS Estado,
            c.id_creacion AS IdCreador,
            c.id_anulacion AS IdAnulador,
            c.fecha_anulacion AS Anulacion,
+           c.multa AS Multa,
            i.id_inquilino AS InquilinoId,
            i.nombre AS NombreI,
            i.apellido AS ApellidoI,
@@ -417,6 +434,7 @@ public class RepositorioContrato: RepositorioBase
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
                        Desde= reader.GetDateTime(nameof(Contrato.Desde)),
                        Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Meses = reader.GetInt32(nameof(Contrato.Meses)),
                        PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
@@ -424,6 +442,7 @@ public class RepositorioContrato: RepositorioBase
                             ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
                         Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
                             ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                        Multa = reader.GetDecimal(nameof(Contrato.Multa)),
                        Creador = new Usuario{
                             UsuarioId = reader.GetInt32("CreadorId"),
                             Nombre = reader.GetString("NombreC"),
@@ -467,11 +486,13 @@ public class RepositorioContrato: RepositorioBase
            c.id_inmueble AS IdInmueble,
            c.desde AS Desde, 
            c.hasta AS Hasta, 
+           c.meses AS Meses,
            c.precio AS PrecioContrato,
            c.estado AS Estado,
            c.id_creacion AS IdCreador,
            c.id_anulacion AS IdAnulador,
            c.fecha_anulacion AS Anulacion,
+           c.multa AS Multa,
            i.id_inquilino AS InquilinoId,
            i.nombre AS NombreI,
            i.apellido AS ApellidoI,
@@ -508,6 +529,7 @@ public class RepositorioContrato: RepositorioBase
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
                        Desde= reader.GetDateTime(nameof(Contrato.Desde)),
                        Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Meses = reader.GetInt32(nameof(Contrato.Meses)),
                        PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
@@ -515,6 +537,7 @@ public class RepositorioContrato: RepositorioBase
                             ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
                         Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
                             ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                        Multa = reader.GetDecimal(nameof(Contrato.Multa)),
                        Creador = new Usuario{
                             UsuarioId = reader.GetInt32("CreadorId"),
                             Nombre = reader.GetString("NombreC"),
@@ -558,11 +581,13 @@ public class RepositorioContrato: RepositorioBase
            c.id_inmueble AS IdInmueble,
            c.desde AS Desde, 
            c.hasta AS Hasta, 
+           c.meses AS Meses,
            c.precio AS PrecioContrato,
            c.estado AS Estado,
            c.id_creacion AS IdCreador,
            c.id_anulacion AS IdAnulador,
            c.fecha_anulacion AS Anulacion,
+           c.multa AS Multa,
            i.id_inquilino AS InquilinoId,
            i.nombre AS NombreI,
            i.apellido AS ApellidoI,
@@ -599,6 +624,7 @@ public class RepositorioContrato: RepositorioBase
                        IdInmueble = reader.GetInt32(nameof(Contrato.IdInmueble)),
                        Desde= reader.GetDateTime(nameof(Contrato.Desde)),
                        Hasta = reader.GetDateTime(nameof(Contrato.Hasta)),
+                       Meses = reader.GetInt32(nameof(Contrato.Meses)),
                        PrecioContrato = reader.GetDecimal(nameof(Contrato.PrecioContrato)),
                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
                        IdCreador = reader.GetInt32(nameof(Contrato.IdCreador)),
@@ -606,6 +632,7 @@ public class RepositorioContrato: RepositorioBase
                             ? (int?)null : reader.GetInt32(nameof(Contrato.IdAnulador)),
                         Anulacion = reader.IsDBNull(reader.GetOrdinal(nameof(Contrato.Anulacion))) 
                             ? (DateTime?)null : reader.GetDateTime(nameof(Contrato.Anulacion)),
+                        Multa = reader.GetDecimal(nameof(Contrato.Multa)),
                        Creador = new Usuario{
                             UsuarioId = reader.GetInt32("CreadorId"),
                             Nombre = reader.GetString("NombreC"),
@@ -736,8 +763,7 @@ public class RepositorioContrato: RepositorioBase
         return res;
     }
 
-
-    public int Baja(int id,int anulador, DateTime fecha)
+    public int Baja(int id,int anulador, DateTime fecha, decimal multa)
     {
         int res = -1;
         using (MySqlConnection connection = new MySqlConnection(ConnectionString))
@@ -745,32 +771,15 @@ public class RepositorioContrato: RepositorioBase
             var query = $@"UPDATE contrato
             SET estado = 0,
             id_anulacion = @anulador,
-            fecha_anulacion = @fecha
+            fecha_anulacion = @fecha,
+            multa = @multa
             WHERE id_contrato = @id";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@id", id);
                 command.Parameters.AddWithValue("@anulador", anulador);
                 command.Parameters.AddWithValue("@fecha", fecha);
-                connection.Open();
-                res = command.ExecuteNonQuery();
-                connection.Close();
-            }
-        }
-        return res;
-    }
-
-      public int Restore(int id)
-    {
-        int res = -1;
-        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
-        {
-            var query = $@"UPDATE contrato
-            SET estado = 1
-            WHERE id_contrato = @id";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@multa", multa);
                 connection.Open();
                 res = command.ExecuteNonQuery();
                 connection.Close();

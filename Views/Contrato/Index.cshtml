@@ -5,7 +5,7 @@
 }
 
 <div class="text-center">
-    <h3 class="display-4">Contratos registrados:</h3>
+    <h1>Contratos registrados:</h1>
 	
 </div>
 <div class="row">
@@ -94,18 +94,16 @@
                 <td>@(item.Inmueble?.Propietario)</td>
                 <td>@(item.Desde.ToString("dd/MM/yyyy"))</td>
                 <td>@(item.Hasta.ToString("dd/MM/yyyy"))</td>
-                @* <td>@(item.Anulacion != null ? item.Anulacion.Value.ToString("dd/MM/yyyy") : "-" )</td> *@
                 <td>
-                    <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a>
+                    <a href="/Contrato/Detalle/@item.ContratoId"><i class="fa-solid fa-eye"></i></a><span> | </span>
+                    <a href="/Contrato/Renovar/@item.ContratoId" ><i class="fa-solid fa-rotate-right"></i></a>
                     @if(item.Estado == true && User.IsInRole("Administrador"))
 					{
                         <span> | </span><a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
                         <a href="#"  data-bs-toggle="modal" data-bs-target="#pagoModal" data-id="@item.ContratoId"><i class="fa-solid fa-hand-holding-dollar"></i></a><span> | </span>
-                        <a href="#" data-url="/Contrato/Eliminar/@item.ContratoId" class="text-danger desactivar"><i class="fa-solid fa-trash"></i></a>
-					}else if(item.Estado == false && User.IsInRole("Administrador"))
-                    {
-                        <span> | </span><a href="#" data-url="/Contrato/Activar/@item.ContratoId" class="text-success activar"><i class="fa-solid fa-trash-arrow-up"></i></a>
-					}else if(item.Estado == true )
+                        <a href="#" data-url="/Contrato/Cancelar/@item.ContratoId" class="text-danger cancelar"><i class="fa-solid fa-trash"></i></a>
+					}
+					else if(item.Estado == true )
                     {
                         <span> | </span><a href="/Contrato/Edicion/@item.ContratoId" ><i class="fa-solid fa-pen-to-square"></i></a> <span> | </span>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#pagoModal" data-id="@item.ContratoId"><i class="fa-solid fa-hand-holding-dollar"></i></a>
@@ -174,36 +172,17 @@
 					cargarContratos('vigente'); 
 				});
 
-                $('.desactivar').click(function (e) {
+                $('.cancelar').click(function (e) {
                     e.preventDefault();
                     var url = $(this).data('url');
                     Swal.fire({
-                        title: "¿Desactivar contrato?",
-                        text: "El inmueble volverá a estar disponible",
+                        title: "¿Cancelar contrato?",
+                        text: "El inmueble volverá a estar disponible y podrian aplicarse multas",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
-                        confirmButtonText: "Desactivar",
-                        cancelButtonText: "Cancelar"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = url;
-                        }
-                    });
-                });
-
-                $('.activar').click(function (e) {
-                    e.preventDefault();
-                    var url = $(this).data('url');
-                    Swal.fire({
-                        title: "¿Activar contrato?",
-                        text: "El inmueble volverá a estar ocupado",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Activar",
+                        confirmButtonText: "Aceptar",
                         cancelButtonText: "Cancelar"
                     }).then((result) => {
                         if (result.isConfirmed) {

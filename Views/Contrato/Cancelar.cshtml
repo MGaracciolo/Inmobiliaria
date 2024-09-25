@@ -1,0 +1,112 @@
+@model net.Models.Contrato
+@{
+    ViewData["Title"] = "Detalle";
+    int id = Model == null ? 0 : Model.ContratoId;
+    var hechos = ViewBag.PagosHechos ?? 0;
+    var faltantes = ViewBag.PagosFaltantes ?? 0;
+}
+
+
+<div class="text-center">
+    <h2>Contrato:</h2>
+</div>
+<hr />
+
+<form class="row" asp-action="Eliminar" id="cancelarForm">
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="ContratoId" class="form-control" type="hidden" />
+        <input asp-for="Multa" class="form-control" type="hidden" />
+        <div class="form-group">
+            <label asp-for="Inquilino" class="control-label">Inquilino</label>
+            <input asp-for="Inquilino" class="form-control" value="@Model?.Inquilino?.ToString()" readonly />
+            <span asp-validation-for="Inquilino" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Inmueble" class="control-label">Inmueble</label>
+            <input asp-for="Inmueble" class="form-control" value="@Model?.Inmueble?.DireccionI" readonly />
+            <span asp-validation-for="Inmueble" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PrecioContrato" class="control-label">Precio</label>
+            <input asp-for="PrecioContrato" class="form-control" readonly />
+            <span asp-validation-for="PrecioContrato" class="text-danger"></span>
+        </div>
+         <div class="form-group">
+            <label asp-for="Desde" class="control-label">Desde</label>
+            <input asp-for="Desde" class="form-control" type="date" readonly />
+            <span asp-validation-for="Desde" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Hasta" class="control-label">Hasta</label>
+            <input asp-for="Hasta" class="form-control" type="date" readonly />
+            <span asp-validation-for="Hasta" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Meses" class="control-label">Meses de contrato</label>
+            <input asp-for="Meses" class="form-control" readonly />
+            <span asp-validation-for="Meses" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Pagos" class="control-label">Cantidad de pagos esperados</label>
+            <input asp-for="Pagos" class="form-control" value="@Model.Meses" readonly />
+            <span asp-validation-for="Pagos" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Meses pagos</label>
+            <input class="form-control" value="@hechos" readonly />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Meses adeudados</label>
+            <input class="form-control" value="@faltantes" readonly />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Multa" class="control-label">Multa</label>
+            <input asp-for="Multa" class="form-control" readonly />
+            <span asp-validation-for="Multa" class="text-danger"></span>
+
+        </div>
+        <div class="form-group">
+            <label asp-for="Creador" class="control-label"></label>
+            <input asp-for="Creador" class="form-control" readonly />
+            <span asp-validation-for="Creador" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Cancelar contrato" class="btn btn-danger" id="cancelar" />
+    </div>
+</form>
+
+
+<div>
+    <a asp-action="Index">Volver al listado</a>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const btnCancelar = document.getElementById("cancelar");
+            btnCancelar.addEventListener("click", (event) => {
+                event.preventDefault();
+                Swal.fire({
+                    title: "¿Está seguro de cancelar contrato?",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Cancelar",
+                    denyButtonText: "No cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const formCancela = document.getElementById("cancelarForm");
+                        formCancela.submit();
+                    }
+                });
+            });
+        });
+    </script>
+}

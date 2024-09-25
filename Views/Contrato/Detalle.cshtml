@@ -6,7 +6,7 @@
 
 
 <div class="text-center">
-    <h3 class="display-4">Contrato:</h3>
+    <h2>Contrato:</h2>
 </div>
 <hr />
 
@@ -24,12 +24,12 @@
             <input asp-for="Inmueble" class="form-control" value="@Model?.Inmueble?.DireccionI" readonly />
             <span asp-validation-for="Inmueble" class="text-danger"></span>
         </div>
-         <div class="form-group">
+        <div class="form-group">
             <label asp-for="PrecioContrato" class="control-label">Precio</label>
             <input asp-for="PrecioContrato" class="form-control" readonly />
             <span asp-validation-for="PrecioContrato" class="text-danger"></span>
         </div>
-        
+
     </div>
     <div class="col-md-4">
         <div class="form-group">
@@ -42,7 +42,7 @@
             <input asp-for="Hasta" class="form-control" type="date" readonly />
             <span asp-validation-for="Hasta" class="text-danger"></span>
         </div>
-       
+
         <div class="form-group">
             <label asp-for="Estado" class="control-label">Estado</label>
             <input type="text" class="form-control" value="@(Model?.Estado == true ? "Activo" : "Inactivo")" readonly />
@@ -70,61 +70,49 @@
         </div>
     }
 </form>
-</div>
-</div>
-
-<div>
-    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#renovarModal" data-id="@id">
+<div class="row">
+    <div class="col-md-5">
+        <a href="/Contrato/Renovar/@Model.ContratoId" class="btn btn-success" style="max-width: 200px;" role="button">
         <i class="fa-solid fa-rotate-right"></i> Renovar contrato
-    </button>
-</div>
-<div class="row mt-5">
-    <div class="col-md-12">
-        <h4>Pagos Registrados</h4>
-        @if (Model != null && Model.Pagos != null && Model.Pagos.Any())
-        {
-            <table class="table table-striped" id="contratoPagosTable">
-                <thead>
-                    <tr>
-                        <th>Numero</th>
-                        <th>Importe</th>
-                        <th>Fecha</th>
-                        <th>Concepto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var pago in Model.Pagos)
-                    {
-                        <tr>
-                            <td>@pago.Numero</td>
-                            <td>@pago.Importe</td>
-                            <td>@pago.Fecha.ToString("dd/MM/yyyy")</td>
-                            <td>@pago.Concepto</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-        }
-        else
-        {
-            <p>No hay pagos registrados para este contrato.</p>
-        }
+        </a>
     </div>
+    @if(Model.Estado && User.IsInRole("Administrador")){
+        <div class="col-md-5">
+            <a href="/Contrato/Cancelar/@Model.ContratoId" class="btn btn-danger" style="max-width: 200px;" role="button">
+            <i class="fa-solid fa-ban"></i> Cancelar contrato
+            </a>
+        </div>
+    }
+</div>
+
+<div class="row ">
+    <h4>Pagos Registrados</h4>
+    <table class="table row-border dt-center" id="contratosPagosTable">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th>Numero</th>
+                <th>Importe</th>
+                <th>Fecha</th>
+                <th>Concepto</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pago in Model.Pagos)
+            {
+                <tr class="@(pago.Estado == false ?  "bg-inactivos" : "")">
+                    <td>@pago.Numero</td>
+                    <td>@pago.Importe</td>
+                    <td>@pago.Fecha.ToString("dd/MM/yyyy")</td>
+                    <td>@pago.Concepto</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 <div>
     <a asp-action="Index">Volver al listado</a>
 </div>
 
-@section Scripts{
-    <script>
-         $('#renovarModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var contratoId = button.data('id');
-            var modal = $(this);
-            
-        });
 
-    </script>
-}
+

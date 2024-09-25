@@ -12,6 +12,8 @@ public class Contrato{
 
     public DateTime Hasta { get; set; }
 
+    public int Meses { get; set; }
+
     public decimal PrecioContrato { get; set; }
 
     public bool Estado { get; set; }  = true;
@@ -22,9 +24,11 @@ public class Contrato{
 
     public DateTime? Anulacion { get; set; } // FechaAnulacion
 
+    public decimal Multa { get; set; }
+
     public Inquilino? Inquilino { get; set; }
 
-    public Inmueble? Inmueble { get; set; }
+    public Inmueble Inmueble { get; set; }
 
     public Usuario? Creador { get; set; }
 
@@ -34,9 +38,7 @@ public class Contrato{
 
     public override string ToString()
     {
-        var inquilinoStr = Inquilino != null ? $"{Inquilino.NombreI} {Inquilino.ApellidoI}" : "";
-        var inmuebleStr = Inmueble != null ? Inmueble.ToString() : "";
-        
-        return $"{inquilinoStr} - {inmuebleStr}";
+        var res = $"{ContratoId} - {Inquilino.ToString()} - {Inmueble.ToString()}";
+        return $"{res}";
     }
 }
