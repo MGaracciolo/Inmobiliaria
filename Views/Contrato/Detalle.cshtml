@@ -72,17 +72,17 @@
 </form>
 <div class="row">
     <div class="col-md-5">
-        <a href="/Contrato/Renovar/@Model.ContratoId" class="btn btn-success" style="max-width: 200px;" role="button">
-        <i class="fa-solid fa-rotate-right"></i> Renovar contrato
+        <a href="/Contrato/Renovar/@Model?.ContratoId" class="btn btn-success" style="max-width: 200px;" role="button">
+            <i class="fa-solid fa-rotate-right"></i> Renovar contrato
         </a>
     </div>
-    @if(Model.Estado && User.IsInRole("Administrador")){
-        <div class="col-md-5">
-            <a href="/Contrato/Cancelar/@Model.ContratoId" class="btn btn-danger" style="max-width: 200px;" role="button">
+
+    <div class="col-md-5">
+        <a href="/Contrato/Cancelar/@Model?.ContratoId" class="btn btn-danger" style="max-width: 200px;" role="button">
             <i class="fa-solid fa-ban"></i> Cancelar contrato
-            </a>
-        </div>
-    }
+        </a>
+    </div>
+
 </div>
 
 <div class="row ">
@@ -113,6 +113,3 @@
 <div>
     <a asp-action="Index">Volver al listado</a>
 </div>
-
-
-

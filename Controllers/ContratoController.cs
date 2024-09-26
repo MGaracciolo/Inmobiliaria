@@ -101,8 +101,6 @@ public class ContratoController : Controller
         TempData["Mensaje"] = "Contrato generado";
         return RedirectToAction("Index");
     }
-
-
     public IActionResult Detalle(int id)
     {
         if (id == 0)
@@ -155,11 +153,7 @@ public class ContratoController : Controller
     }
     public IActionResult Eliminar(Contrato contrato)
     {
-        if (!User.IsInRole("Administrador"))
-        {
-            TempData["Error"] = "Acceso denegado";
-            return Redirect("/Home/Index");
-        }
+        
         int res = repo.Baja(contrato.ContratoId, int.Parse(User.Claims.First().Value), DateTime.Now, contrato.Multa);
         if (res == -1)
             TempData["Error"] = "No se pudo cancelar el contrato";

@@ -1,0 +1,26 @@
+@model net.Models.Usuario
+@{
+    ViewData["Title"] = "Editar Contraseña";
+	int id = Model==null ? 0 : Model.UsuarioId;
+}
+
+<h2>Cambiar Contraseña</h2>
+
+<form asp-action="ModificarPassword" method="post">
+    <input type="hidden" value="@Model.UsuarioId" name="UsuarioId" />
+
+    <div class="form-group">
+        <label for="currentPassword">Contraseña Actual</label>
+        <input type="password" class="form-control" id="currentPassword" name="currentPassword" required />
+    </div>
+    <div class="form-group">
+        <label for="newPassword">Nueva Contraseña</label>
+        <input type="password" class="form-control" id="newPassword" name="newPassword" required />
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+</form>
+

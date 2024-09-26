@@ -100,13 +100,14 @@
                     @if(item.Estado == true && User.IsInRole("Administrador"))
 					{
                         <span> | </span><a href="/Contrato/Edicion/@item.ContratoId"><i class="fa-solid fa-pen-to-square"></i></a><span> | </span>
-                        <a href="#"  data-bs-toggle="modal" data-bs-target="#pagoModal" data-id="@item.ContratoId"><i class="fa-solid fa-hand-holding-dollar"></i></a><span> | </span>
-                        <a href="#" data-url="/Contrato/Cancelar/@item.ContratoId" class="text-danger cancelar"><i class="fa-solid fa-trash"></i></a>
+                        <a href="#"  data-bs-toggle="modal" data-bs-target="#pagoModal" data-id="@item.ContratoId"><i class="fa-solid fa-hand-holding-dollar"></i></a>
+                        <a href="#" data-url="/Contrato/Cancelar/@item.ContratoId" class="text-danger cancelar"><i class="fa-solid fa-trash"></i></a><span> | </span>
 					}
 					else if(item.Estado == true )
                     {
                         <span> | </span><a href="/Contrato/Edicion/@item.ContratoId" ><i class="fa-solid fa-pen-to-square"></i></a> <span> | </span>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#pagoModal" data-id="@item.ContratoId"><i class="fa-solid fa-hand-holding-dollar"></i></a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#pagoModal" data-id="@item.ContratoId"><i class="fa-solid fa-hand-holding-dollar"></i></a><span> | </span>
+                        <a href="#" data-url="/Contrato/Cancelar/@item.ContratoId" class="text-danger cancelar"><i class="fa-solid fa-trash"></i></a>
                     }
                 </td>
                 </tr>

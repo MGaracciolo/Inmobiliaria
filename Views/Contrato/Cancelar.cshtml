@@ -51,7 +51,7 @@
         </div>
         <div class="form-group">
             <label asp-for="Pagos" class="control-label">Cantidad de pagos esperados</label>
-            <input asp-for="Pagos" class="form-control" value="@Model.Meses" readonly />
+            <input asp-for="Pagos" class="form-control" value="@Model?.Meses" readonly />
             <span asp-validation-for="Pagos" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -71,11 +71,13 @@
             <span asp-validation-for="Multa" class="text-danger"></span>
 
         </div>
-        <div class="form-group">
-            <label asp-for="Creador" class="control-label"></label>
-            <input asp-for="Creador" class="form-control" readonly />
-            <span asp-validation-for="Creador" class="text-danger"></span>
-        </div>
+        @if(User.IsInRole("Administrador")){
+            <div class="form-group">
+                <label asp-for="Creador" class="control-label"></label>
+                <input asp-for="Creador" class="form-control" readonly />
+                <span asp-validation-for="Creador" class="text-danger"></span>
+            </div>
+        }
     </div>
     <div class="form-group">
         <input type="submit" value="Cancelar contrato" class="btn btn-danger" id="cancelar" />

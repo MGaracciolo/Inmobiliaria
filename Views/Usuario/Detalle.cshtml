@@ -19,7 +19,7 @@
                 }
                 else
                 {
-                    <span>Sin foto</span>
+                     <img width="64" src="/avatars/sinfoto.png" alt="Sin avatar"/>
                 }
                 <span asp-validation-for="Avatar" class="text-danger"></span>
             </div>
@@ -50,7 +50,10 @@
             </div>  
     </div>
     <div class="mt-3">
-        <a href="/Usuario/Edicion/@Model.UsuarioId" class="btn btn-primary">Editar datos</a>
+        <a href="/Usuario/Edicion/@Model?.UsuarioId" class="btn btn-primary">Editar datos</a>
+    </div>
+    <div class="mt-3">
+        <a href="/Usuario/CambiarPass/@Model?.UsuarioId" class="btn btn-warning">Cambiar Contraseña</a>
     </div>
 </div>
 

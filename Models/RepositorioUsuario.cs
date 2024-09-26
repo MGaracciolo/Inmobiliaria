@@ -60,7 +60,7 @@ public class RepositorioUsuario: RepositorioBase
                         Email = reader.GetString(nameof(Usuario.Email)),
                         Password = reader.GetString(nameof(Usuario.Password)),
                         Rol = reader.GetInt32(nameof(Usuario.Rol)),
-                        Avatar = reader.IsDBNull(reader.GetOrdinal(nameof(Usuario.Avatar))) ? null : reader.GetString(nameof(Usuario.Avatar))
+                        Avatar = reader.IsDBNull(reader.GetOrdinal(nameof(Usuario.Avatar))) ? null : reader.GetString(nameof(Usuario.Avatar)) 
                    };
                }
                connection.Close();
@@ -148,9 +148,8 @@ public class RepositorioUsuario: RepositorioBase
            var query = $@"UPDATE usuario
            SET nombre= @nombre,
            apellido= @apellido,
-           email= @email,
            rol = @rol,
-           password = @password,
+           email= @email,
            avatar = @avatar
            WHERE id_usuario = @id_usuario";
            
@@ -158,9 +157,8 @@ public class RepositorioUsuario: RepositorioBase
                command.Parameters.AddWithValue("@id_usuario", usuario.UsuarioId);
                command.Parameters.AddWithValue("@nombre", usuario.Nombre);
                command.Parameters.AddWithValue("@apellido", usuario.Apellido);
-               command.Parameters.AddWithValue("@email", usuario.Email);
                command.Parameters.AddWithValue("@rol", usuario.Rol);
-               command.Parameters.AddWithValue("@password", usuario.Password);
+               command.Parameters.AddWithValue("@email", usuario.Email);
                command.Parameters.AddWithValue("@avatar", usuario.Avatar);
                connection.Open();
                res = command.ExecuteNonQuery();
@@ -268,5 +266,23 @@ public class RepositorioUsuario: RepositorioBase
            }
         }
         return usuario;
+    }
+
+    public int ModificarEmail(Usuario usuario) {//Melian
+        int res = -1;
+        using(MySqlConnection connection = new MySqlConnection(ConnectionString)){
+           var query = $@"UPDATE usuario
+           SET 
+           email = @email
+           WHERE id_usuario = @id_usuario";
+           using(MySqlCommand command = new MySqlCommand(query, connection)){
+               command.Parameters.AddWithValue("@id_usuario", usuario.UsuarioId);
+               
+               connection.Open();
+               res = command.ExecuteNonQuery();
+               connection.Close();
+           }
+        }
+        return res;
     }
 }

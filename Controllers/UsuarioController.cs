@@ -35,17 +35,53 @@ public class UsuarioController : Controller
 
 	}
 
-	public IActionResult Detalle(int id)
+	// public IActionResult Detalle(int id)
+	// {
+	// 	if (!User.IsInRole("Administrador"))
+	// 	{
+	// 		TempData["Error"] = "Acceso denegado";
+	// 		return Redirect("/Home/Index");
+	// 	}
+	// 	//cuando es admin
+	// 		var usuario = repo.ObtenerPorEmail(User.Identity.Name);
+	// 	//cuando no es admin
+	// 	// var usuario =repo.ObtenerUno(id);
+	// 	ViewBag.Roles = Usuario.ObtenerRoles();
+	// 	return View(usuario);
+
+	// }
+	public IActionResult Detalle(int? id)
 	{
-		if (!User.IsInRole("Administrador"))
+		// var usuarioIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+		// if (!User.IsInRole("Administrador") && usuarioIdClaim != null && usuario.UsuarioId != int.Parse(usuarioIdClaim))
+		// {
+		// 	TempData["Error"] = "Acceso denegado";
+		// 	return Redirect("/Home/Index");
+		// }
+
+		Usuario usuario;
+
+		if (User.IsInRole("Administrador"))
 		{
-			TempData["Error"] = "Acceso denegado";
-			return Redirect("/Home/Index");
+			if (id.HasValue)
+			{
+				usuario = repo.ObtenerUno(id.Value);
+			}
+			else
+			{
+				usuario = repo.ObtenerPorEmail(User.FindFirstValue(ClaimTypes.Email));
+			}
 		}
-		//cuando es admin
-			var usuario = repo.ObtenerPorEmail(User.Identity.Name);
-		//cuando no es admin
-		// var usuario =repo.ObtenerUno(id);
+		else
+		{
+			usuario = repo.ObtenerPorEmail(User.FindFirstValue(ClaimTypes.Email));
+			if (usuario == null)
+			{
+				TempData["Error"] = "Acceso denegado";
+				return Redirect("/Home/Index");
+			}
+		}
+
 		ViewBag.Roles = Usuario.ObtenerRoles();
 		return View(usuario);
 
@@ -54,7 +90,7 @@ public class UsuarioController : Controller
 	public ActionResult Perfil()
 	{
 
-		var usuario = repo.ObtenerPorEmail(User.Identity.Name);
+		var usuario = repo.ObtenerPorEmail(User.FindFirstValue(ClaimTypes.Email));
 		ViewBag.Roles = Usuario.ObtenerRoles();
 		return View("Detalle", usuario);
 	}
@@ -127,80 +163,249 @@ public class UsuarioController : Controller
 
 	public ActionResult Edicion(int id)
 	{
-		if (!User.IsInRole("Administrador")  && id != int.Parse(User.Claims.First().Value))
+		if (!User.IsInRole("Administrador") && id != int.Parse(User.Claims.First().Value))
 		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
 		}
 		if (id == 0)
-            return View();
-        ViewBag.Roles = Usuario.ObtenerRoles();
+			return View();
+		ViewBag.Roles = Usuario.ObtenerRoles();
 		var usuario = repo.ObtenerUno(id);
-        return View(usuario);
+		return View(usuario);
 	}
 
-	public IActionResult ModificarDatos(Usuario usuario){
-		if (!User.IsInRole("Administrador") && usuario.UsuarioId != int.Parse(User.Claims.First().Value))
+	public async Task<IActionResult> ModificarUsuario(Usuario usuario)
+	{
+		Usuario usuarioExistente = repo.ObtenerUno(usuario.UsuarioId);
+		if (usuarioExistente == null)
+		{
+			TempData["Error"] = "Usuario no encontrado";
+			return RedirectToAction("Index", "Home");
+		}
+
+		var usuarioIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+		if (!User.IsInRole("Administrador") && usuarioIdClaim != null && usuario.UsuarioId != int.Parse(usuarioIdClaim))
 		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
 		}
-		int res = repo.ModificarDatos(usuario);
+		if (usuarioExistente.Email != usuario.Email || usuarioExistente.RolNombre != usuario.RolNombre)
+		{
+			try
+			{
+				await ActualizarClaim(usuario);
+			}
+			catch (Exception ex)
+			{
+				TempData["Error"] = $"No se pudo actualizar el claim: {ex.Message}";
+				return RedirectToAction("Index", "Home");
+			}
+		}
+		int res = repo.Modificar(usuario);
 		if (res == -1)
-			TempData["Error"] = "No se pudo modificar los datos";
+		{
+			TempData["Error"] = "No se pudo modificar el usuario";
+		}
 		else
-			TempData["Mensaje"] = "Cambios guardados";
-		return RedirectToAction("Index","Home");
+		{
+			TempData["Mensaje"] = "Usuario modificado correctamente";
+		}
+
+		return RedirectToAction("Index", "Home");
 	}
-	
-	public IActionResult ModificarPassword(Usuario usuario){
-		if (!User.IsInRole("Administrador") && usuario.UsuarioId != int.Parse(User.Claims.First().Value))
+	public async Task ActualizarClaim(Usuario usuario)
+	{
+		var identity = (ClaimsIdentity)User.Identity;
+		var emailClaim = identity.FindFirst(ClaimTypes.Email);
+		if (emailClaim != null)
+		{
+			identity.RemoveClaim(emailClaim);
+		}
+		var roleClaim = identity.FindFirst(ClaimTypes.Role);
+		if (roleClaim != null)
+		{
+			identity.RemoveClaim(roleClaim);
+		}
+		identity.AddClaim(new Claim(ClaimTypes.Email, usuario.Email));
+		identity.AddClaim(new Claim(ClaimTypes.Role, usuario.RolNombre));
+		await HttpContext.SignInAsync(
+			CookieAuthenticationDefaults.AuthenticationScheme,
+			new ClaimsPrincipal(identity));
+	}
+
+	[HttpPost]//Melian
+	public async Task<IActionResult> CambiarEmail(string newEmail)
+	{
+		var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+		var usuario = repo.ObtenerUno(userId);
+
+		if (usuario != null)
+		{
+			usuario.Email = newEmail;
+			int res = repo.ModificarEmail(usuario);
+
+			if (res == -1)
+				TempData["Error"] = "No se pudo cambiar el email.";
+			else
+			{
+				//Actualizar la claim del mail
+				var identity = (ClaimsIdentity)User.Identity;
+				identity.RemoveClaim(identity.FindFirst(ClaimTypes.Email));
+				identity.AddClaim(new Claim(ClaimTypes.Email, newEmail));
+
+				await HttpContext.SignInAsync(
+					CookieAuthenticationDefaults.AuthenticationScheme,
+					new ClaimsPrincipal(identity));
+
+				TempData["Mensaje"] = "Email cambiado exitosamente.";
+			}
+		}
+		else
+		{
+			TempData["Error"] = "Usuario no encontrado.";
+		}
+
+		return RedirectToAction("Index", "Home");
+	}
+
+	public IActionResult CambiarPass(int id)//Melian
+	{
+		var usuario = repo.ObtenerUno(id);
+		return View(usuario);
+	}
+	[HttpPost]
+	public IActionResult ModificarPassword(Usuario usuario, string currentPassword, string newPassword, string confirmPassword)
+	{
+		var usuarioDb = repo.ObtenerUno(usuario.UsuarioId);
+
+		if (usuarioDb == null)
+		{
+			TempData["Error"] = "Usuario no encontrado";
+			return Redirect("/Home/Index");
+		}
+
+		var usuarioIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+		if (!User.IsInRole("Administrador") && usuarioIdClaim != null && usuario.UsuarioId != int.Parse(usuarioIdClaim))
 		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
 		}
 
-		//verificar primero que las claves coincidan 
+		// Verificar que las nuevas contraseñas coincidan
+		if (newPassword != confirmPassword)
+		{
+			TempData["Error"] = "Las contraseñas no coinciden";
+			return RedirectToAction("Perfil");
+		}
 
-		string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-								password: usuario.Password,
+		// Verificar la contraseña actual
+		string hashedCurrentPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+								password: currentPassword,
 								salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
 								prf: KeyDerivationPrf.HMACSHA1,
 								iterationCount: 1000,
 								numBytesRequested: 256 / 8));
-		usuario.Password = hashed;
+
+		if (hashedCurrentPassword != usuarioDb.Password)
+		{
+			TempData["Error"] = "Contraseña actual incorrecta";
+			return RedirectToAction("Perfil");
+		}
+
+		// Cambiar la contraseña
+		string hashedNewPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+								password: newPassword,
+								salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+								prf: KeyDerivationPrf.HMACSHA1,
+								iterationCount: 1000,
+								numBytesRequested: 256 / 8));
+
+		usuario.Password = hashedNewPassword;
 		int res = repo.ModificarClave(usuario);
+
 		if (res == -1)
 			TempData["Error"] = "No se pudo modificar la clave";
 		else
 			TempData["Mensaje"] = "Cambios guardados";
-		return RedirectToAction("Index","Home");
+
+		return RedirectToAction("Perfil");
 	}
-	public IActionResult EliminarAvatar(Usuario usuario){
-		if (!User.IsInRole("Administrador") && usuario.UsuarioId != int.Parse(User.Claims.First().Value))
+
+	public ActionResult EliminarAvatar(int id)
+	{
+		Usuario usuario = repo.ObtenerUno(id);
+		var usuarioIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+		if (!User.IsInRole("Administrador") && usuarioIdClaim != null && usuario.UsuarioId != int.Parse(usuarioIdClaim))
 		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
 		}
+		string wwwPath = environment.WebRootPath;
+		string path = Path.Combine(wwwPath, "avatars");
+		string oldAvatarPath = Path.Combine(wwwPath, usuario.Avatar.TrimStart('/'));
+		
+		if (System.IO.File.Exists(oldAvatarPath))
+		{
+			System.IO.File.Delete(oldAvatarPath);
+		}
+		usuario.Avatar = null;
+
 		int res = repo.ModificarAvatar(usuario);
 		if (res == -1)
-			TempData["Error"] = "No se pudo modificar el avatar";
+		{
+			TempData["Error"] = "No se pudo eliminar el avatar";
+		}
 		else
-			TempData["Mensaje"] = "Se elimino el avatar";
-		return RedirectToAction("Index","Home");
+		{
+			TempData["Mensaje"] = "Avatar eliminado correctamente";
+		}
+
+		return RedirectToAction("Detalle", "Usuario",id);
 	}
-	public ActionResult ModificarAvatar(Usuario usuario){
-		if (!User.IsInRole("Administrador") && usuario.UsuarioId != int.Parse(User.Claims.First().Value))
+
+
+	public ActionResult ModificarAvatar(Usuario usuario)
+	{
+		var usuarioIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+		if (!User.IsInRole("Administrador") && usuarioIdClaim != null && usuario.UsuarioId != int.Parse(usuarioIdClaim))
 		{
 			TempData["Error"] = "Acceso denegado";
 			return Redirect("/Home/Index");
 		}
+		if (usuario.AvatarFile != null)
+		{
+			string wwwPath = environment.WebRootPath;
+			string path = Path.Combine(wwwPath, "avatars");
+
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path); 
+			}
+
+			string oldAvatarPath = Path.Combine(wwwPath, usuario.Avatar.TrimStart('/')); 
+			if (System.IO.File.Exists(oldAvatarPath))
+			{
+				System.IO.File.Delete(oldAvatarPath); 
+			}
+
+			string fileName = "avatar_" + usuario.UsuarioId + Path.GetExtension(usuario.AvatarFile.FileName);
+			string pathCompleto = Path.Combine(path, fileName);
+			usuario.Avatar = Path.Combine("/avatars", fileName);
+
+			using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+			{
+				usuario.AvatarFile.CopyTo(stream); 
+			}
+		}
+
 		int res = repo.ModificarAvatar(usuario);
 		if (res == -1)
 			TempData["Error"] = "No se pudo modificar el avatar";
 		else
 			TempData["Mensaje"] = "Cambios guardados";
-		return RedirectToAction("Index","Home");
+		return RedirectToAction("Detalle", "Usuario");
 	}
 	public IActionResult Eliminar(int id)
 	{
@@ -260,8 +465,7 @@ public class UsuarioController : Controller
 				var claims = new List<Claim>
 				{
 					new Claim("Id", usuario.UsuarioId.ToString()),
-					new Claim(ClaimTypes.Name, usuario.Email),
-					new Claim("FullName", usuario.Nombre + " " + usuario.Apellido),
+					new Claim(ClaimTypes.Email, usuario.Email),
 					new Claim(ClaimTypes.Role, usuario.RolNombre)
 				};
 

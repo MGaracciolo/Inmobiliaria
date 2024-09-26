@@ -25,16 +25,16 @@
         {
             <tr class="@(item.Estado == false ?  "bg-inactivos" : "")">
                 <td>@(item.Contrato)</td>
-                <td>@($"{item.Numero.ToString()} de {item.Contrato.Meses}")</td>
-                <td>@( item.Importe.ToString("C"))</td>
-                <td>@(item.Fecha.ToString("dd/MM/yyyy"))</td>
-                <td>@(item.Concepto != null ? item.Concepto : "-")</td>
+                <td>@($"{item.Numero.ToString()} de {item?.Contrato?.Meses}")</td>
+                <td>@( item?.Importe.ToString("C"))</td>
+                <td>@(item?.Fecha.ToString("dd/MM/yyyy"))</td>
+                <td>@(item?.Concepto != null ? item.Concepto : "-")</td>
                 <td>
-                    <a href="/Pago/Detalle/@item.PagoId"><i class="fa-solid fa-eye"></i></a>
+                    <a href="/Pago/Detalle/@item?.PagoId"><i class="fa-solid fa-eye"></i></a>
                     @if(item.Estado){
-                        <span> | </span><a href="/Pago/Edicion/@item.PagoId"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <span> | </span><a href="/Pago/Edicion/@item?.PagoId"><i class="fa-solid fa-pen-to-square"></i></a>
                         @if(User.IsInRole("Administrador")){
-                            <span> | </span><a href="#" data-url="/Pago/Eliminar/@item.PagoId" class="text-danger eliminar" ><i class="fa-solid fa-trash"></i></a>
+                            <span> | </span><a href="#" data-url="/Pago/Eliminar/@item?.PagoId" class="text-danger eliminar" ><i class="fa-solid fa-trash"></i></a>
                         } 
                     }
                 </td>

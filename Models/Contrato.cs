@@ -28,17 +28,17 @@ public class Contrato{
 
     public Inquilino? Inquilino { get; set; }
 
-    public Inmueble Inmueble { get; set; }
+    public Inmueble? Inmueble { get; set; }
 
     public Usuario? Creador { get; set; }
 
     public Usuario? Anulador { get; set; }
 
-    public List<Pago> Pagos { get; set; }//Nuevo. Melian
+    public List<Pago>? Pagos { get; set; }//Nuevo. Melian
 
     public override string ToString()
     {
-        var res = $"{ContratoId} - {Inquilino.ToString()} - {Inmueble.ToString()}";
+        var res = $"{ContratoId} - {Inquilino?.ToString()} - {Inmueble.ToString()}";
         return $"{res}";
     }
 }
