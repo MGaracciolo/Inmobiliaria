@@ -93,35 +93,34 @@
     function modalPagar(contratoId) {
         var modal = $('#pagoModal');
 
-        // Establecer el valor del campo oculto en el modal
+
         $('#contratoId').val(contratoId); 
 
-        // Verifica si el modal ya existe en el DOM
         if (modal.length === 0) {
             $.ajax({
                 url: `@Url.Action("Pagar", "Contrato")`,
                 type: 'GET',
             }).done(res => {
-                // Asegúrate de que la respuesta contiene el HTML necesario
+               
                 var div = document.createElement("div");
                 div.innerHTML = res;
-                document.body.appendChild(div); // Agrega el contenido al cuerpo
-                $('#pagoModal').modal("show"); // Abre el modal
+                document.body.appendChild(div); 
+                $('#pagoModal').modal("show"); 
             }).fail(res => {
                 console.log("Error: ", res);
             });
         } else {
-            modal.modal("show"); // Abre el modal si ya existe
+            modal.modal("show"); 
         }
     }
 
-    // Evento para abrir el modal
+    
     $(document).on('click', '.abrir-pago-modal', function (event) {
         event.preventDefault();
-        var contratoId = $(this).data('id'); // Obtener el ID del contrato del atributo data-id
-        modalPagar(contratoId); // Llama a la función para abrir el modal
+        var contratoId = $(this).data('id'); 
+        modalPagar(contratoId); 
     });
-    // Función para cargar contratos con el estado especificado
+   
     function cargarContratos(estado) {
         $.ajax({
             url: '@Url.Action("Index", "Contrato")',
@@ -131,12 +130,11 @@
             },
             success: function (result) {
                 $('#contratosTable tbody').html($(result).find('#contratosTable tbody').html());
-                cargarEventos(); // Vuelve a cargar eventos si es necesario
+                cargarEventos(); 
             }
         });
     }
 
-    // Función para cargar eventos
     function cargarEventos() {
         $('#todosBtn').on('click', function (e) {
             e.preventDefault();
@@ -158,7 +156,7 @@
             cargarContratos('vigente');
         });
 
-        // Evento para cancelar contrato
+       
         $('.cancelar').click(function (e) {
             e.preventDefault();
             var url = $(this).data('url');
