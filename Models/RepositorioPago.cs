@@ -285,34 +285,36 @@ public class RepositorioPago: RepositorioBase
     }
 
     public int Agregar(Pago pago)
+{
+    var res = -1;
+    using (MySqlConnection connection = new MySqlConnection(ConnectionString))
     {
-        var res = -1;
-        using (MySqlConnection connection = new MySqlConnection(ConnectionString))
+        var query = $@"INSERT INTO pago
+        (id_contrato,
+        importe, 
+        fecha, 
+        id_creacion,
+        concepto)
+        VALUES
+        (@id_contrato, @importe, @fecha, @id_creacion, @concepto);
+        SELECT LAST_INSERT_ID();";
+        
+        using (MySqlCommand command = new MySqlCommand(query, connection))
         {
-            var query = $@"INSERT INTO pago
-            (id_contrato,
-            importe, 
-            fecha, 
-            id_creacion,
-            concepto)
-            VALUES
-            (@id_contrato, @importe, @fecha, @id_creacion, @concepto);
-            SELECT LAST_INSERT_ID();";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@id_contrato", pago.IdContrato);
-                command.Parameters.AddWithValue("@importe", pago.Importe);
-                command.Parameters.AddWithValue("@fecha", pago.Fecha);
-                command.Parameters.AddWithValue("@id_creacion", pago.CreadorId);
-                command.Parameters.AddWithValue("@concepto", pago.Concepto);
-                connection.Open();
-                command.ExecuteNonQuery();
-                res = Convert.ToInt32(command.ExecuteScalar());
-                connection.Close();
-            }
+            command.Parameters.AddWithValue("@id_contrato", pago.IdContrato);
+            command.Parameters.AddWithValue("@importe", pago.Importe);
+            command.Parameters.AddWithValue("@fecha", pago.Fecha);
+            command.Parameters.AddWithValue("@id_creacion", pago.CreadorId);
+            command.Parameters.AddWithValue("@concepto", pago.Concepto);
+            connection.Open();
+            
+            
+            res = Convert.ToInt32(command.ExecuteScalar());
         }
-        return res;
     }
+    return res;
+}
+
     
 
     public int Modificar(Pago pago){

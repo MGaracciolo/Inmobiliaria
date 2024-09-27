@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-09-2024 a las 23:15:02
+-- Tiempo de generación: 27-09-2024 a las 09:21:17
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -49,14 +49,12 @@ CREATE TABLE `contrato` (
 --
 
 INSERT INTO `contrato` (`id_contrato`, `id_inquilino`, `id_inmueble`, `desde`, `hasta`, `meses`, `precio`, `estado`, `id_creacion`, `id_anulacion`, `fecha_anulacion`, `multa`) VALUES
-(30, 12, 10, '2024-09-21', '2025-09-21', 13, 250000.00, 1, 25, 25, '2024-09-22', 0.00),
-(31, 13, 11, '2024-09-24', '2024-09-30', 1, 250000.00, 1, 25, NULL, NULL, 0.00),
-(32, 14, 10, '2024-11-10', '2025-01-30', 3, 750000.00, 0, 25, 25, '2024-09-23', 0.00),
-(33, 12, 10, '2025-01-07', '2027-10-06', 34, 6000.00, 1, 25, 25, '2024-09-23', 0.00),
-(34, 15, 12, '2016-01-01', '2028-12-31', 159, 10.00, 1, 25, NULL, NULL, 0.00),
-(35, 16, 14, '2012-01-23', '2027-10-19', 192, 10.00, 0, 25, 25, '2024-09-25', 20.00),
-(39, 16, 14, '2027-10-20', '2027-10-29', 1, 10.00, 1, 25, NULL, NULL, 0.00),
-(40, 14, 10, '2029-01-01', '2029-01-03', 1, 250000.00, 0, 25, 25, '2024-09-25', 500000.00);
+(46, 12, 10, '2015-01-01', '2025-12-01', 133, 150.00, 1, 24, NULL, NULL, 0.00),
+(47, 13, 11, '2024-06-01', '2024-12-21', 7, 750.00, 1, 24, NULL, NULL, 0.00),
+(48, 14, 15, '2024-09-27', '2025-03-31', 7, 6000.00, 1, 24, NULL, NULL, 0.00),
+(49, 16, 12, '2024-10-09', '2028-11-23', 51, 750.00, 1, 24, NULL, NULL, 0.00),
+(50, 15, 12, '2016-01-01', '2017-07-12', 19, 750000.00, 1, 24, NULL, NULL, 0.00),
+(51, 14, 16, '2024-10-01', '2024-12-05', 3, 750000.00, 1, 24, NULL, NULL, 0.00);
 
 -- --------------------------------------------------------
 
@@ -141,12 +139,10 @@ CREATE TABLE `pago` (
 --
 
 INSERT INTO `pago` (`id_pago`, `id_contrato`, `numero`, `importe`, `fecha`, `id_creacion`, `id_anulacion`, `concepto`, `estado`) VALUES
-(22, 35, 1, 70.00, '2024-09-24', 25, NULL, 'Septiembre', 1),
-(23, 35, 2, 70.00, '2024-09-24', 25, NULL, 'Septiembre', 1),
-(24, 39, 1, 10.00, '2024-09-25', 22, NULL, 'Septiembre', 1),
-(25, 39, 2, 10.00, '2024-09-25', 22, NULL, 'Septiembre', 1),
-(26, 33, 1, 75000.00, '2024-09-26', 25, NULL, 'Enero 1/3', 1),
-(27, 33, 2, 75000.00, '2024-09-26', 25, NULL, 'Enero 1/3', 1);
+(61, 46, 1, 750.00, '2024-09-01', 24, NULL, 'Septiembre', 1),
+(62, 46, 2, 750.00, '2024-10-02', 24, NULL, 'Octubre', 1),
+(63, 49, 1, 750.00, '2024-09-18', 24, NULL, 'Marzo', 1),
+(64, 49, 2, 250.00, '2024-09-10', 24, NULL, 'Abril', 1);
 
 --
 -- Disparadores `pago`
@@ -334,7 +330,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `contrato`
 --
 ALTER TABLE `contrato`
-  MODIFY `id_contrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_contrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de la tabla `inmueble`
@@ -352,7 +348,7 @@ ALTER TABLE `inquilino`
 -- AUTO_INCREMENT de la tabla `pago`
 --
 ALTER TABLE `pago`
-  MODIFY `id_pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_pago` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT de la tabla `propietario`

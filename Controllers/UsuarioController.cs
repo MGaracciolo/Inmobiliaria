@@ -202,7 +202,7 @@ public class UsuarioController : Controller
 				return RedirectToAction("Index", "Home");
 			}
 		}
-		int res = repo.Modificar(usuario);
+		int res = repo.ModificarDatos(usuario);
 		if (res == -1)
 		{
 			TempData["Error"] = "No se pudo modificar el usuario";

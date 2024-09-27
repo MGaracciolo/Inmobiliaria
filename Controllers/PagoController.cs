@@ -44,16 +44,10 @@ public class PagoController : Controller
     public IActionResult Edicion(int id, Pago pago)
     {
         id=pago.PagoId;
-        if (id == 0)
-        {
-            repo.Agregar(pago);
-            TempData["Mensaje"] = "Pago guardado";
-        }
-        else
-        {
+        
             repo.Modificar(pago);
             TempData["Mensaje"] = "Cambios guardados";
-        }
+        
         return RedirectToAction("Index","Pago");
     }
   

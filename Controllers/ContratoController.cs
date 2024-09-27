@@ -87,7 +87,7 @@ public class ContratoController : Controller
     public IActionResult Renovar(Contrato contrato)
     {
 
-        if (VerificarDisponibilidad(contrato.Desde, contrato.Hasta, contrato.IdInmueble))
+        if (VerificarDisponibilidad(contrato.Desde, contrato.Hasta, contrato.IdInmueble,contrato.ContratoId))
         {
             TempData["Error"] = "El inmueble ya se encuentra ocupado entre esas fechas";
             return RedirectToAction("Index");
@@ -121,36 +121,43 @@ public class ContratoController : Controller
         }
     }
     [HttpPost]
-    public IActionResult Guardar(int id, Contrato contrato)
-    {
-        id = contrato.ContratoId;
-        if (VerificarDisponibilidad(contrato.Desde, contrato.Hasta, contrato.IdInmueble))
-        {
-            TempData["Error"] = "El inmueble ya se encuentra ocupado entre esas fechas";
-            return RedirectToAction("Edicion");
-        }
+   public IActionResult Guardar(int id, Contrato contrato)
+{
+    id = contrato.ContratoId;
 
-        var dias = (contrato.Hasta - contrato.Desde).TotalDays;
-        var mesesCalculados = (int)Math.Ceiling(dias / 30.0);
-        contrato.Meses = mesesCalculados < 1 ? 1 : mesesCalculados;
-        if (id == 0)
-        {
-            repo.Alta(contrato);
-            TempData["Mensaje"] = "Contrato generado";
-        }
-        else
-        {
-            repo.Modificar(contrato);
-            TempData["Mensaje"] = "Cambios guardados";
-        }
-        return RedirectToAction("Index");
-    }
-    public bool VerificarDisponibilidad(DateTime inicio, DateTime fin, int idInmueble)
+    // Verificar la disponibilidad del inmueble, excluyendo el contrato actual
+    if (VerificarDisponibilidad(contrato.Desde, contrato.Hasta, contrato.IdInmueble, contrato.ContratoId))
     {
-        string desde = inicio.ToString("yyyy-MM-dd");
-        string hasta = fin.ToString("yyyy-MM-dd");
-        return repo.estaOcupado(idInmueble, desde, hasta);
+        TempData["Error"] = "El inmueble ya se encuentra ocupado entre esas fechas";
+        return RedirectToAction("Edicion");
     }
+    var dias = (contrato.Hasta - contrato.Desde).TotalDays;
+    var mesesCalculados = (int)Math.Ceiling(dias / 30.0);
+    contrato.Meses = mesesCalculados > 0 ? mesesCalculados : 1;
+
+
+    if (id == 0)
+    {
+        repo.Alta(contrato);
+        TempData["Mensaje"] = "Contrato generado";
+    }
+    else
+    {
+        repo.Modificar(contrato);
+        TempData["Mensaje"] = "Cambios guardados";
+    }
+
+    return RedirectToAction("Index");
+}
+
+   public bool VerificarDisponibilidad(DateTime inicio, DateTime fin, int idInmueble, int contratoId = 0)
+{
+    string desde = inicio.ToString("yyyy-MM-dd");
+    string hasta = fin.ToString("yyyy-MM-dd");
+
+    return repo.estaOcupado(idInmueble, desde, hasta, contratoId);
+}
+
     public IActionResult Eliminar(Contrato contrato)
     {
         
@@ -182,7 +189,13 @@ public class ContratoController : Controller
         return View("Index", contratosFiltrados);
     }
 
-    [HttpPost]
+    public async Task<IActionResult> Pagar()
+    {
+        var model = new Pago();
+        return PartialView("Pagar", model); 
+    }
+
+
     public IActionResult RegistrarPago(Pago pago)
     {
         if (ModelState.IsValid)//Nuevo. Melian
@@ -191,19 +204,16 @@ public class ContratoController : Controller
 
             if (contratoExistente == null)
             {
-                ModelState.AddModelError("", "El contrato no existe.");
-                return View("Detalle", repo.ObtenerUno(pago.IdContrato));
+               TempData["Error"] = "El contrato no existe.";
+                return View("Index","Contrato");
             }
 
             pago.CreadorId = int.Parse(User.Claims.First().Value);
-            pago.Fecha = DateTime.Now;
-            pago.AnuladorId = null;
-            pago.IdContrato = contratoExistente.ContratoId;
             repoPago.Agregar(pago);
-            return RedirectToAction("Detalle", new { id = pago.IdContrato });
+             return RedirectToAction("Detalle", new { id = pago.IdContrato });
         }
 
-        return View("Detalle", repo.ObtenerUno(pago.IdContrato));
+        return View("Index","Contrato");
     }
 
     public IActionResult Cancelar(int id)

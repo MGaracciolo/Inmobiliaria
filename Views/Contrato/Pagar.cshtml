@@ -1,0 +1,42 @@
+@model net.Models.Pago
+@{
+     var contratos = ViewBag.Contratos as IEnumerable<Contrato>;
+}
+
+
+<!--Este es el modal para registrar los pagos. Melian-->
+<div class="modal fade" id="pagoModal" tabindex="-1" role="dialog" aria-labelledby="pagoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pagoModalLabel">Registrar Pago</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="pagoForm" asp-action="RegistrarPago" method="post">
+                    <!-- Este campo oculta el id del contrato -->
+                    <input type="hidden" name="IdContrato" id="contratoId" />
+                    <div class="form-group">
+                        <label for="importe">Importe</label>
+                        <input type="number" name="Importe" id="importe" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" name="Fecha" id="fecha" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="concepto">Concepto</label>
+                        <input type="text" name="Concepto" id="concepto" class="form-control" />
+                    </div>
+                    
+                    <input type="submit" id="registrarPagoBtn" class="btn btn-primary" value="Registrar Pago"></input>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
